@@ -10,8 +10,11 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".ui.MainDashboard"></activity>
+        android:theme="@style/Theme.AppCompat">
+        <activity android:name=".ui.Nav"></activity>
+        <activity
+            android:name=".ui.MainDashboard"
+            android:theme="@style/Theme.AppCompat" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

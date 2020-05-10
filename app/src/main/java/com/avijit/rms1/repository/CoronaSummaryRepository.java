@@ -35,6 +35,7 @@ public class CoronaSummaryRepository {
                 {
                     coronaSummaryResponseMutableLiveData.setValue(response.body());
                 }
+
             }
 
             @Override
@@ -44,4 +45,5 @@ public class CoronaSummaryRepository {
         });
         return coronaSummaryResponseMutableLiveData;
     }
+
 }

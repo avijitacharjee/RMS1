@@ -3,4 +3,10 @@
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
+    <color name="textcardColor">#36F4DB</color>
+    <color name="cardColor">#36F49B</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="white_1">#DFE6E9</color>
+    <color name="black_1">#34495E</color>
 </resources>
