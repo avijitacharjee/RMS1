@@ -23,6 +23,7 @@ import com.avijit.rms1.MainActivity;
 import com.avijit.rms1.data.remote.responses.CoronaSummaryResponse;
 import com.avijit.rms1.repository.CoronaSummaryRepository;
 import com.avijit.rms1.ui.MainDashboard;
+import com.avijit.rms1.ui.Nav;
 
 public class MainDashBoardViewModel extends AndroidViewModel {
 
@@ -52,7 +53,7 @@ public class MainDashBoardViewModel extends AndroidViewModel {
         return mutableLiveData;
     }
     public void buttonClicked(){
-        context.startActivity(new Intent(context, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        context.startActivity(new Intent(context, Nav.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
     }
 
 }

@@ -2,8 +2,10 @@ package com.avijit.rms1.utils;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
@@ -11,7 +13,14 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+
+import com.avijit.rms1.MainActivity;
+import com.avijit.rms1.R;
 import com.avijit.rms1.ui.MainDashboard;
+import com.google.android.material.navigation.NavigationView;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class AppUtils {
     Context context;
@@ -66,4 +75,35 @@ public class AppUtils {
             dialog.getWindow().setAttributes(layoutParams);
         }
     }
+    public final NavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener = new NavigationView.OnNavigationItemSelectedListener() {
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            int id = item.getItemId();
+            switch (id)
+            {
+                /*case R.id.logout: {
+                    context.getSharedPreferences("RMS",MODE_PRIVATE).edit().putString("token","").apply();
+                    context.startActivity(new Intent(context, MainActivity.class));
+                    break;
+                }
+                case R.id.home: {
+                    context.startActivity(new Intent(context,MainActivity.class));
+                    break;
+                }
+                case R.id.nav_add_donate_schedule: {
+                    context.startActivity(new Intent(context, AddDonateSchedule.class));
+                    break;
+                }
+                case R.id.nav_show_pending_donate_schedule: {
+                    context.startActivity(new Intent(context, ShowPendingDonateSchedule.class));
+                    break;
+                }
+                case R.id.nav_show_completed_donate_schedule: {
+                    context.startActivity(new Intent(context, ShowCompletedDonateSchedule.class));
+                    break;
+                }*/
+            }
+            return true;
+        }
+    };
 }
