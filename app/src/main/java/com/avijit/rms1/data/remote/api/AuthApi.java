@@ -3,6 +3,8 @@ package com.avijit.rms1.data.remote.api;
 import com.avijit.rms1.data.remote.model.AuthBody;
 import com.avijit.rms1.data.remote.responses.AuthResponse;
 
+import org.json.JSONObject;
+
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.POST;

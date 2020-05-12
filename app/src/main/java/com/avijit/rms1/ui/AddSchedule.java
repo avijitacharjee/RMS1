@@ -6,7 +6,7 @@ import android.os.Bundle;
 
 import com.avijit.rms1.R;
 
-public class AddSchedule extends AppCompatActivity {
+public class AddSchedule extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
