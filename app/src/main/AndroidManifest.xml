@@ -11,7 +11,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat">
-        <activity android:name=".ui.Nav"></activity>
+        <activity android:name=".ui.PendingSchedules"></activity>
+        <activity android:name=".ui.CompletedSchedules" />
+        <activity android:name=".ui.StoreRelief" />
+        <activity android:name=".ui.FamilyAddress" />
+        <activity android:name=".ui.AddSchedule" />
+        <activity android:name=".ui.SearchByNid" />
+        <activity android:name=".ui.SignUp" />
+        <activity android:name=".ui.Login" />
+        <activity
+            android:name=".ui.Nav"
+            android:theme="@style/Theme.MaterialComponents.NoActionBar" />
         <activity
             android:name=".ui.MainDashboard"
             android:theme="@style/Theme.AppCompat" />
@@ -22,6 +32,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

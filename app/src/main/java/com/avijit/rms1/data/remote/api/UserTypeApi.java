@@ -1,5 +1,27 @@
 package com.avijit.rms1.data.remote.api;
 
-public interface UserTypeApi {
+import com.avijit.rms1.data.remote.model.User;
 
+import retrofit2.Call;
+import retrofit2.http.Body;
+import retrofit2.http.DELETE;
+import retrofit2.http.GET;
+import retrofit2.http.POST;
+import retrofit2.http.Path;
+
+public interface UserTypeApi {
+    @DELETE("deleteuser/{id}")
+    Call<User> delete(@Path("id") String id);
+
+    @GET("getuser/{id}")
+    Call<User> getUser(@Path("id") String id);
+
+    @GET("allusers")
+    Call<User> allUser();
+
+    @POST("saveuser")
+    Call<User> storeUser(@Body User user);
+
+    @POST("updateuser/{id}")
+    Call<User> update(@Path("id") String id,@Body User user);
 }

@@ -2,4 +2,17 @@
     <string name="app_name">RMS1</string>
     <string name="total_cases">Total cases:</string>
     <string name="next">Next</string>
+    <string name="home">Home</string>
+    <string name="add_a_schedule">Add a schedule</string>
+    <string name="show_pending_schedule">Show pending schedules</string>
+    <string name="show_com_schedule">Show completed schedules</string>
+    <string name="log_out">Log out</string>
+    <string name="about">About</string>
+    <string name="contact">Contact</string>
+    <string name="nav_header_desc">abc</string>
+    <string name="nav_header_title">abc</string>
+    <string name="nav_header_subtitle">abc</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
 </resources>

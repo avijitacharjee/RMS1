@@ -1,6 +1,7 @@
 package com.avijit.rms1.data.remote.api;
 
 import com.avijit.rms1.data.remote.model.CompanyUser;
+import com.avijit.rms1.data.remote.model.PackageUpdate;
 import com.avijit.rms1.data.remote.responses.CompanyUserStoreResponse;
 import com.avijit.rms1.data.remote.responses.PackageResponse;
 import com.avijit.rms1.data.remote.responses.PackageStoreResponse;
@@ -26,4 +27,6 @@ public interface PackageApi {
     @DELETE("package/{id}")
     Call<PackageStoreResponse> delete(@Path("id") String id);
 
+    @POST("package/{id}")
+    Call<PackageStoreResponse> update(@Path("id") String id, @Body PackageUpdate body);
 }
