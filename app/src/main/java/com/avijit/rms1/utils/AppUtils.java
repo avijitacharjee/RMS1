@@ -15,9 +15,17 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import com.android.volley.RetryPolicy;
+import com.android.volley.VolleyError;
 import com.avijit.rms1.MainActivity;
 import com.avijit.rms1.R;
+import com.avijit.rms1.ui.AddSchedule;
+import com.avijit.rms1.ui.CompletedSchedules;
+import com.avijit.rms1.ui.FamilyAddress;
+import com.avijit.rms1.ui.Login;
 import com.avijit.rms1.ui.MainDashboard;
+import com.avijit.rms1.ui.Nav;
+import com.avijit.rms1.ui.PendingSchedules;
 import com.google.android.material.navigation.NavigationView;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -30,6 +38,22 @@ public class AppUtils {
         this.context = context;
         setProgressDialog();
     }
+    public static final RetryPolicy STRING_REQUEST_RETRY_POLICY = new RetryPolicy() {
+        @Override
+        public int getCurrentTimeout() {
+            return 50000;
+        }
+
+        @Override
+        public int getCurrentRetryCount() {
+            return 5;
+        }
+
+        @Override
+        public void retry(VolleyError error) throws VolleyError {
+
+        }
+    };
     public void setProgressDialog() {
 
         int llPadding = 30;
@@ -81,6 +105,32 @@ public class AppUtils {
             int id = item.getItemId();
             switch (id)
             {
+                case R.id.home: {
+                    context.startActivity(new Intent(context, Nav.class));
+                    break;
+                }
+                case R.id.nav_add_donate_schedule: {
+                    context.startActivity(new Intent(context, AddSchedule.class));
+                    break;
+                }
+                case R.id.nav_show_pending_donate_schedule: {
+                    context.startActivity(new Intent(context, PendingSchedules.class));
+                    break;
+                }
+                case R.id.nav_show_completed_donate_schedule: {
+                    context.startActivity(new Intent(context, CompletedSchedules.class));
+                    break;
+                }
+                case R.id.logout: {
+                    context.getSharedPreferences("RMS",MODE_PRIVATE).edit().putString("token","").apply();
+                    context.startActivity(new Intent(context, Login.class));
+                    break;
+                }
+                case R.id.nav_entry_giving_reliefs: {
+                    context.startActivity(new Intent(context, FamilyAddress.class));
+                    break;
+                }
+
                 /*case R.id.logout: {
                     context.getSharedPreferences("RMS",MODE_PRIVATE).edit().putString("token","").apply();
                     context.startActivity(new Intent(context, MainActivity.class));

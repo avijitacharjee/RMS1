@@ -21,6 +21,11 @@
             android:icon="@drawable/ic_schedule_black_24dp"
             android:title="@string/show_com_schedule"/>
         <item
+            android:id="@+id/nav_entry_giving_reliefs"
+            android:icon="@drawable/ic_info_outline_black_24dp"
+            android:title="Entry given reliefs"
+            />
+        <item
             android:id="@+id/logout"
             android:icon="@drawable/ic_exit_to_app_black_24dp"
             android:title="@string/log_out" />

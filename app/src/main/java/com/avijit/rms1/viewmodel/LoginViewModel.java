@@ -18,7 +18,6 @@ import com.google.gson.internal.$Gson$Types;
 public class LoginViewModel extends ViewModel {
     private MutableLiveData<AuthResponse> user;
     private AuthRepository authRepository;
-    AuthBody authBody;
     public void init(){
         if(user!=null){
             return;
@@ -33,15 +32,8 @@ public class LoginViewModel extends ViewModel {
         MutableLiveData<Boolean> isUser = new MutableLiveData<>();
         this.user.setValue( authRepository.getAuth(user).getValue());
         isUser.setValue(!this.user.getValue().getAccessToken().equals(""));
+
         return isUser;
-    }
-    public String getToken(){
-        if(this.user.getValue()==null){
-            return "";
-        }
-        else {
-            return this.user.getValue().getAccessToken();
-        }
     }
     public MutableLiveData<AuthResponse> getUser(){
         return this.user;

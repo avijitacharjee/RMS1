@@ -49,4 +49,7 @@ public class AuthResponse {
     public void setRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
     }
+    public boolean isUser(){
+        return !getAccessToken().equals("");
+    }
 }
