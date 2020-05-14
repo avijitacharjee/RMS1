@@ -14,11 +14,22 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.avijit.rms1.R;
 import com.avijit.rms1.data.remote.model.AuthBody;
 import com.avijit.rms1.data.remote.model.User;
 import com.avijit.rms1.data.remote.responses.AuthResponse;
+import com.avijit.rms1.utils.AppUtils;
 import com.avijit.rms1.viewmodel.LoginViewModel;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class Login extends AppCompatActivity {
     LoginViewModel loginViewModel;
@@ -57,6 +68,7 @@ public class Login extends AppCompatActivity {
                 
             }
         });
+        saveUserInfo();
         signUpIntentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,4 +85,30 @@ public class Login extends AppCompatActivity {
         /*finish();
         overridePendingTransition(0,0);*/
     }
+
+    public void saveUserInfo(){
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String url = "https://aniksen.me/covidbd/api/user";
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                getSharedPreferences("RMS",MODE_PRIVATE).edit().putString("user",response).apply();}
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(Login.this, error.toString(), Toast.LENGTH_SHORT).show();
+            }
+        }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String,String> headers = new HashMap<>();
+                headers.put("Authorization","Bearer "+getSharedPreferences("RMS",MODE_PRIVATE).getString("token",""));
+                return headers;
+            }
+        };
+        stringRequest.setRetryPolicy(AppUtils.STRING_REQUEST_RETRY_POLICY);
+        queue.add(stringRequest);
+    }
+
+
 }

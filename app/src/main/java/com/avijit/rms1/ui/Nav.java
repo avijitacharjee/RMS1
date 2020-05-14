@@ -6,12 +6,24 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.MutableLiveData;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.avijit.rms1.R;
+import com.avijit.rms1.data.local.AppDatabase;
 import com.avijit.rms1.data.remote.RetrofitService;
 import com.avijit.rms1.data.remote.api.CompanyApi;
 import com.avijit.rms1.data.remote.api.CoronaSummaryApi;
@@ -23,22 +35,31 @@ import com.avijit.rms1.repository.CompanyRepository;
 import com.avijit.rms1.repository.CoronaSummaryRepository;
 import com.avijit.rms1.utils.AppUtils;
 import com.avijit.rms1.utils.EndDrawerToggle;
+import com.avijit.rms1.utils.MyBroadcastReceiver;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.navigation.NavigationView;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import retrofit2.Call;
 import retrofit2.Callback;
-import retrofit2.Response;
-
+import com.avijit.rms1.data.local.daos.*;
+import com.avijit.rms1.data.local.entities.*;
 public class Nav extends AppCompatActivity {
     DrawerLayout drawer;
-
-
+    MyBroadcastReceiver myBroadcastReceiver;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nav);
         AppUtils appUtils = new AppUtils(this);
+        myBroadcastReceiver = new MyBroadcastReceiver();
 
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -75,8 +96,116 @@ public class Nav extends AppCompatActivity {
         if(getSharedPreferences("RMS",MODE_PRIVATE).getString("token","").equals("")){
             startActivity(new Intent(Nav.this,Login.class));
         }
+        setLocations();
 
+        saveUserInfo();
+        //broadcastIntent();
+    }
+    public void saveUserInfo(){
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String url = "https://aniksen.me/covidbd/api/user";
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                getSharedPreferences("RMS",MODE_PRIVATE).edit().putString("user",response).apply();}
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(Nav.this, error.toString(), Toast.LENGTH_SHORT).show();
+            }
+        }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String,String> headers = new HashMap<>();
+                headers.put("Authorization","Bearer "+getSharedPreferences("RMS",MODE_PRIVATE).getString("token",""));
+                return headers;
+            }
+        };
+        stringRequest.setRetryPolicy(AppUtils.STRING_REQUEST_RETRY_POLICY);
+        queue.add(stringRequest);
+    }
+    public void setLocations(){
+        RequestQueue queue = Volley.newRequestQueue(Nav.this);
+        String url = "https://aniksen.me/covidbd/api/locations";
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    final AppDatabase db = AppDatabase.getInstance(Nav.this);
 
+                    List<Division> divisionList = new ArrayList<>();
+                    List<District> districtList = new ArrayList<>();
+                    List<Area> areaList = new ArrayList<>();
+                    JSONObject jsonObject = new JSONObject(response);
+                    JSONArray locations = jsonObject.getJSONArray("locations");
+                    for(int i=0;i<locations.length();i++)
+                    {
+                        JSONObject divisionResponse = locations.getJSONObject(i);
+                        final Division division = new Division(divisionResponse.getString("division_id"),divisionResponse.getString("division_name"));
+                        divisionList.add(division);
+                        JSONArray districts = divisionResponse.getJSONArray("districts");
+                        for(int j =0;j<districts.length();j++)
+                        {
+                            JSONObject districtResponse = districts.getJSONObject(j);
+                            final com.avijit.rms1.data.local.entities.District district ;
+                            district = new District(districtResponse.getString("district_id"),divisionResponse.getString("division_id"),districtResponse.getString("district_name"));
+                            districtList.add(district);
+                            JSONArray areas = districtResponse.getJSONArray("areas");
+                            for(int k=0;k<areas.length();k++)
+                            {
+                                JSONObject areaResponse = areas.getJSONObject(k);
+                                final Area area = new Area(district.districtId,areaResponse.getString("area_id"),areaResponse.getString("area"),areaResponse.getString("area_type"));
+                                areaList.add(area);
+                            }
+                        }
+                    }
+                    final Division[] divisions = new Division[divisionList.size()];
+                    final District[] districts = new District[districtList.size()];
+                    final Area[] areas = new Area[areaList.size()];
+                    for(int i=0;i<divisionList.size();i++)
+                    {
+                        divisions[i] = divisionList.get(i);
+                    }
+                    for(int i=0;i<districtList.size();i++)
+                    {
+                        districts[i] = districtList.get(i);
+                    }
+                    for(int i=0;i<areaList.size();i++)
+                    {
+                        areas[i] = areaList.get(i);
+                    }
+                    AsyncTask.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            AppDatabase db = AppDatabase.getInstance(Nav.this);
+                            db.divisionDao().deleteAll();
+                            db.districtDao().deleteAll();
+                            db.areaDao().deleteAll();
 
+                            db.divisionDao().insertAll(divisions);
+                            db.districtDao().insertAll(districts);
+                            db.areaDao().insert(areas);
+                        }
+                    });
+
+                }catch (Exception e){
+                    Toast.makeText(Nav.this, ""+e, Toast.LENGTH_SHORT).show();
+                }
+            }
+        },new AppUtils(Nav.this).errorListener);
+        stringRequest.setRetryPolicy(AppUtils.STRING_REQUEST_RETRY_POLICY);
+        queue.add(stringRequest);
+    }
+
+    /**
+     * Needed to call the method for checking internet connectivity
+     */
+    public void broadcastIntent() {
+        registerReceiver(myBroadcastReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(myBroadcastReceiver);
     }
 }

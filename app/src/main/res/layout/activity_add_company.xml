@@ -6,7 +6,7 @@
     android:id="@+id/drawer_layout"
     android:fitsSystemWindows="true"
     tools:openDrawer="end"
-    tools:context=".ui.AddSchedule"
+    tools:context=".ui.AddCompany"
     xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -28,7 +28,6 @@
 
         </com.google.android.material.appbar.AppBarLayout>
         <!-- Content -->
-
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             xmlns:tools="http://schemas.android.com/tools"
@@ -55,58 +54,6 @@
                         android:gravity="center"
                         android:background="@color/white_1"
                         android:layout_height="match_parent">
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:background="@color/anik2"
-                            android:elevation="10dp"
-                            android:layout_margin="10dp"
-                            android:layout_height="wrap_content">
-                            <Spinner
-                                android:id="@+id/division_spinner"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"/>
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:background="@color/anik2"
-                            android:elevation="10dp"
-                            android:layout_margin="10dp"
-                            android:layout_height="wrap_content">
-                            <Spinner
-
-                                android:id="@+id/district_spinner"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"/>
-
-                        </LinearLayout>
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:background="@color/anik2"
-                            android:elevation="10dp"
-                            android:layout_margin="10dp"
-                            android:layout_height="wrap_content">
-                            <Spinner
-                                android:id="@+id/type_spinner"
-                                android:layout_width="match_parent"
-                                android:textColor="@color/black"
-                                android:layout_height="wrap_content"/>
-
-                        </LinearLayout>
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:background="@color/anik2"
-                            android:elevation="10dp"
-                            android:layout_margin="10dp"
-                            android:layout_height="wrap_content">
-                            <Spinner
-                                android:id="@+id/area_spinner"
-                                android:layout_width="match_parent"
-                                android:textColor="@color/black"
-                                android:layout_height="wrap_content"/>
-
-                        </LinearLayout>
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -120,16 +67,16 @@
                             app:hintTextColor="@color/black">
 
                             <EditText
-                                android:id="@+id/address_edit_text"
+                                android:id="@+id/company_name_edit_text"
                                 android:layout_width="match_parent"
-                                android:hint="Address"
+                                android:hint="Company Name"
                                 android:background="@color/white"
                                 android:padding="10dp"
                                 android:textColor="@color/black"
                                 android:textColorHint="@color/black"
                                 android:layout_height="50dp"/>
                         </LinearLayout>
-                        <LinearLayout
+                       <!-- <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             app:boxStrokeColor="@color/black"
@@ -150,7 +97,7 @@
                                 android:textColor="@color/white"
                                 android:textColorHint="@color/black"
                                 android:layout_height="50dp"/>
-                        </LinearLayout>
+                        </LinearLayout>-->
 
 
                         <TextView
@@ -173,7 +120,6 @@
                 </ScrollView>
             </LinearLayout>
         </LinearLayout>
-
         <!-- End of content -->
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

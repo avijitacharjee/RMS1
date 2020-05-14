@@ -12,9 +12,11 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.android.volley.Response;
 import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.avijit.rms1.MainActivity;
@@ -52,6 +54,15 @@ public class AppUtils {
         @Override
         public void retry(VolleyError error) throws VolleyError {
 
+        }
+    };
+    public final Response.ErrorListener errorListener = new Response.ErrorListener() {
+        @Override
+        public void onErrorResponse(VolleyError error) {
+            Toast.makeText(context, ""+error, Toast.LENGTH_SHORT).show();
+            if(dialog.isShowing()){
+                dialog.dismiss();
+            }
         }
     };
     public void setProgressDialog() {
