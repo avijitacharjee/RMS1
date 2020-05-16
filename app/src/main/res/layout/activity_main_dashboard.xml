@@ -340,6 +340,7 @@
             android:textSize="18sp"
             android:gravity="center"
             android:text="@string/next"
+            android:padding="10dp"
             android:textColor="@color/white_1"
             android:layout_margin="20dp"
             app:layout_constraintBottom_toBottomOf="parent"

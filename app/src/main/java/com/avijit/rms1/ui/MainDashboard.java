@@ -1,12 +1,16 @@
 package com.avijit.rms1.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.ViewGroup;
@@ -22,7 +26,12 @@ import com.avijit.rms1.databinding.ActivityMainDashboardBinding;
 import com.avijit.rms1.utils.AppUtils;
 import com.avijit.rms1.viewmodel.MainDashBoardViewModel;
 
-public class MainDashboard extends AppCompatActivity {
+import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static android.Manifest.permission.CAMERA;
+
+public class MainDashboard extends BaseActivity {
+    private static final int PERMISSION_REQUEST_CODE = 200;
     TextView textView;
     MainDashBoardViewModel mainDashBoardViewModel;
     AlertDialog dialog;
@@ -40,6 +49,7 @@ public class MainDashboard extends AppCompatActivity {
             @Override
             public void onChanged(CoronaSummaryResponse coronaSummaryResponse) {
                dialog.dismiss();
+               requestPermission();
             }
         });
         ActivityMainDashboardBinding binding = DataBindingUtil.setContentView(this,R.layout.activity_main_dashboard);
@@ -48,6 +58,88 @@ public class MainDashboard extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        exitDialog();
+    }
+    private void exitDialog(){
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(MainDashboard.this);
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finishAffinity();
+                //System.exit(0);
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
 
+            }
+        });
+        builder.setMessage("Are you sure to exit?");
+
+        androidx.appcompat.app.AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+    private void requestPermission() {
+        ActivityCompat.requestPermissions(this, new String[]{ACCESS_FINE_LOCATION,ACCESS_COARSE_LOCATION, CAMERA}, PERMISSION_REQUEST_CODE);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSION_REQUEST_CODE:
+                if (grantResults.length > 0) {
+
+                    boolean fineLocationAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                    boolean coraseLocationAccepted = grantResults[1] == PackageManager.PERMISSION_GRANTED;
+                    boolean cameraAccepted = grantResults[2] == PackageManager.PERMISSION_GRANTED;
+
+                    if (fineLocationAccepted && coraseLocationAccepted && cameraAccepted)
+                    {
+
+                    }
+                    //Snackbar.make(view, "Permission Granted, Now you can access location data and camera.", Snackbar.LENGTH_LONG).show();
+                    else {
+
+                        // Snackbar.make(view, "Permission Denied, You cannot access location data and camera.", Snackbar.LENGTH_LONG).show();
+
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            if (shouldShowRequestPermissionRationale(ACCESS_FINE_LOCATION)
+                                    || shouldShowRequestPermissionRationale(ACCESS_COARSE_LOCATION)
+                                    || shouldShowRequestPermissionRationale(CAMERA)
+                            ) {
+                                showMessageOKCancel("You need to allow access to both the permissions",
+                                        new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                requestPermission();
+                                            }
+                                        });
+                                return;
+                            }
+                        }
+
+                    }
+                }
+                break;
+        }
+    }
+
+
+    private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
+        new androidx.appcompat.app.AlertDialog.Builder(MainDashboard.this)
+                .setMessage(message)
+                .setPositiveButton("OK", okListener)
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finishAffinity();
+                    }
+                })
+                .create()
+                .show();
+    }
 
 }

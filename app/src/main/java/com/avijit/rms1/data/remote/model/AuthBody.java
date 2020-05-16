@@ -1,6 +1,8 @@
 package com.avijit.rms1.data.remote.model;
 
-public class AuthBody {
+import com.avijit.rms1.data.remote.responses.BaseModel;
+
+public class AuthBody extends BaseModel {
     public final String grant_type = "password";
     public final String client_id="2";
     public final String client_secret="Xhqe0rptK0qCmRjuXbw2PADML5fjaE3RJOBhTMHn";

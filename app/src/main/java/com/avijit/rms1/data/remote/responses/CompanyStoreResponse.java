@@ -1,9 +1,12 @@
 package com.avijit.rms1.data.remote.responses;
 
+import androidx.annotation.NonNull;
+
+import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class CompanyStoreResponse {
+public class CompanyStoreResponse extends BaseModel{
 
     @SerializedName("confirm_msg")
     @Expose
@@ -37,5 +40,11 @@ public class CompanyStoreResponse {
 
     public void setCompanyUser(String companyUser) {
         this.companyUser = companyUser;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return new Gson().toJson(this);
     }
 }

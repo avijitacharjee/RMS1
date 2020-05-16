@@ -1,9 +1,10 @@
 package com.avijit.rms1.data.remote.model;
 
+import com.avijit.rms1.data.remote.responses.BaseModel;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Package {
+public class Package extends BaseModel {
 
     @SerializedName("name")
     @Expose

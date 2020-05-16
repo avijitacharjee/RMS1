@@ -49,7 +49,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SearchByNid extends AppCompatActivity {
+public class SearchByNid extends BaseActivity {
 
     TableLayout tableLayout;
     Button searchButton;

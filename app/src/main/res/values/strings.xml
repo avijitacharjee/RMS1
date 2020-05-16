@@ -15,4 +15,6 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="add_a_company">Add a company</string>
+    <string name="entry_given_reliefs">Entry given reliefs</string>
 </resources>

@@ -6,8 +6,11 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,11 +34,11 @@ import com.avijit.rms1.viewmodel.LoginViewModel;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Login extends AppCompatActivity {
+public class Login extends BaseActivity {
     LoginViewModel loginViewModel;
     EditText userNameEditText,passwordEditText;
     TextView loginButton;
-    Button signUpIntentButton;
+    TextView signUpIntentButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,22 +53,36 @@ public class Login extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final AuthBody user = new AuthBody();
-                user.setUsername(userNameEditText.getText().toString());
-                user.setPassword(passwordEditText.getText().toString());
-                loginViewModel.getAuth(user).observe(Login.this, new Observer<AuthResponse>() {
-                    @Override
-                    public void onChanged(AuthResponse response) {
-                        if(response.isUser()){
-                            getSharedPreferences("RMS",MODE_PRIVATE).edit().putString("token",response.getAccessToken()).apply();
-                            startActivity(new Intent(Login.this,Nav.class));
+                if(isFormValid()){
+                    final AuthBody user = new AuthBody();
+                    user.setUsername(userNameEditText.getText().toString());
+                    user.setPassword(passwordEditText.getText().toString());
+                    loginViewModel.getAuth(user).observe(Login.this, new Observer<AuthResponse>() {
+                        @Override
+                        public void onChanged(AuthResponse response) {
+                            if(response.isUser()){
+                                getSharedPreferences("RMS",MODE_PRIVATE).edit().putString("token",response.getAccessToken()).apply();
+                                startActivity(new Intent(Login.this,Nav.class));
+                            }
+                            else {
+                                Toast.makeText(Login.this, "Incorrect username/password", Toast.LENGTH_SHORT).show();
+                            }
                         }
-                        else {
-                            Toast.makeText(Login.this, "Incorrect username/password", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-                
+                    });
+                }
+                else {
+                    Toast toast = Toast.makeText(getApplicationContext(),"All fields are required" , Toast.LENGTH_SHORT);
+                    View view = toast.getView();
+
+                    //Gets the actual oval background of the Toast then sets the colour filter
+                    view.getBackground().setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
+
+                    //Gets the TextView from the Toast so it can be editted
+                    TextView text = view.findViewById(android.R.id.message);
+                    text.setTextSize(TypedValue.COMPLEX_UNIT_SP,16);
+                    text.setTextColor(Color.WHITE);
+                    toast.show();
+                }
             }
         });
         saveUserInfo();
@@ -80,12 +97,21 @@ public class Login extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(Login.this,Nav.class);
+        Intent intent = new Intent(Login.this,MainDashboard.class);
         startActivity(intent);
         /*finish();
         overridePendingTransition(0,0);*/
     }
-
+    private boolean isFormValid(){
+        boolean valid = true;
+        if(userNameEditText.getText().toString().isEmpty()){
+            valid = false;
+        }
+        if(passwordEditText.getText().toString().isEmpty()){
+            valid = false;
+        }
+        return valid;
+    }
     public void saveUserInfo(){
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = "https://aniksen.me/covidbd/api/user";
@@ -109,6 +135,4 @@ public class Login extends AppCompatActivity {
         stringRequest.setRetryPolicy(AppUtils.STRING_REQUEST_RETRY_POLICY);
         queue.add(stringRequest);
     }
-
-
 }

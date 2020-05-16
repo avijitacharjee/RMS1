@@ -2,6 +2,7 @@ package com.avijit.rms1.data.remote.api;
 
 import com.avijit.rms1.data.remote.model.ReliefSchedule;
 import com.avijit.rms1.data.remote.responses.ReliefScheduleResponse;
+import com.avijit.rms1.data.remote.responses.ReliefScheduleStoreResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -16,5 +17,6 @@ public interface ReliefScheduleApi {
     Call<ReliefScheduleResponse> pendingSchedules(@Path("id") String id);
 
     @POST("schedule-create")
-    Call<ReliefScheduleResponse> storeSchedule(@Body ReliefSchedule reliefSchedule);
+    Call<ReliefScheduleStoreResponse> storeSchedule(@Body ReliefSchedule reliefSchedule);
+
 }

@@ -23,7 +23,12 @@
         <item
             android:id="@+id/nav_entry_giving_reliefs"
             android:icon="@drawable/ic_info_outline_black_24dp"
-            android:title="Entry given reliefs"
+            android:title="@string/entry_given_reliefs"
+            />
+        <item
+            android:id="@+id/nav_add_company"
+            android:icon="@drawable/ic_info_outline_black_24dp"
+            android:title="@string/add_a_company"
             />
         <item
             android:id="@+id/logout"
@@ -31,7 +36,8 @@
             android:title="@string/log_out" />
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="Communicate"
+        android:id="@+id/group_title_1">
         <menu>
             <item
                 android:id="@+id/about"

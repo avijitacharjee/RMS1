@@ -1,4 +1,6 @@
 package com.avijit.rms1.data.remote.model;
 
-public class PackageUpdate {
+import com.avijit.rms1.data.remote.responses.BaseModel;
+
+public class PackageUpdate extends BaseModel {
 }

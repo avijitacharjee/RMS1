@@ -1,19 +1,19 @@
 package com.avijit.rms1.ui;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.drawerlayout.widget.DrawerLayout;
-
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.TextAppearanceSpan;
+import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
@@ -22,7 +22,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -30,19 +34,26 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.avijit.rms1.R;
 import com.avijit.rms1.data.local.AppDatabase;
-import com.avijit.rms1.data.local.entities.*;
-import com.avijit.rms1.data.local.daos.*;
+import com.avijit.rms1.data.local.entities.Area;
+import com.avijit.rms1.data.local.entities.District;
+import com.avijit.rms1.data.local.entities.Division;
+import com.avijit.rms1.data.remote.model.ReliefSchedule;
+import com.avijit.rms1.data.remote.responses.ReliefScheduleStoreResponse;
 import com.avijit.rms1.utils.AppUtils;
 import com.avijit.rms1.utils.EndDrawerToggle;
+import com.avijit.rms1.viewmodel.AddScheduleVIewModel;
 import com.google.android.material.navigation.NavigationView;
+import com.google.gson.Gson;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class AddSchedule extends BaseActivity {
+    AddScheduleVIewModel addScheduleVIewModel;
     AlertDialog dialog ;
     DatePickerDialog datePickerDialog;
     TextView dateEditText;
@@ -96,9 +107,9 @@ public class AddSchedule extends BaseActivity {
                 datePickerDialog.show();
             }
         });
-
+        addScheduleVIewModel = ViewModelProviders.of(this).get(AddScheduleVIewModel.class);
+        addScheduleVIewModel.init();
         Toolbar toolbar = findViewById(R.id.toolbar);
-
         toolbar.setTitle("RMS");
         toolbar.setSubtitle("Add a schedule for giving relief");
         //toolbar.setLogo(R.drawable.ic_exit_to_app_black_24dp);
@@ -106,14 +117,9 @@ public class AddSchedule extends BaseActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        Window window = getWindow();
-
         drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(utils.navigationItemSelectedListener);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-
         EndDrawerToggle toggle = new EndDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -122,14 +128,15 @@ public class AddSchedule extends BaseActivity {
 
             @Override
             public void onClick(View v) {
-                if (drawer.isDrawerOpen(Gravity.RIGHT)) {
-                    drawer.closeDrawer(Gravity.RIGHT);
-                } else {
-                    drawer.openDrawer(Gravity.RIGHT);
-                }
+                AddSchedule.super.onBackPressed();
             }
         });
 
+        Menu menu = navigationView.getMenu();
+        MenuItem tools= menu.findItem(R.id.group_title_1);
+        SpannableString s = new SpannableString(tools.getTitle());
+        s.setSpan(new TextAppearanceSpan(this, R.style.TextAppearance44), 0, s.length(), 0);
+        tools.setTitle(s);
 
 
         divisionSpinner= findViewById(R.id.division_spinner);
@@ -146,6 +153,10 @@ public class AddSchedule extends BaseActivity {
                 divisionList= db.divisionDao().getAll();
                 String[] divisions = new String[divisionList.size()+1];
                 divisions[0]="--Select Division--";
+                if(divisionList.size()==0){
+                    setLocations();
+                    dialog.show();
+                }
                 for(int i=0;i<divisionList.size();i++)
                 {
                     divisions[i+1]=divisionList.get(i).name;
@@ -158,10 +169,8 @@ public class AddSchedule extends BaseActivity {
                         divisionSpinner.setAdapter(adapter);
                     }
                 });
-
             }
         });
-
         setDistricts();
         setTypes();
         setAreas();
@@ -226,39 +235,54 @@ public class AddSchedule extends BaseActivity {
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RequestQueue requestQueue= Volley.newRequestQueue(AddSchedule.this);
-                String url = "https://aniksen.me/covidbd/api/schedule-create";
-                StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Toast.makeText(AddSchedule.this, response, Toast.LENGTH_SHORT).show();
-                        dialog.dismiss();
-                    }
-                }, new AppUtils(AddSchedule.this).errorListener){
-                    @Override
-                    protected Map<String, String> getParams() throws AuthFailureError {
-                        Map<String,String> params = new HashMap<>();
-                        params.put("user_id","1");
-                        params.put("schedule_date",dateEditText.getText().toString());
-                        params.put("division_id",divisionList.get(divisionSpinner.getSelectedItemPosition()-1).divisionId);
-                        params.put("district_id",districtList.get(districtSpinner.getSelectedItemPosition()-1).districtId);
-                        params.put("area_id",areaList.get(areaSpinner.getSelectedItemPosition()-1).areaId);
-                        params.put("address",addressEditText.getText().toString());
-                        params.put("company_id","1");
-                        return params;
-                    }
+                if(isFormValid()){
+                    ReliefSchedule reliefSchedule = new ReliefSchedule();
+                    reliefSchedule.setAddress(addressEditText.getText().toString());
+                    reliefSchedule.setCompany_id("1");
+                    reliefSchedule.setUser_id("1");
+                    reliefSchedule.setSchedule_date(dateEditText.getText().toString());
+                    reliefSchedule.setDistrict_id(districtList.get(districtSpinner.getSelectedItemPosition() - 1).districtId);
+                    reliefSchedule.setDivision_id(divisionList.get(divisionSpinner.getSelectedItemPosition() - 1).divisionId);
+                    reliefSchedule.setArea_id(areaList.get(areaSpinner.getSelectedItemPosition()-1).areaId);
+                    Log.d("JSON", "onClick: "+new Gson().toJson(reliefSchedule));
+                    addScheduleVIewModel.addSchedule(reliefSchedule).observe(AddSchedule.this, new Observer<ReliefScheduleStoreResponse>() {
+                        @Override
+                        public void onChanged(ReliefScheduleStoreResponse reliefScheduleStoreResponse) {
+                            Log.d("TAG", "onChanged: " + new Gson().toJson(reliefScheduleStoreResponse));
+                            Toast.makeText(AddSchedule.this, "Schedule Added Successfully", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+                else {
+                    Toast toast = Toast.makeText(getApplicationContext(),"All fields are required" , Toast.LENGTH_SHORT);
+                    View view = toast.getView();
 
-                    @Override
-                    public Map<String, String> getHeaders() throws AuthFailureError {
-                        return super.getHeaders();
-                    }
-                };
-                stringRequest.setRetryPolicy(AppUtils.STRING_REQUEST_RETRY_POLICY);
-                requestQueue.add(stringRequest);
-                dialog.show();
+                    //Gets the actual oval background of the Toast then sets the colour filter
+                    view.getBackground().setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
+
+                    //Gets the TextView from the Toast so it can be editted
+                    TextView text = view.findViewById(android.R.id.message);
+                    text.setTextSize(TypedValue.COMPLEX_UNIT_SP,16);
+                    text.setTextColor(Color.WHITE);
+
+                    toast.show();
+                }
+
             }
         });
     }
+
+    @Override
+    public void onBackPressed() {
+        if(drawer.isDrawerOpen(Gravity.RIGHT)){
+            drawer.closeDrawer(Gravity.RIGHT);
+        }
+        else
+        {
+            super.onBackPressed();
+        }
+    }
+
     private void setDistricts() {
         AsyncTask.execute(new Runnable() {
             @Override
@@ -344,5 +368,99 @@ public class AddSchedule extends BaseActivity {
                 areaSpinner.setAdapter(adapter);
             }
         });
+    }
+    private boolean isFormValid(){
+        boolean valid = true;
+        if(divisionSpinner.getSelectedItemPosition()==0){
+            valid = false;
+        }
+        if(districtSpinner.getSelectedItemPosition() ==0){
+            valid = false;
+        }
+        if(areaSpinner.getSelectedItemPosition()==0){
+            valid = false;
+        }
+        if(dateEditText.getText().toString().contains("D")){
+            valid = false;
+        }
+        if(addressEditText.getText().toString().isEmpty()){
+            valid = false;
+        }
+        return valid;
+    }
+    public void setLocations(){
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String url = "https://aniksen.me/covidbd/api/locations";
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    final AppDatabase db = AppDatabase.getInstance(AddSchedule.this);
+
+                    List<Division> divisionList = new ArrayList<>();
+                    List<District> districtList = new ArrayList<>();
+                    List<Area> areaList = new ArrayList<>();
+                    JSONObject jsonObject = new JSONObject(response);
+                    JSONArray locations = jsonObject.getJSONArray("locations");
+                    for(int i=0;i<locations.length();i++)
+                    {
+                        JSONObject divisionResponse = locations.getJSONObject(i);
+                        final Division division = new Division(divisionResponse.getString("division_id"),divisionResponse.getString("division_name"));
+                        divisionList.add(division);
+                        JSONArray districts = divisionResponse.getJSONArray("districts");
+                        for(int j =0;j<districts.length();j++)
+                        {
+                            JSONObject districtResponse = districts.getJSONObject(j);
+                            final com.avijit.rms1.data.local.entities.District district ;
+                            district = new District(districtResponse.getString("district_id"),divisionResponse.getString("division_id"),districtResponse.getString("district_name"));
+                            districtList.add(district);
+                            JSONArray areas = districtResponse.getJSONArray("areas");
+                            for(int k=0;k<areas.length();k++)
+                            {
+                                JSONObject areaResponse = areas.getJSONObject(k);
+                                final Area area = new Area(district.districtId,areaResponse.getString("area_id"),areaResponse.getString("area"),areaResponse.getString("area_type"));
+                                areaList.add(area);
+                            }
+                        }
+                    }
+                    final Division[] divisions = new Division[divisionList.size()];
+                    final District[] districts = new District[districtList.size()];
+                    final Area[] areas = new Area[areaList.size()];
+                    for(int i=0;i<divisionList.size();i++)
+                    {
+                        divisions[i] = divisionList.get(i);
+                    }
+                    for(int i=0;i<districtList.size();i++)
+                    {
+                        districts[i] = districtList.get(i);
+                    }
+                    for(int i=0;i<areaList.size();i++)
+                    {
+                        areas[i] = areaList.get(i);
+                    }
+                    AsyncTask.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            if(dialog.isShowing()){
+                                dialog.dismiss();
+                            }
+                            AppDatabase db = AppDatabase.getInstance(AddSchedule.this);
+                            db.divisionDao().deleteAll();
+                            db.districtDao().deleteAll();
+                            db.areaDao().deleteAll();
+
+                            db.divisionDao().insertAll(divisions);
+                            db.districtDao().insertAll(districts);
+                            db.areaDao().insert(areas);
+                        }
+                    });
+
+                }catch (Exception e){
+                    Toast.makeText(AddSchedule.this, ""+e, Toast.LENGTH_SHORT).show();
+                }
+            }
+        },new AppUtils(AddSchedule.this).errorListener);
+        stringRequest.setRetryPolicy(AppUtils.STRING_REQUEST_RETRY_POLICY);
+        queue.add(stringRequest);
     }
 }

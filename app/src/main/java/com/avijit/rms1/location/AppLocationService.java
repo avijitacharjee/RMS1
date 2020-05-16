@@ -70,8 +70,6 @@ public class AppLocationService extends Service implements LocationListener {
                 .show();
     }
 
-
-
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {

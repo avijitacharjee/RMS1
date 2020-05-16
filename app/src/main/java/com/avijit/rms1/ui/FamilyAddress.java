@@ -37,7 +37,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class FamilyAddress extends AppCompatActivity {
+public class FamilyAddress extends BaseActivity {
     TextView nextButton;
 
     Spinner divisionSpinner,districtSpinner,typeSpinner,areaSpinner;
@@ -48,7 +48,7 @@ public class FamilyAddress extends AppCompatActivity {
     String[] divisions =  {"--Select division--"};
     String[] districts = {"--Select district--"};
     String[] areas = {"--Select area--"};
-    String[] types = {"--Select type--", "A","B" };
+    String[] types = {"--Select type--" };
 
     String division="";
     String district="";
@@ -87,10 +87,10 @@ public class FamilyAddress extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         divisionSpinner.setAdapter(adapter);
         setDivisions();
-
         divisionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
                 ((TextView) parent.getChildAt(0)).setTextColor(Color.BLACK);
                 ((TextView) parent.getChildAt(0)).setBackgroundColor(Color.WHITE);
                 //Toast.makeText(FamilyAddress.this, divisionSpinner.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
@@ -282,18 +282,20 @@ public class FamilyAddress extends AppCompatActivity {
     }
     private boolean formValidationPassed() {
 
-        //TODO complete validation
         boolean flag = true;
-        if(division.startsWith("-"))
+        if(divisionSpinner.getSelectedItemPosition()==0)
         {
             flag=false;
         }
-        if(district.startsWith("-"))
+        if(districtSpinner.getSelectedItemPosition()==0)
         {
             flag=false;
         }
-        if(type.startsWith("-"))
+        if(typeSpinner.getSelectedItemPosition()==0)
         {
+            flag=false;
+        }
+        if(areaSpinner.getSelectedItemPosition()==0){
             flag=false;
         }
         if(addressEditText.length()==0)

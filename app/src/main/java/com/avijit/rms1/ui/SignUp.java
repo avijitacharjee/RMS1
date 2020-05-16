@@ -6,9 +6,11 @@ import android.app.ActivityOptions;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Pair;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -36,10 +38,10 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SignUp extends AppCompatActivity {
+public class SignUp extends BaseActivity {
 
     ProgressDialog progressDialog;
-    Button loginIntentButton;
+    TextView loginIntentButton;
     TextView goButton;
     ImageView logoImage;
     TextInputLayout tran2,tran3;
@@ -104,11 +106,32 @@ public class SignUp extends AppCompatActivity {
                 {
                     v();
                 }
+                else {
+                    Toast toast = Toast.makeText(getApplicationContext(),"Please check all fields" , Toast.LENGTH_SHORT);
+                    View view = toast.getView();
+
+                    //Gets the actual oval background of the Toast then sets the colour filter
+                    view.getBackground().setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
+
+                    //Gets the TextView from the Toast so it can be editted
+                    TextView text = view.findViewById(android.R.id.message);
+                    text.setTextSize(TypedValue.COMPLEX_UNIT_SP,16);
+                    text.setTextColor(Color.WHITE);
+
+                    toast.show();
+                }
             }
         });
 
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(SignUp.this,MainDashboard.class);
+        startActivity(intent);
+        /*finish();
+        overridePendingTransition(0,0);*/
+    }
     /*
      * Volley request for registration
      * @Params no params
@@ -246,43 +269,31 @@ public class SignUp extends AppCompatActivity {
         confirmPasswordEditText = findViewById(R.id.confirm_password_edit_text);
     }
 
-    @Override
-    public void onBackPressed() {
-        //startActivity(new Intent(SignUp.this,MainActivity.class));
-        /*finish();
-        overridePendingTransition(0,0);*/
-    }
     private boolean formIsValid()
     {
         boolean valid = true;
         if(nameEditText.getText().toString().equals(""))
         {
-            tran2.setError("Name can't be empty");
             valid = false;
         }
         if(emailEditText.getText().toString().equals(""))
         {
-            emailEditText.setError("Email can't be empty");
             valid = false;
         }
         if(phoneEditText.getText().toString().equals(""))
         {
-            phoneEditText.setError("Phone can't be empty");
             valid = false;
         }
         if(nidEditText.getText().toString().equals(""))
         {
-            nidEditText.setError("NID can't be empty");
             valid = false;
         }
         if(passwordEditText.getText().toString().equals(""))
         {
-            passwordEditText.setError("Password can't be empty");
             valid = false;
         }
         if(confirmPasswordEditText.getText().toString().equals(""))
         {
-            confirmPasswordEditText.setError("Confirm password");
             valid = false;
         }
         if(!confirmPasswordEditText.getText().toString().equals(passwordEditText.getText().toString()))

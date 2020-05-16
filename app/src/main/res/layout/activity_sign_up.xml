@@ -224,7 +224,9 @@
                         android:textColor="#fff"
                         android:transitionName="tran4" />
 
-                    <Button
+                    <TextView
+                        android:gravity="center"
+                        android:padding="10dp"
                         android:id="@+id/signup_intent_button"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

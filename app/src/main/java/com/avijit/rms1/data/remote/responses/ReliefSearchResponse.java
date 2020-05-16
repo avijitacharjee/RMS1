@@ -1,4 +1,4 @@
 package com.avijit.rms1.data.remote.responses;
 
-public class ReliefSearchResponse {
+public class ReliefSearchResponse  extends BaseModel{
 }

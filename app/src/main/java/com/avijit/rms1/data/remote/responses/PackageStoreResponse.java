@@ -4,7 +4,7 @@ import com.avijit.rms1.data.remote.model.Package;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class PackageStoreResponse {
+public class PackageStoreResponse extends BaseModel{
 
 
     @SerializedName("data")

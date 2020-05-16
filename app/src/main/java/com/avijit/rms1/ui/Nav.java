@@ -1,17 +1,16 @@
 package com.avijit.rms1.ui;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.lifecycle.MutableLiveData;
-
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.TextAppearanceSpan;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -24,15 +23,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.avijit.rms1.R;
 import com.avijit.rms1.data.local.AppDatabase;
-import com.avijit.rms1.data.remote.RetrofitService;
-import com.avijit.rms1.data.remote.api.CompanyApi;
-import com.avijit.rms1.data.remote.api.CoronaSummaryApi;
-import com.avijit.rms1.data.remote.responses.CompanyResponse;
-import com.avijit.rms1.data.remote.responses.CompanySearchResponse;
-import com.avijit.rms1.data.remote.responses.CompanyStoreResponse;
-import com.avijit.rms1.data.remote.responses.CoronaSummaryResponse;
-import com.avijit.rms1.repository.CompanyRepository;
-import com.avijit.rms1.repository.CoronaSummaryRepository;
 import com.avijit.rms1.utils.AppUtils;
 import com.avijit.rms1.utils.EndDrawerToggle;
 import com.avijit.rms1.utils.MyBroadcastReceiver;
@@ -47,23 +37,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import com.avijit.rms1.data.local.daos.*;
 import com.avijit.rms1.data.local.entities.*;
-public class Nav extends AppCompatActivity {
-    DrawerLayout drawer;
+public class Nav extends BaseActivity {
     MyBroadcastReceiver myBroadcastReceiver;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nav);
         AppUtils appUtils = new AppUtils(this);
-        myBroadcastReceiver = new MyBroadcastReceiver();
-
-
-        Toolbar toolbar = findViewById(R.id.toolbar);
-
+        toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("RMS");
         toolbar.setSubtitle("Home");
         //toolbar.setLogo(R.drawable.ic_exit_to_app_black_24dp);
@@ -93,11 +75,15 @@ public class Nav extends AppCompatActivity {
                 }
             }
         });
+        Menu menu = navigationView.getMenu();
+        MenuItem tools= menu.findItem(R.id.group_title_1);
+        SpannableString s = new SpannableString(tools.getTitle());
+        s.setSpan(new TextAppearanceSpan(this, R.style.TextAppearance44), 0, s.length(), 0);
+        tools.setTitle(s);
         if(getSharedPreferences("RMS",MODE_PRIVATE).getString("token","").equals("")){
             startActivity(new Intent(Nav.this,Login.class));
         }
         setLocations();
-
         saveUserInfo();
         //broadcastIntent();
     }
@@ -206,6 +192,6 @@ public class Nav extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        unregisterReceiver(myBroadcastReceiver);
+        //unregisterReceiver(myBroadcastReceiver);
     }
 }

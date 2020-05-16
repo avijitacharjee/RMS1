@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class CompanySearchResponse {
+public class CompanySearchResponse extends BaseModel{
 
 
     @SerializedName("companySuggestion1")

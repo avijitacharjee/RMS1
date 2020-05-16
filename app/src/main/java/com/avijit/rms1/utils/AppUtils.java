@@ -21,6 +21,7 @@ import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.avijit.rms1.MainActivity;
 import com.avijit.rms1.R;
+import com.avijit.rms1.ui.AddCompany;
 import com.avijit.rms1.ui.AddSchedule;
 import com.avijit.rms1.ui.CompletedSchedules;
 import com.avijit.rms1.ui.FamilyAddress;
@@ -139,6 +140,10 @@ public class AppUtils {
                 }
                 case R.id.nav_entry_giving_reliefs: {
                     context.startActivity(new Intent(context, FamilyAddress.class));
+                    break;
+                }
+                case R.id.nav_add_company: {
+                    context.startActivity(new Intent(context, AddCompany.class));
                     break;
                 }
 

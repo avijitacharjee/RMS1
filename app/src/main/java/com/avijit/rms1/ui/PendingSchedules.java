@@ -3,13 +3,19 @@ package com.avijit.rms1.ui;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.TextAppearanceSpan;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.android.volley.Request;
@@ -19,8 +25,10 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.avijit.rms1.R;
 import com.avijit.rms1.adapters.ReliefScheduleRecyclerViewAdapter;
+import com.avijit.rms1.data.remote.responses.ReliefScheduleResponse;
 import com.avijit.rms1.utils.AppUtils;
 import com.avijit.rms1.utils.EndDrawerToggle;
+import com.avijit.rms1.viewmodel.PendingSchedulesViewModel;
 import com.google.android.material.navigation.NavigationView;
 
 import org.json.JSONArray;
@@ -29,7 +37,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PendingSchedules extends AppCompatActivity {
+public class PendingSchedules extends BaseActivity {
+    PendingSchedulesViewModel pendingSchedulesViewModel;
     AppUtils appUtils;
     AlertDialog dialog;
     DrawerLayout drawer;
@@ -48,6 +57,8 @@ public class PendingSchedules extends AppCompatActivity {
         this.dialog = appUtils.dialog;
 
         Toolbar toolbar = findViewById(R.id.toolbar);
+        pendingSchedulesViewModel = ViewModelProviders.of(this).get(PendingSchedulesViewModel.class);
+        pendingSchedulesViewModel.init();
 
         toolbar.setTitle("RMS");
         toolbar.setSubtitle("Pending schedules for giving relief");
@@ -69,13 +80,14 @@ public class PendingSchedules extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                if (drawer.isDrawerOpen(Gravity.RIGHT)) {
-                    drawer.closeDrawer(Gravity.RIGHT);
-                } else {
-                    drawer.openDrawer(Gravity.RIGHT);
-                }
+                PendingSchedules.super.onBackPressed();
             }
         });
+        Menu menu = navigationView.getMenu();
+        MenuItem tools= menu.findItem(R.id.group_title_1);
+        SpannableString s = new SpannableString(tools.getTitle());
+        s.setSpan(new TextAppearanceSpan(this, R.style.TextAppearance44), 0, s.length(), 0);
+        tools.setTitle(s);
         recyclerView = findViewById(R.id.recycler_view);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
@@ -92,29 +104,22 @@ public class PendingSchedules extends AppCompatActivity {
 
         adapter = new ReliefScheduleRecyclerViewAdapter(sls,dates,names);
         recyclerView.setAdapter(adapter);
+
     }
     private void fetchData(String id) {
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        String url = "https://aniksen.me/covidbd/api/pending-schedules/"+id;
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+        dialog.show();
+        pendingSchedulesViewModel.getPendingSchedules(id).observe(PendingSchedules.this, new Observer<ReliefScheduleResponse>() {
             @Override
-            public void onResponse(String response) {
-                try{
-                    JSONObject jsonObject = new JSONObject(response);
-                    JSONArray jsonArray = jsonObject.getJSONArray("data");
-                    for(int i=0;i<jsonArray.length();i++){
-                        sls.add(""+(i+1));
-                        dates.add(jsonArray.getJSONObject(i).getString("schedule_date"));
-                        names.add(jsonArray.getJSONObject(i).getString("name"));
-                    }
-                    adapter.notifyDataSetChanged();
-                }catch (Exception e ){
-
+            public void onChanged(ReliefScheduleResponse reliefScheduleResponse) {
+                for(int i=0;i<reliefScheduleResponse.getData().size();i++){
+                    sls.add(""+(i+1));
+                    dates.add(reliefScheduleResponse.getData().get(i).getSchedule_date());
+                    names.add(reliefScheduleResponse.getData().get(i).getName());
                 }
+                dialog.dismiss();
+                adapter.notifyDataSetChanged();
             }
-        }, appUtils.errorListener);
-        stringRequest.setRetryPolicy(AppUtils.STRING_REQUEST_RETRY_POLICY);
-        requestQueue.add(stringRequest);
+        });
 
     }
 

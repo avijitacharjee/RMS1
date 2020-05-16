@@ -4,7 +4,7 @@ import com.avijit.rms1.data.remote.model.CoronaSummary;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class CoronaSummaryResponse {
+public class CoronaSummaryResponse extends BaseModel{
     @SerializedName("data")
     @Expose
     private CoronaSummary data;

@@ -1,6 +1,6 @@
 package com.avijit.rms1.data.remote.responses;
 
-public class CompanyUserStoreResponse {
+public class CompanyUserStoreResponse extends BaseModel{
     String confirm_msg;
 
     public String getConfirm_msg() {

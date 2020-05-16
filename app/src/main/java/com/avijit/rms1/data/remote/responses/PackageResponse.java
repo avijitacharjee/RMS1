@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class PackageResponse {
+public class PackageResponse extends BaseModel{
 
     @SerializedName("data")
     @Expose

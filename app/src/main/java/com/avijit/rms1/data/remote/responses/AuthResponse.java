@@ -3,7 +3,7 @@ package com.avijit.rms1.data.remote.responses;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class AuthResponse {
+public class AuthResponse extends BaseModel{
 
     @SerializedName("token_type")
     @Expose

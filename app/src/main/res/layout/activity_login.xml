@@ -63,6 +63,7 @@
                         android:id="@+id/username"
                         app:boxStrokeColor="@color/black"
                         android:hint="Username"
+                        app:hintTextColor="@color/black"
                         app:hintAnimationEnabled="true"
                         android:textColorHint="@color/black"
                         android:transitionName="tran2"
@@ -82,6 +83,7 @@
                         android:id="@+id/password"
                         app:boxStrokeColor="@color/black"
                         android:hint="Password"
+                        app:hintTextColor="@color/black"
                         app:hintAnimationEnabled="true"
                         android:textColorHint="@color/black"
                         android:transitionName="tran3"
@@ -105,21 +107,25 @@
                         android:layout_margin="5dp"
                         android:background="#00000000"
                         android:elevation="0dp"
-                        android:text="Forgot Password?" />
+                        android:text="Forgot Password?"
+                        android:visibility="gone" />
 
                     <TextView
                         android:id="@+id/login_button"
                         android:layout_width="match_parent"
-                        android:gravity="center"
                         android:layout_height="wrap_content"
-                        android:text="GO"
-                        android:background="#000000"
-                        android:transitionName="tran4"
-                        android:textColor="#fff"
                         android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"/>
+                        android:layout_marginBottom="10dp"
+                        android:background="#000000"
+                        android:gravity="center"
+                        android:padding="10dp"
+                        android:text="GO"
+                        android:textColor="#fff"
+                        android:transitionName="tran4" />
 
-                    <Button
+                    <TextView
+                        android:gravity="center"
+                        android:padding="10dp"
                         android:id="@+id/signup_intent_button"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

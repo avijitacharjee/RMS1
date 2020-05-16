@@ -1,4 +1,6 @@
 package com.avijit.rms1.data.remote.model;
 
-public class Relief {
+import com.avijit.rms1.data.remote.responses.BaseModel;
+
+public class Relief extends BaseModel {
 }
