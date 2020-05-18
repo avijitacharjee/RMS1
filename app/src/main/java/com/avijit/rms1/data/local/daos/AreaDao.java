@@ -1,5 +1,7 @@
 package com.avijit.rms1.data.local.daos;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
@@ -11,11 +13,11 @@ import java.util.List;
 @Dao
 public interface AreaDao {
     @Query("SELECT * FROM Area")
-    List<Area> getAll();
+    LiveData<List<Area>> getAll();
     @Insert
     void insert(Area... areas);
     @Query("DELETE from Area")
     void deleteAll();
     @Query("SELECT * FROM Area WHERE Area.districtId =(:districtId)")
-    List<Area> getAreasByDistrictId(String districtId);
+    LiveData<List<Area>> getAreasByDistrictId(String districtId);
 }

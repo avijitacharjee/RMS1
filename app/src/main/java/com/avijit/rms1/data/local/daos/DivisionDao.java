@@ -1,5 +1,7 @@
 package com.avijit.rms1.data.local.daos;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -12,7 +14,7 @@ import java.util.List;
 @Dao
 public interface DivisionDao {
     @Query("Select * from Division")
-    List<Division> getAll();
+    LiveData<List<Division>> getAll();
     @Insert
     void insertAll(Division... divisions);
     @Delete

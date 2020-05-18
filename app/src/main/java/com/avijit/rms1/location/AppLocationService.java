@@ -19,6 +19,11 @@ import androidx.core.app.ActivityCompat;
 import static android.content.Context.LOCATION_SERVICE;
 
 public class AppLocationService extends Service implements LocationListener {
+    private boolean isGPSEnabled = false;
+    private boolean isNetworkEnabled = false;
+    private boolean canGetLocation = false;
+    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10; // 10 meters
+    private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1; // 1 minute
 
     protected LocationManager locationManager;
     private Location location;
@@ -36,6 +41,14 @@ public class AppLocationService extends Service implements LocationListener {
 
     public Location getLocation() {
         String provider = LocationManager.NETWORK_PROVIDER;
+        isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        isNetworkEnabled = locationManager
+                .isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        if (!isGPSEnabled && !isNetworkEnabled) {
+            // no network provider is enabled
+        } else {
+
+        }
         if (locationManager.isProviderEnabled(provider)) {
             /*if(ActivityCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION)!= PackageManager
             .PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION)!=PackageManager.PERMISSION_GRANTED)

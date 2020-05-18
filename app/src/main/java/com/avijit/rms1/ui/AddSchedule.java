@@ -54,23 +54,24 @@ import java.util.List;
 
 public class AddSchedule extends BaseActivity {
     AddScheduleVIewModel addScheduleVIewModel;
-    AlertDialog dialog ;
+    AlertDialog dialog;
     DatePickerDialog datePickerDialog;
     TextView dateEditText;
-    Spinner divisionSpinner,districtSpinner,typeSpinner,areaSpinner;
+    Spinner divisionSpinner, districtSpinner, typeSpinner, areaSpinner;
     EditText addressEditText;
     TextView nextButton;
     DrawerLayout drawer;
 
-    private List<Division> divisionList =new ArrayList<>();
-    private List<District> districtList =new ArrayList<>();
-    private List<String> typeList =new ArrayList<>();
-    private List<Area> areaList =new ArrayList<>();
+    private final List<Division> divisionList = new ArrayList<>();
+    private List<District> districtList = new ArrayList<>();
+    private List<String> typeList = new ArrayList<>();
+    private List<Area> areaList = new ArrayList<>();
 
     /**
      * List of areas after selecting type
      */
     private List<Area> selectedArea = new ArrayList<>();
+
     /**
      * @param savedInstanceState previously saved bundle
      */
@@ -108,7 +109,6 @@ public class AddSchedule extends BaseActivity {
             }
         });
         addScheduleVIewModel = ViewModelProviders.of(this).get(AddScheduleVIewModel.class);
-        addScheduleVIewModel.init();
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("RMS");
         toolbar.setSubtitle("Add a schedule for giving relief");
@@ -133,42 +133,31 @@ public class AddSchedule extends BaseActivity {
         });
 
         Menu menu = navigationView.getMenu();
-        MenuItem tools= menu.findItem(R.id.group_title_1);
+        MenuItem tools = menu.findItem(R.id.group_title_1);
         SpannableString s = new SpannableString(tools.getTitle());
         s.setSpan(new TextAppearanceSpan(this, R.style.TextAppearance44), 0, s.length(), 0);
         tools.setTitle(s);
 
 
-        divisionSpinner= findViewById(R.id.division_spinner);
+        divisionSpinner = findViewById(R.id.division_spinner);
         districtSpinner = findViewById(R.id.district_spinner);
         typeSpinner = findViewById(R.id.type_spinner);
         areaSpinner = findViewById(R.id.area_spinner);
-        addressEditText= findViewById(R.id.address_edit_text);
+        addressEditText = findViewById(R.id.address_edit_text);
         nextButton = findViewById(R.id.next_button);
-
-        AsyncTask.execute(new Runnable() {
+        addScheduleVIewModel.getDivisions().observe(this, new Observer<List<Division>>() {
             @Override
-            public void run() {
-                AppDatabase db = AppDatabase.getInstance(AddSchedule.this);
-                divisionList= db.divisionDao().getAll();
-                String[] divisions = new String[divisionList.size()+1];
-                divisions[0]="--Select Division--";
-                if(divisionList.size()==0){
-                    setLocations();
-                    dialog.show();
+            public void onChanged(List<Division> divisions) {
+                divisionList.clear();
+                divisionList.addAll(divisions);
+                String[] divs = new String[divisionList.size() + 1];
+                divs[0] = "--Select Division--";
+                for (int i = 0; i < divisionList.size(); i++) {
+                    divs[i + 1] = divisionList.get(i).name;
                 }
-                for(int i=0;i<divisionList.size();i++)
-                {
-                    divisions[i+1]=divisionList.get(i).name;
-                }
-                final ArrayAdapter<String> adapter = new ArrayAdapter<String>(AddSchedule.this, R.layout.spinner_layout,divisions);
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        divisionSpinner.setAdapter(adapter);
-                    }
-                });
+                final ArrayAdapter<String> adapter = new ArrayAdapter<String>(AddSchedule.this, R.layout.spinner_layout, divs);
+                divisionSpinner.setAdapter(adapter);
+
             }
         });
         setDistricts();
@@ -179,8 +168,7 @@ public class AddSchedule extends BaseActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 ((TextView) parent.getChildAt(0)).setTextColor(Color.BLACK);
                 ((TextView) parent.getChildAt(0)).setBackgroundColor(Color.WHITE);
-                if(position>0)
-                {
+                if (position > 0) {
                     setDistricts();
                 }
             }
@@ -193,8 +181,9 @@ public class AddSchedule extends BaseActivity {
         districtSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if(position>0)
-                {
+                ((TextView) parent.getChildAt(0)).setTextColor(Color.BLACK);
+                ((TextView) parent.getChildAt(0)).setBackgroundColor(Color.WHITE);
+                if (position > 0) {
                     setTypes();
                 }
             }
@@ -209,8 +198,7 @@ public class AddSchedule extends BaseActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 ((TextView) parent.getChildAt(0)).setTextColor(Color.BLACK);
                 ((TextView) parent.getChildAt(0)).setBackgroundColor(Color.WHITE);
-                if(position>0)
-                {
+                if (position > 0) {
                     setAreas();
                 }
             }
@@ -235,7 +223,7 @@ public class AddSchedule extends BaseActivity {
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isFormValid()){
+                if (isFormValid()) {
                     ReliefSchedule reliefSchedule = new ReliefSchedule();
                     reliefSchedule.setAddress(addressEditText.getText().toString());
                     reliefSchedule.setCompany_id("1");
@@ -243,8 +231,8 @@ public class AddSchedule extends BaseActivity {
                     reliefSchedule.setSchedule_date(dateEditText.getText().toString());
                     reliefSchedule.setDistrict_id(districtList.get(districtSpinner.getSelectedItemPosition() - 1).districtId);
                     reliefSchedule.setDivision_id(divisionList.get(divisionSpinner.getSelectedItemPosition() - 1).divisionId);
-                    reliefSchedule.setArea_id(areaList.get(areaSpinner.getSelectedItemPosition()-1).areaId);
-                    Log.d("JSON", "onClick: "+new Gson().toJson(reliefSchedule));
+                    reliefSchedule.setArea_id(areaList.get(areaSpinner.getSelectedItemPosition() - 1).areaId);
+                    Log.d("JSON", "onClick: " + new Gson().toJson(reliefSchedule));
                     addScheduleVIewModel.addSchedule(reliefSchedule).observe(AddSchedule.this, new Observer<ReliefScheduleStoreResponse>() {
                         @Override
                         public void onChanged(ReliefScheduleStoreResponse reliefScheduleStoreResponse) {
@@ -252,9 +240,8 @@ public class AddSchedule extends BaseActivity {
                             Toast.makeText(AddSchedule.this, "Schedule Added Successfully", Toast.LENGTH_SHORT).show();
                         }
                     });
-                }
-                else {
-                    Toast toast = Toast.makeText(getApplicationContext(),"All fields are required" , Toast.LENGTH_SHORT);
+                } else {
+                    Toast toast = Toast.makeText(getApplicationContext(), "All fields are required", Toast.LENGTH_SHORT);
                     View view = toast.getView();
 
                     //Gets the actual oval background of the Toast then sets the colour filter
@@ -262,7 +249,7 @@ public class AddSchedule extends BaseActivity {
 
                     //Gets the TextView from the Toast so it can be editted
                     TextView text = view.findViewById(android.R.id.message);
-                    text.setTextSize(TypedValue.COMPLEX_UNIT_SP,16);
+                    text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
                     text.setTextColor(Color.WHITE);
 
                     toast.show();
@@ -274,93 +261,91 @@ public class AddSchedule extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        if(drawer.isDrawerOpen(Gravity.RIGHT)){
+        if (drawer.isDrawerOpen(Gravity.RIGHT)) {
             drawer.closeDrawer(Gravity.RIGHT);
-        }
-        else
-        {
+        } else {
             super.onBackPressed();
         }
     }
 
     private void setDistricts() {
-        AsyncTask.execute(new Runnable() {
+        if (divisionSpinner.getSelectedItemPosition() <1) {
+            final ArrayAdapter<String> adapter = new ArrayAdapter<String>(AddSchedule.this, R.layout.spinner_layout, new String[]{"--Select District--"});
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            districtSpinner.setAdapter(adapter);
+            return;
+        }
+        addScheduleVIewModel.getDistrictByDivisionId(divisionList.get(divisionSpinner.getSelectedItemPosition() - 1).divisionId).observe(this, new Observer<List<District>>() {
             @Override
-            public void run() {
-                AppDatabase db = AppDatabase.getInstance(AddSchedule.this);
+            public void onChanged(List<District> districtss) {
                 String[] districts = new String[1];
-                districts[0]="--Select Districts--";
-                if(divisionSpinner.getSelectedItemPosition()>0)
-                {
-                    districtList = db.districtDao().getDistrictByDivisionId(divisionList.get(divisionSpinner.getSelectedItemPosition()-1).divisionId);
-                    districts = new String[districtList.size()+1];
-                    districts[0]="--Select Districts";
-                    for(int i=0;i<districtList.size();i++)
-                    {
-                        districts[i+1]=districtList.get(i).name;
+                districts[0] = "--Select Districts--";
+                if (divisionSpinner.getSelectedItemPosition() > 0) {
+                    districtList = districtss;
+                    districts = new String[districtList.size() + 1];
+                    districts[0] = "--Select Districts";
+                    for (int i = 0; i < districtList.size(); i++) {
+                        districts[i + 1] = districtList.get(i).name;
                     }
                 }
-                final ArrayAdapter<String> adapter = new ArrayAdapter<String>(AddSchedule.this, R.layout.spinner_layout,districts);
+                final ArrayAdapter<String> adapter = new ArrayAdapter<String>(AddSchedule.this, R.layout.spinner_layout, districts);
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        districtSpinner.setAdapter(adapter);
-                    }
-                });
+                districtSpinner.setAdapter(adapter);
             }
         });
     }
+
     private void setTypes() {
-        AsyncTask.execute(new Runnable() {
+        if(districtSpinner.getSelectedItemPosition()<1){
+            final ArrayAdapter<String> adapter = new ArrayAdapter<String>(AddSchedule.this, R.layout.spinner_layout, new String[]{"--Select Type--"});
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            typeSpinner.setAdapter(adapter);
+            return;
+        }
+        addScheduleVIewModel.getAreasByDistrictId(districtList.get(districtSpinner.getSelectedItemPosition() - 1).districtId).observe(this, new Observer<List<Area>>() {
             @Override
-            public void run() {
-                AppDatabase db = AppDatabase.getInstance(AddSchedule.this);
+            public void onChanged(List<Area> areas) {
                 String[] types = new String[1];
-                types[0]="--Select Types--";
-                if(districtSpinner.getSelectedItemPosition()>0) {
-                    areaList = db.areaDao().getAreasByDistrictId(districtList.get(districtSpinner.getSelectedItemPosition()-1).districtId);
-                    for(int i=0;i<areaList.size();i++) {
+                types[0] = "--Select Types--";
+                if (districtSpinner.getSelectedItemPosition() > 0) {
+                    areaList = areas;
+                    for (int i = 0; i < areaList.size(); i++) {
                         //districts[i+1]=districtList.get(i).name;
                         Area area = areaList.get(i);
-                        if(!typeList.contains(area.type)) {
+                        if (!typeList.contains(area.type)) {
                             typeList.add(area.type);
                         }
                     }
-                    types = new String[typeList.size()+1];
-                    types[0]="--Select Types--";
-                    for(int i=0;i<typeList.size();i++){
-                        types[i+1]=typeList.get(i);
+                    types = new String[typeList.size() + 1];
+                    types[0] = "--Select Types--";
+                    for (int i = 0; i < typeList.size(); i++) {
+                        types[i + 1] = typeList.get(i);
                     }
                 }
-                final ArrayAdapter<String> adapter = new ArrayAdapter<String>(AddSchedule.this, R.layout.spinner_layout,types);
+                final ArrayAdapter<String> adapter = new ArrayAdapter<String>(AddSchedule.this, R.layout.spinner_layout, types);
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        typeSpinner.setAdapter(adapter);
-                    }
-                });
+                typeSpinner.setAdapter(adapter);
             }
         });
     }
-    private void setAreas(){
+
+    private void setAreas() {
         selectedArea.clear();
-        for(int i=0;i<areaList.size();i++){
-            if(areaList.get(i).type.equals(typeList.get(typeSpinner.getSelectedItemPosition()-1))){
+        for (int i = 0; i < areaList.size(); i++) {
+            if (areaList.get(i).type.equals(typeList.get(typeSpinner.getSelectedItemPosition() - 1))) {
                 selectedArea.add(areaList.get(i));
             }
         }
         String[] areas = new String[1];
         areas[0] = "--Select Area--";
-        if(selectedArea.size()>0){
-            areas= new String[selectedArea.size()+1];
-            areas[0]="--Select Area--";
-            for(int i=0;i<selectedArea.size();i++){
-                areas[i+1]=selectedArea.get(i).name;
+        if (selectedArea.size() > 0) {
+            areas = new String[selectedArea.size() + 1];
+            areas[0] = "--Select Area--";
+            for (int i = 0; i < selectedArea.size(); i++) {
+                areas[i + 1] = selectedArea.get(i).name;
             }
         }
-        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(AddSchedule.this, R.layout.spinner_layout,areas);
+        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(AddSchedule.this, R.layout.spinner_layout, areas);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         runOnUiThread(new Runnable() {
             @Override
@@ -369,26 +354,28 @@ public class AddSchedule extends BaseActivity {
             }
         });
     }
-    private boolean isFormValid(){
+
+    private boolean isFormValid() {
         boolean valid = true;
-        if(divisionSpinner.getSelectedItemPosition()==0){
+        if (divisionSpinner.getSelectedItemPosition() == 0) {
             valid = false;
         }
-        if(districtSpinner.getSelectedItemPosition() ==0){
+        if (districtSpinner.getSelectedItemPosition() == 0) {
             valid = false;
         }
-        if(areaSpinner.getSelectedItemPosition()==0){
+        if (areaSpinner.getSelectedItemPosition() == 0) {
             valid = false;
         }
-        if(dateEditText.getText().toString().contains("D")){
+        if (dateEditText.getText().toString().contains("D")) {
             valid = false;
         }
-        if(addressEditText.getText().toString().isEmpty()){
+        if (addressEditText.getText().toString().isEmpty()) {
             valid = false;
         }
         return valid;
     }
-    public void setLocations(){
+
+    public void setLocations() {
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = "https://aniksen.me/covidbd/api/locations";
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
@@ -402,23 +389,20 @@ public class AddSchedule extends BaseActivity {
                     List<Area> areaList = new ArrayList<>();
                     JSONObject jsonObject = new JSONObject(response);
                     JSONArray locations = jsonObject.getJSONArray("locations");
-                    for(int i=0;i<locations.length();i++)
-                    {
+                    for (int i = 0; i < locations.length(); i++) {
                         JSONObject divisionResponse = locations.getJSONObject(i);
-                        final Division division = new Division(divisionResponse.getString("division_id"),divisionResponse.getString("division_name"));
+                        final Division division = new Division(divisionResponse.getString("division_id"), divisionResponse.getString("division_name"));
                         divisionList.add(division);
                         JSONArray districts = divisionResponse.getJSONArray("districts");
-                        for(int j =0;j<districts.length();j++)
-                        {
+                        for (int j = 0; j < districts.length(); j++) {
                             JSONObject districtResponse = districts.getJSONObject(j);
-                            final com.avijit.rms1.data.local.entities.District district ;
-                            district = new District(districtResponse.getString("district_id"),divisionResponse.getString("division_id"),districtResponse.getString("district_name"));
+                            final com.avijit.rms1.data.local.entities.District district;
+                            district = new District(districtResponse.getString("district_id"), divisionResponse.getString("division_id"), districtResponse.getString("district_name"));
                             districtList.add(district);
                             JSONArray areas = districtResponse.getJSONArray("areas");
-                            for(int k=0;k<areas.length();k++)
-                            {
+                            for (int k = 0; k < areas.length(); k++) {
                                 JSONObject areaResponse = areas.getJSONObject(k);
-                                final Area area = new Area(district.districtId,areaResponse.getString("area_id"),areaResponse.getString("area"),areaResponse.getString("area_type"));
+                                final Area area = new Area(district.districtId, areaResponse.getString("area_id"), areaResponse.getString("area"), areaResponse.getString("area_type"));
                                 areaList.add(area);
                             }
                         }
@@ -426,22 +410,19 @@ public class AddSchedule extends BaseActivity {
                     final Division[] divisions = new Division[divisionList.size()];
                     final District[] districts = new District[districtList.size()];
                     final Area[] areas = new Area[areaList.size()];
-                    for(int i=0;i<divisionList.size();i++)
-                    {
+                    for (int i = 0; i < divisionList.size(); i++) {
                         divisions[i] = divisionList.get(i);
                     }
-                    for(int i=0;i<districtList.size();i++)
-                    {
+                    for (int i = 0; i < districtList.size(); i++) {
                         districts[i] = districtList.get(i);
                     }
-                    for(int i=0;i<areaList.size();i++)
-                    {
+                    for (int i = 0; i < areaList.size(); i++) {
                         areas[i] = areaList.get(i);
                     }
                     AsyncTask.execute(new Runnable() {
                         @Override
                         public void run() {
-                            if(dialog.isShowing()){
+                            if (dialog.isShowing()) {
                                 dialog.dismiss();
                             }
                             AppDatabase db = AppDatabase.getInstance(AddSchedule.this);
@@ -455,11 +436,11 @@ public class AddSchedule extends BaseActivity {
                         }
                     });
 
-                }catch (Exception e){
-                    Toast.makeText(AddSchedule.this, ""+e, Toast.LENGTH_SHORT).show();
+                } catch (Exception e) {
+                    Toast.makeText(AddSchedule.this, "" + e, Toast.LENGTH_SHORT).show();
                 }
             }
-        },new AppUtils(AddSchedule.this).errorListener);
+        }, new AppUtils(AddSchedule.this).errorListener);
         stringRequest.setRetryPolicy(AppUtils.STRING_REQUEST_RETRY_POLICY);
         queue.add(stringRequest);
     }

@@ -58,8 +58,8 @@ public class AddUserInCompany extends BaseActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 try {
-                    ((TextView) parent.getChildAt(0)).setTextColor(Color.BLACK);
-                    ((TextView) parent.getChildAt(0)).setBackgroundColor(Color.WHITE);
+                    ((TextView) parent.getChildAt(0)).setTextColor(getResources().getColor(R.color.black_1));
+                    ((TextView) parent.getChildAt(0)).setBackgroundColor(getResources().getColor(R.color.white_1));
                 }catch (Exception e) {}
                 if(position==1){
                     newUserLayout.setVisibility(View.VISIBLE);
@@ -84,8 +84,8 @@ public class AddUserInCompany extends BaseActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 try {
-                    ((TextView) parent.getChildAt(0)).setTextColor(Color.BLACK);
-                    ((TextView) parent.getChildAt(0)).setBackgroundColor(Color.WHITE);
+                    ((TextView) parent.getChildAt(0)).setTextColor(getResources().getColor(R.color.black_1));
+                    ((TextView) parent.getChildAt(0)).setBackgroundColor(getResources().getColor(R.color.white_1));
                 }catch (Exception e) {}
             }
 

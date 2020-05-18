@@ -29,6 +29,7 @@ import com.avijit.rms1.ui.Login;
 import com.avijit.rms1.ui.MainDashboard;
 import com.avijit.rms1.ui.Nav;
 import com.avijit.rms1.ui.PendingSchedules;
+import com.avijit.rms1.ui.ReliefRequest;
 import com.google.android.material.navigation.NavigationView;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -144,6 +145,10 @@ public class AppUtils {
                 }
                 case R.id.nav_add_company: {
                     context.startActivity(new Intent(context, AddCompany.class));
+                    break;
+                }
+                case R.id.nav_add_request_for_relief :{
+                    context.startActivity(new Intent(context, ReliefRequest.class));
                     break;
                 }
 

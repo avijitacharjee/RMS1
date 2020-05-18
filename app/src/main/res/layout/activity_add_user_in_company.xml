@@ -88,19 +88,23 @@
                             android:layout_marginBottom="20dp"
                             android:orientation="vertical">
 
-                            <LinearLayout
+                            <com.google.android.material.textfield.TextInputLayout
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="10dp"
-                                android:background="@drawable/shape1"
-                                android:elevation="20dp">
+                                android:hint="Email"
+                                android:textColorHint="@color/black_1"
+                                app:boxStrokeColor="@color/black_1"
+                                android:elevation="20dp"
+                                app:hintAnimationEnabled="true"
+                                app:hintTextColor="@color/black">
 
                                 <Spinner
                                     android:id="@+id/user_type_spinner"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:textColor="@color/black" />
-                            </LinearLayout>
+                                    android:textColor="@color/black_1" />
+                            </com.google.android.material.textfield.TextInputLayout>
 
                             <com.google.android.material.textfield.TextInputLayout
                                 android:id="@+id/email"
@@ -108,8 +112,8 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="Email"
-                                android:textColorHint="@color/black"
-                                app:boxStrokeColor="@color/black"
+                                android:textColorHint="@color/black_1"
+                                app:boxStrokeColor="@color/black_1"
                                 app:hintAnimationEnabled="true"
                                 app:hintTextColor="@color/black">
 
@@ -118,8 +122,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:inputType="textEmailAddress"
-                                    android:textColor="@color/black"
-                                    android:textColorHint="@color/black" />
+                                    android:textColor="@color/black_1"/>
                             </com.google.android.material.textfield.TextInputLayout>
 
                             <LinearLayout
@@ -135,9 +138,9 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:hint="Full Name"
-                                    android:textColorHint="@color/black"
+                                    android:textColorHint="@color/black_1"
                                     android:transitionName="tran2"
-                                    app:boxStrokeColor="@color/black"
+                                    app:boxStrokeColor="@color/black_1"
                                     app:hintAnimationEnabled="true"
                                     app:hintTextColor="@color/black">
 
@@ -145,8 +148,7 @@
                                         android:id="@+id/full_name_edit_text"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:textColor="@color/black"
-                                        android:textColorHint="@color/black" />
+                                        android:textColor="@color/black_1" />
                                 </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -156,18 +158,17 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:hint="Phone no"
-                                    android:textColorHint="@color/black"
+                                    android:textColorHint="@color/black_1"
                                     app:boxStrokeColor="@color/black"
                                     app:hintAnimationEnabled="true"
-                                    app:hintTextColor="@color/black">
+                                    app:hintTextColor="@color/black_1">
 
                                     <com.google.android.material.textfield.TextInputEditText
                                         android:id="@+id/phone_edit_text"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:inputType="number"
-                                        android:textColor="@color/black"
-                                        android:textColorHint="@color/black" />
+                                        android:textColor="@color/black_1"/>
                                 </com.google.android.material.textfield.TextInputLayout>
 
                                 <com.google.android.material.textfield.TextInputLayout
@@ -176,18 +177,17 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:hint="NID"
-                                    android:textColorHint="@color/black"
+                                    android:textColorHint="@color/black_1"
                                     android:transitionName="tran2"
                                     app:boxStrokeColor="@color/black"
                                     app:hintAnimationEnabled="true"
-                                    app:hintTextColor="@color/black">
+                                    app:hintTextColor="@color/black_1">
 
                                     <com.google.android.material.textfield.TextInputEditText
                                         android:id="@+id/nid_edit_text"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:textColor="@color/black"
-                                        android:textColorHint="@color/black" />
+                                        android:textColor="@color/black_1"/>
                                 </com.google.android.material.textfield.TextInputLayout>
 
                                 <com.google.android.material.textfield.TextInputLayout
@@ -196,11 +196,11 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:hint="Password"
-                                    android:textColorHint="@color/black"
+                                    android:textColorHint="@color/black_1"
                                     android:transitionName="tran3"
                                     app:boxStrokeColor="@color/black"
                                     app:hintAnimationEnabled="true"
-                                    app:hintTextColor="@color/black"
+                                    app:hintTextColor="@color/black_1"
                                     app:passwordToggleEnabled="true"
                                     app:passwordToggleTint="@color/black">
 
@@ -209,8 +209,7 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:inputType="textPassword"
-                                        android:textColor="@color/black"
-                                        android:textColorHint="@color/black" />
+                                        android:textColor="@color/black_1"/>
                                 </com.google.android.material.textfield.TextInputLayout>
 
                                 <com.google.android.material.textfield.TextInputLayout
@@ -219,11 +218,11 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:hint="Confirm Password"
-                                    android:textColorHint="@color/black"
+                                    android:textColorHint="@color/black_1"
                                     android:transitionName="tran3"
                                     app:boxStrokeColor="@color/black"
                                     app:hintAnimationEnabled="true"
-                                    app:hintTextColor="@color/black"
+                                    app:hintTextColor="@color/black_1"
                                     app:passwordToggleEnabled="true"
                                     app:passwordToggleTint="@color/black">
 
@@ -232,8 +231,7 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:inputType="textPassword"
-                                        android:textColor="@color/black"
-                                        android:textColorHint="@color/black" />
+                                        android:textColor="@color/black_1" />
                                 </com.google.android.material.textfield.TextInputLayout>
 
                                 <LinearLayout
@@ -247,7 +245,6 @@
                                         android:id="@+id/type_spinner"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:hint="Full Name"
                                         android:textColor="@color/black" />
                                 </LinearLayout>
 
@@ -263,12 +260,14 @@
                             </LinearLayout>
                                 <TextView
                                     android:id="@+id/go"
+                                    android:gravity="center"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="5dp"
                                     android:layout_marginBottom="5dp"
-                                    android:background="#000000"
+                                    android:background="@color/black_1"
                                     android:padding="10dp"
+                                    android:fontFamily="@font/oxygen_bold"
                                     android:text="GO"
                                     android:textColor="#fff"
                                     android:transitionName="tran4" />
@@ -280,9 +279,7 @@
         </LinearLayout>
 
         <!-- End of content -->
-
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
         style="@style/Widget.Custom.NavigationView"

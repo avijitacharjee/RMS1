@@ -17,4 +17,5 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="add_a_company">Add a company</string>
     <string name="entry_given_reliefs">Entry given reliefs</string>
+    <string name="add_request_for_relief">Add Request For Relief</string>
 </resources>

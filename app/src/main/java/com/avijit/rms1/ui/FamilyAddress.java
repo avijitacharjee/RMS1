@@ -1,6 +1,8 @@
 package com.avijit.rms1.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -26,7 +28,11 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.avijit.rms1.R;
+import com.avijit.rms1.data.local.entities.Area;
+import com.avijit.rms1.data.local.entities.District;
+import com.avijit.rms1.data.local.entities.Division;
 import com.avijit.rms1.utils.AppUtils;
+import com.avijit.rms1.viewmodel.FamilyAddressViewModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,6 +44,7 @@ import java.util.List;
 import java.util.Map;
 
 public class FamilyAddress extends BaseActivity {
+    FamilyAddressViewModel viewModel;
     TextView nextButton;
 
     Spinner divisionSpinner,districtSpinner,typeSpinner,areaSpinner;
@@ -45,32 +52,20 @@ public class FamilyAddress extends BaseActivity {
 
     ProgressBar progressBar;
     ProgressDialog progressDialog;
-    String[] divisions =  {"--Select division--"};
-    String[] districts = {"--Select district--"};
-    String[] areas = {"--Select area--"};
-    String[] types = {"--Select type--" };
 
-    String division="";
-    String district="";
-    String type="";
-    public int divisionId;
-    public int districtId;
-    public int areaId;
 
-    // Intent intent = new Intent(getApplicationContext(),FamilyAddress.class);
-
-    private List<String> divisionsIdList =new ArrayList<>();
-    private List<String> districtIdList =new ArrayList<>();
-    private List<String> areaIdList =new ArrayList<>();
-
-    public static JSONObject areaResponse=null;
-    List<String> typesList=new ArrayList<>();
+    private final List<Division> divisionList = new ArrayList<>();
+    private List<District> districtList = new ArrayList<>();
+    private List<String> typeList = new ArrayList<>();
+    private List<Area> areaList = new ArrayList<>();
+    private List<Area> selectedArea = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_family_address);
         //TODO locations background task
+        viewModel = ViewModelProviders.of(this).get(FamilyAddressViewModel.class);
 
         divisionSpinner= findViewById(R.id.division_spinner);
         districtSpinner = findViewById(R.id.district_spinner);
@@ -83,43 +78,48 @@ public class FamilyAddress extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("RMS");
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.spinner_layout,divisions);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item,new String[]{"--Select Division--"});
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         divisionSpinner.setAdapter(adapter);
-        setDivisions();
+        ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_dropdown_item,new String[]{"--Select District--"});
+        adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        districtSpinner.setAdapter(adapter1);
+
         divisionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                ((TextView) parent.getChildAt(0)).setTextColor(Color.BLACK);
-                ((TextView) parent.getChildAt(0)).setBackgroundColor(Color.WHITE);
-                //Toast.makeText(FamilyAddress.this, divisionSpinner.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
-                division=divisionSpinner.getSelectedItem().toString();
-                if(position>0)
-                {
-                    divisionId = Integer.parseInt(divisionsIdList.get(position-1));
-                    Toast.makeText(getApplicationContext(), divisionsIdList.get(position-1)+"", Toast.LENGTH_SHORT).show();
-                    setDistricts(divisionsIdList.get(position-1));
+                setDropdownFirstItemStyle(parent);
+                if(position>0){
+                    setDistricts();
                 }
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
             }
         });
-        ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_dropdown_item,districts);
-        adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        districtSpinner.setAdapter(adapter1);
+        viewModel.getDivisions().observe(this, new Observer<List<Division>>() {
+            @Override
+            public void onChanged(List<Division> divisions) {
+                divisionList.clear();
+                divisionList.addAll(divisions);
+                String[] divs = new String[divisionList.size() + 1];
+                divs[0] = "--Select Division--";
+                for (int i = 0; i < divisionList.size(); i++) {
+                    divs[i + 1] = divisionList.get(i).name;
+                }
+                final ArrayAdapter<String> adapter = new ArrayAdapter<>(FamilyAddress.this, android.R.layout.simple_spinner_dropdown_item, divs);
+                divisionSpinner.setAdapter(adapter);
+
+            }
+        });
         districtSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                ((TextView) parent.getChildAt(0)).setTextColor(Color.BLACK);
-                ((TextView) parent.getChildAt(0)).setBackgroundColor(Color.WHITE);
-                //district = districtSpinner.getSelectedItem().toString();
-                if(position>0)
-                {
-                    districtId = Integer.parseInt(districtIdList.get(position-1));
-                    setTypes(districtId);
+                setDropdownFirstItemStyle(parent);
+                if(position>0){
+                    setTypes();
                 }
             }
 
@@ -129,16 +129,16 @@ public class FamilyAddress extends BaseActivity {
             }
         });
 
-        ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_dropdown_item,types);
+        ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this,android.R.layout.simple_spinner_dropdown_item,new String[]{"--Select type--"});
         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         typeSpinner.setAdapter(adapter2);
         typeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                ((TextView) parent.getChildAt(0)).setTextColor(Color.BLACK);
-                ((TextView) parent.getChildAt(0)).setBackgroundColor(Color.WHITE);
-                type = typeSpinner.getSelectedItem().toString();
-                setAreas(type);
+                setDropdownFirstItemStyle(parent);
+                if(position>0){
+                    setAreas();
+                }
             }
 
             @Override
@@ -146,9 +146,6 @@ public class FamilyAddress extends BaseActivity {
 
             }
         });
-
-
-        typesList.add("--Select Types--");
 
         ArrayAdapter<String> adapter3 = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_dropdown_item,new String[]{"--Select area--"});
         adapter3.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -156,8 +153,7 @@ public class FamilyAddress extends BaseActivity {
         areaSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                ((TextView) parent.getChildAt(0)).setTextColor(Color.BLACK);
-                ((TextView) parent.getChildAt(0)).setBackgroundColor(Color.WHITE);
+                setDropdownFirstItemStyle(parent);
             }
 
             @Override
@@ -175,11 +171,10 @@ public class FamilyAddress extends BaseActivity {
                 {
                     Intent familyRegistration = new Intent(getApplicationContext(),StoreRelief.class);
                     //ids
-                    familyRegistration.putExtra("divisionId",divisionsIdList.get(divisionSpinner.getSelectedItemPosition()-1));
-                    familyRegistration.putExtra("districtId",districtIdList.get(districtSpinner.getSelectedItemPosition()-1));
-                    familyRegistration.putExtra("type",type);
+                    familyRegistration.putExtra("divisionId",divisionList.get(divisionSpinner.getSelectedItemPosition()-1).divisionId);
+                    familyRegistration.putExtra("districtId",districtList.get(districtSpinner.getSelectedItemPosition()-1).districtId);
                     familyRegistration.putExtra("address",addressEditText.getText().toString());
-                    familyRegistration.putExtra("areaId",areaIdList.get(areaSpinner.getSelectedItemPosition()-1));
+                    familyRegistration.putExtra("areaId",selectedArea.get(areaSpinner.getSelectedItemPosition()-1).areaId);
                     //Original values
                     familyRegistration.putExtra("division",divisionSpinner.getSelectedItem().toString());
                     familyRegistration.putExtra("district",districtSpinner.getSelectedItem().toString());
@@ -205,76 +200,93 @@ public class FamilyAddress extends BaseActivity {
             }
         });
     }
-    public void setAreas(String type){
-        if(areaResponse!=null){
-            try{
-                JSONArray jsonArray = areaResponse.getJSONArray("areas");
-                List<String> areasList = new ArrayList<>();
-                areasList.add("--Select Area--");
-                for(int i=0;i<jsonArray.length();i++) {
-                    if(jsonArray.getJSONObject(i).getString("type").equals(type)){
-                        areasList.add(jsonArray.getJSONObject(i).getString("name"));
-                    }
-                }
-                areas= new String[areasList.size()];
-                for(int i=0;i<areasList.size();i++){
-                    areas[i] = areasList.get(i);
-                }
-                ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_dropdown_item,areas);
-                adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                areaSpinner.setAdapter(adapter2);
-
-            }catch (Exception e){
-
-            }
+    private void setDistricts() {
+        if (divisionSpinner.getSelectedItemPosition() <1) {
+            final ArrayAdapter<String> adapter = new ArrayAdapter<String>(FamilyAddress.this, android.R.layout.simple_spinner_dropdown_item, new String[]{"--Select District--"});
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            districtSpinner.setAdapter(adapter);
+            return;
         }
-    }
-    public void setTypes(int id) {
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        String url = "https://aniksen.me/covidbd/api/areas/"+id;
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+        viewModel.getDistrictByDivisionId(divisionList.get(divisionSpinner.getSelectedItemPosition() - 1).divisionId).observe(this, new Observer<List<District>>() {
             @Override
-            public void onResponse(String response) {
-                try{
-                    JSONObject jsonObject = new JSONObject(response);
-                    areaResponse = jsonObject;
-                    JSONArray jsonArray = jsonObject.getJSONArray("areas");
-                    for(int i=0;i<jsonArray.length();i++) {
-                        if(!typesList.contains(jsonArray.getJSONObject(i).getString("type"))){
-                            typesList.add(jsonArray.getJSONObject(i).getString("type"));
-                        }
-                        areaIdList.add(jsonArray.getJSONObject(i).getString("id"));
+            public void onChanged(List<District> districtss) {
+                String[] districts = new String[1];
+                districts[0] = "--Select Districts--";
+                if (divisionSpinner.getSelectedItemPosition() > 0) {
+                    districtList = districtss;
+                    districts = new String[districtList.size() + 1];
+                    districts[0] = "--Select Districts";
+                    for (int i = 0; i < districtList.size(); i++) {
+                        districts[i + 1] = districtList.get(i).name;
                     }
-                    String[] t = new String[jsonArray.length()];
-                    for (int i = 0; i < typesList.size(); i++) {
-                        t[i] = typesList.get(i);
-                    }
-                    ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(FamilyAddress.this,android.R.layout.simple_spinner_dropdown_item,t);
-                    adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    typeSpinner.setAdapter(adapter2);
-
-                }catch (Exception e){
-                    System.out.println(e);
                 }
-                progressDialog.dismiss();
-
+                final ArrayAdapter<String> adapter = new ArrayAdapter<String>(FamilyAddress.this, android.R.layout.simple_spinner_dropdown_item, districts);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                districtSpinner.setAdapter(adapter);
             }
-        }, commonErrorListener);
-        stringRequest.setRetryPolicy(AppUtils.STRING_REQUEST_RETRY_POLICY);
-        requestQueue.add(stringRequest);
-
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Loading");
-        progressDialog.show();
+        });
     }
-    Response.ErrorListener commonErrorListener =new Response.ErrorListener() {
-        @Override
-        public void onErrorResponse(VolleyError error) {
-            /*textView.setText("Failed"+error.toString());*/
-            Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_LONG).show();
-            progressDialog.dismiss();
+
+    private void setTypes() {
+        if(districtSpinner.getSelectedItemPosition()<1){
+            final ArrayAdapter<String> adapter = new ArrayAdapter<String>(FamilyAddress.this,  android.R.layout.simple_spinner_dropdown_item, new String[]{"--Select Type--"});
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            typeSpinner.setAdapter(adapter);
+            return;
         }
-    };
+        viewModel.getAreasByDistrictId(districtList.get(districtSpinner.getSelectedItemPosition() - 1).districtId).observe(this, new Observer<List<Area>>() {
+            @Override
+            public void onChanged(List<Area> areas) {
+                String[] types = new String[1];
+                types[0] = "--Select Types--";
+                if (districtSpinner.getSelectedItemPosition() > 0) {
+                    areaList = areas;
+                    for (int i = 0; i < areaList.size(); i++) {
+                        //districts[i+1]=districtList.get(i).name;
+                        Area area = areaList.get(i);
+                        if (!typeList.contains(area.type)) {
+                            typeList.add(area.type);
+                        }
+                    }
+                    types = new String[typeList.size() + 1];
+                    types[0] = "--Select Types--";
+                    for (int i = 0; i < typeList.size(); i++) {
+                        types[i + 1] = typeList.get(i);
+                    }
+                }
+                final ArrayAdapter<String> adapter = new ArrayAdapter<String>(FamilyAddress.this,  android.R.layout.simple_spinner_dropdown_item, types);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                typeSpinner.setAdapter(adapter);
+            }
+        });
+    }
+
+    private void setAreas() {
+        selectedArea.clear();
+        for (int i = 0; i < areaList.size(); i++) {
+            if (areaList.get(i).type.equals(typeList.get(typeSpinner.getSelectedItemPosition() - 1))) {
+                selectedArea.add(areaList.get(i));
+            }
+        }
+        String[] areas = new String[1];
+        areas[0] = "--Select Area--";
+        if (selectedArea.size() > 0) {
+            areas = new String[selectedArea.size() + 1];
+            areas[0] = "--Select Area--";
+            for (int i = 0; i < selectedArea.size(); i++) {
+                areas[i + 1] = selectedArea.get(i).name;
+            }
+        }
+        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(FamilyAddress.this, R.layout.spinner_layout, areas);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                areaSpinner.setAdapter(adapter);
+            }
+        });
+    }
+
 
     public boolean onOptionsItemSelected(MenuItem item){
         super.onBackPressed();
@@ -303,135 +315,5 @@ public class FamilyAddress extends BaseActivity {
             flag=false;
         }
         return flag;
-    }
-    public void setDivisions() {
-        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-        String url ="https://aniksen.me/covidbd/api/divisions";
-
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-
-                        try {
-                            JSONObject jsonObject = new JSONObject(response);
-                            JSONArray data = jsonObject.getJSONArray("divisions");
-                            int length = data.length();
-                            String[] divs = new String[length+1];
-                            divs[0]="--Select Division--";
-                            for(int i=0;i<length;i++)
-                            {
-                                JSONObject division = data.getJSONObject(i);
-                                divs[i+1]=(division.getString("name"));
-                                divisionsIdList.add(division.getString("id"));
-                            }
-
-                            ArrayAdapter<String> adapter = new ArrayAdapter<String>(FamilyAddress.this, android.R.layout.simple_spinner_dropdown_item,divs);
-                            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                            divisionSpinner.setAdapter(adapter);
-
-                        }catch (JSONException e)
-                        {
-                            Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_LONG).show();
-                        }
-                        progressDialog.dismiss();
-
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                /*textView.setText("Failed"+error.toString());*/
-                Toast.makeText(getApplicationContext(),error.toString(),Toast.LENGTH_LONG).show();
-                progressDialog.dismiss();
-            }
-        }){
-
-            /* passing request body */
-            /*protected Map<String,String> getParams()
-            {
-                Map<String,String> params = new HashMap<String,String>() ;
-                params.put("access_key","6808");
-                params.put("get_categories","1");
-
-                return params;
-            }*/
-            /** Passing some request headers* */
-            @Override
-            public Map getHeaders() throws AuthFailureError {
-                HashMap headers = new HashMap();
-                headers.put("Content-Type", "application/json");
-                headers.put("Content-Type", "application/x-www-form-urlencoded");
-                return headers;
-            }
-        };
-        stringRequest.setRetryPolicy(AppUtils.STRING_REQUEST_RETRY_POLICY);
-        queue.add(stringRequest);
-        progressDialog = new ProgressDialog(FamilyAddress.this);
-        progressDialog.setMessage("Loading....");
-        progressDialog.show();
-    }
-    public void setDistricts(String divisionId) {
-        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-        String url ="https://aniksen.me/covidbd/api/districts/"+divisionId;
-
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-
-                        try {
-                            JSONObject jsonObject = new JSONObject(response);
-                            JSONArray data = jsonObject.getJSONArray("districts");
-                            int length = data.length();
-                            String[] divs = new String[length+1];
-                            divs[0]="--Select Division--";
-                            districtIdList.clear();
-                            for(int i=0;i<length;i++)
-                            {
-                                JSONObject district = data.getJSONObject(i);
-                                divs[i+1]=(district.getString("name"));
-                                districtIdList.add(district.getString("id"));
-                            }
-
-                            ArrayAdapter<String> adapter = new ArrayAdapter<String>(FamilyAddress.this, android.R.layout.simple_spinner_dropdown_item,divs);
-                            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                            districtSpinner.setAdapter(adapter);
-
-                        }catch (JSONException e)
-                        {
-                            Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_LONG).show();
-                        }
-
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                /*textView.setText("Failed"+error.toString());*/
-                Toast.makeText(getApplicationContext(),error.toString(),Toast.LENGTH_LONG).show();
-            }
-        }){
-
-            /* passing request body */
-            /*protected Map<String,String> getParams()
-            {
-                Map<String,String> params = new HashMap<String,String>() ;
-                params.put("access_key","6808");
-                params.put("get_categories","1");
-
-                return params;
-            }*/
-            /** Passing some request headers* */
-            @Override
-            public Map getHeaders() throws AuthFailureError {
-                HashMap headers = new HashMap();
-                headers.put("Content-Type", "application/json");
-                headers.put("Content-Type", "application/x-www-form-urlencoded");
-                return headers;
-            }
-        };
-        stringRequest.setRetryPolicy(AppUtils.STRING_REQUEST_RETRY_POLICY);
-        queue.add(stringRequest);
-        ProgressBar progressBar = new ProgressBar(this);
-
     }
 }

@@ -1,0 +1,175 @@
+
+<androidx.drawerlayout.widget.DrawerLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawer_layout"
+    android:fitsSystemWindows="true"
+    tools:openDrawer="end"
+    tools:context=".ui.ReliefRequest"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        tools:context=".SearchByNid"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.AppBarOverlay">
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/black"
+                style="@style/AppTheme.PopupOverlay"
+                />
+
+        </com.google.android.material.appbar.AppBarLayout>
+        <!-- Content -->
+
+        <LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:background="@color/white_1"
+            android:layout_width="match_parent">
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_margin="20dp"
+                android:background="@drawable/shape1"
+                android:elevation="20dp"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:layout_gravity="center"
+                    android:background="@color/white_1"
+                    android:layout_height="match_parent">
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:boxStrokeColor="@color/black"
+                        android:layout_marginTop="10dp"
+                        android:hint="Name"
+                        app:hintTextColor="@color/black_1"
+                        android:outlineAmbientShadowColor="@color/black_1"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/full_name_edit_text"
+                            android:textColor="@color/black_1"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:boxStrokeColor="@color/black"
+                        android:layout_marginTop="10dp"
+                        android:hint="Phone"
+                        app:hintTextColor="@color/black_1"
+                        android:outlineAmbientShadowColor="@color/black_1"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="phone"
+                            android:id="@+id/phone_edit_text"
+                            android:textColor="@color/black_1"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:boxStrokeColor="@color/black"
+                        android:layout_marginTop="10dp"
+                        android:hint="Address"
+                        app:hintTextColor="@color/black_1"
+                        android:outlineAmbientShadowColor="@color/black_1"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/address_edit_text"
+                            android:textColor="@color/black_1"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:boxStrokeColor="@color/black"
+                        android:layout_marginTop="10dp"
+                        android:hint="Earning Person"
+                        app:hintTextColor="@color/black_1"
+                        android:outlineAmbientShadowColor="@color/black_1"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="number"
+                            android:id="@+id/earning_members_edit_text"
+                            android:textColor="@color/black_1"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:boxStrokeColor="@color/black"
+                        android:layout_marginTop="10dp"
+                        android:hint="Family Member"
+                        app:hintTextColor="@color/black_1"
+                        android:outlineAmbientShadowColor="@color/black_1"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="number"
+                            android:id="@+id/family_members_edit_text"
+                            android:textColor="@color/black_1"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_gravity="end"
+                        android:layout_margin="20dp"
+                        android:elevation="200dp"
+                        android:background="@drawable/shape1"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:id="@+id/add_and_next_button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:elevation="30dp"
+                            android:text="Go"
+                            android:layout_gravity="end"
+                            android:paddingRight="20dp"
+                            android:paddingLeft="20dp"
+                            android:paddingTop="10dp"
+                            android:paddingBottom="10dp"
+                            android:textSize="18sp"
+                            android:transitionName="tran4"
+                            android:background="@color/black_1"
+                            android:textColor="@color/white_1"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </ScrollView>
+        </LinearLayout>
+        <!-- End of content -->
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
+        style="@style/Widget.Custom.NavigationView"
+        android:background="@color/anik1"
+        android:layout_width="wrap_content"
+        app:headerLayout="@layout/navigation_header_main"
+        android:fitsSystemWindows="true"
+        android:visibility="visible"
+        android:layout_gravity="end"
+        app:menu="@menu/main"
+        android:layout_height="match_parent"/>
+</androidx.drawerlayout.widget.DrawerLayout>
+
+<!--alkjfbalsdkfaskdf-->
