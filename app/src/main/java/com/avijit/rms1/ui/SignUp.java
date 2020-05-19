@@ -1,6 +1,8 @@
 package com.avijit.rms1.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import android.app.ActivityOptions;
 import android.app.ProgressDialog;
@@ -30,6 +32,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.avijit.rms1.R;
+import com.avijit.rms1.data.remote.model.User;
+import com.avijit.rms1.data.remote.responses.UserStoreResponse;
+import com.avijit.rms1.data.remote.responses.UserTypeResponse;
+import com.avijit.rms1.viewmodel.SignUpViewModel;
 import com.google.android.material.textfield.TextInputLayout;
 
 import org.json.JSONArray;
@@ -39,6 +45,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SignUp extends BaseActivity {
+    SignUpViewModel viewModel;
 
     ProgressDialog progressDialog;
     TextView loginIntentButton;
@@ -50,6 +57,7 @@ public class SignUp extends BaseActivity {
     String typeIds[];
     EditText nameEditText,emailEditText,phoneEditText,nidEditText,passwordEditText,confirmPasswordEditText;
 
+    private static final String TAG = "SignUp";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +68,7 @@ public class SignUp extends BaseActivity {
         tran2 = findViewById(R.id.username);
         tran3 = findViewById(R.id.password);
         typeSpinner = findViewById(R.id.type_spinner);
+        viewModel = ViewModelProviders.of(this).get(SignUpViewModel.class);
         initEditTexts();
         setTypeSpinner();
         ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_dropdown_item,types);
@@ -137,54 +146,23 @@ public class SignUp extends BaseActivity {
      * @Params no params
      */
     public void setTypeSpinner(){
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        String url = "https://aniksen.me/covidbd/api/user-type";
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+        viewModel.getUserTypes().observe(this, new Observer<UserTypeResponse>() {
             @Override
-            public void onResponse(String response) {
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
-                    JSONArray jsonArray = jsonObject.getJSONArray("data");
-                    String[] t = new String[jsonArray.length()];
-                    typeIds = new String[jsonArray.length()];
-                    for(int i=0;i<jsonArray.length();i++)
-                    {
-                        t[i] = jsonArray.getJSONObject(i).getString("name");
-                        typeIds[i]=jsonArray.getJSONObject(i).getString("id");
-                    }
-                    types=t;
-                    ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(SignUp.this,android.R.layout.simple_spinner_dropdown_item,types);
-                    adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    typeSpinner.setAdapter(adapter2);
-
-                }catch (Exception e) {
-
+            public void onChanged(UserTypeResponse userTypeResponse) {
+                String[] t = new String[userTypeResponse.getData().size()+1];
+                t[0]="--Select User Type--";
+                typeIds = new String[userTypeResponse.getData().size()];
+                for(int i=0;i<userTypeResponse.getData().size();i++)
+                {
+                    t[i+1] = userTypeResponse.getData().get(i).getName();
+                    typeIds[i]=userTypeResponse.getData().get(i).getId();
                 }
-                progressDialog.dismiss();
+                types=t;
+                ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(SignUp.this,android.R.layout.simple_spinner_dropdown_item,types);
+                adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                typeSpinner.setAdapter(adapter2);
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(SignUp.this, ""+error, Toast.LENGTH_SHORT).show();
-                progressDialog.dismiss();
-            }
-        }){
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String,String> headers = new HashMap<>();
-                headers.put("","");
-                return super.getHeaders();
-            }
-
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                return super.getParams();
-            }
-        };
-        requestQueue.add(stringRequest);
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Loading");
-        progressDialog.show();
+        });
     }
 
     /*
@@ -192,67 +170,20 @@ public class SignUp extends BaseActivity {
      * @Params no params
      */
     public void v() {
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        String url = "https://aniksen.me/covidbd/api/saveuser";
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Toast.makeText(SignUp.this, response , Toast.LENGTH_SHORT).show();
-                        progressDialog.dismiss();
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(SignUp.this, error.toString(), Toast.LENGTH_SHORT).show();
-                        progressDialog.dismiss();
-                    }
-                }){
+        User user = new User();
+        user.setName(nameEditText.getText().toString());
+        user.setEmail(emailEditText.getText().toString());
+        user.setPhone(phoneEditText.getText().toString());
+        user.setNid(nidEditText.getText().toString());
+        user.setPassword(passwordEditText.getText().toString());
+        user.setTbl_user_types_id(typeIds[typeSpinner.getSelectedItemPosition()-1]);
 
+        viewModel.saveUser(user).observe(this, new Observer<UserStoreResponse>() {
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String,String> params = new HashMap<>();
-                params.put("name",nameEditText.getText().toString());
-                params.put("email",emailEditText.getText().toString());
-                params.put("password",passwordEditText.getText().toString());
-                params.put("phone",phoneEditText.getText().toString());
-                params.put("nid",nidEditText.getText().toString());
-                params.put("tbl_user_types_id",typeIds[typeSpinner.getSelectedItemPosition()]);
-                return params;
-            }
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String,String> headers = new HashMap<>();
-                headers.put("Content-Type","application/json");
-                headers.put("Content-Type","application/x-www-form-urlencoded");
-
-
-                return headers;
-            }
-        };
-        stringRequest.setRetryPolicy(new RetryPolicy() {
-            @Override
-            public int getCurrentTimeout() {
-                return 50000;
-            }
-
-            @Override
-            public int getCurrentRetryCount() {
-                return 50000;
-            }
-
-            @Override
-            public void retry(VolleyError error) throws VolleyError {
-
+            public void onChanged(UserStoreResponse userStoreResponse) {
+                Log.d(TAG, "onChanged: "+userStoreResponse.toString());
             }
         });
-        requestQueue.add(stringRequest);
-        progressDialog = new ProgressDialog(SignUp.this);
-        progressDialog.setMessage("Loading....");
-        progressDialog.show();
-
     }
 
     /*

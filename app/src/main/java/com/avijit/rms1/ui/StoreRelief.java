@@ -2,6 +2,8 @@ package com.avijit.rms1.ui;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -14,6 +16,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Base64;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MenuItem;
@@ -37,7 +40,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.avijit.rms1.R;
+import com.avijit.rms1.data.remote.model.Relief;
+import com.avijit.rms1.data.remote.responses.ReliefStoreResponse;
 import com.avijit.rms1.location.AppLocationService;
+import com.avijit.rms1.viewmodel.StoreReliefViewModel;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -50,6 +56,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class StoreRelief extends BaseActivity {
+    StoreReliefViewModel viewModel;
     TextView chooseImageButton,addButton,addAndNextButton,addressTextView;
     EditText fullName,nid, contactNo, members, earningMembers;
     ImageView imageView;
@@ -60,6 +67,7 @@ public class StoreRelief extends BaseActivity {
     private double latitude =0;
     private double longitude=0;
 
+    private static final String TAG = "StoreRelief";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,7 +88,7 @@ public class StoreRelief extends BaseActivity {
         addAndNextButton = findViewById(R.id.add_and_next_button);
         addressTextView = findViewById(R.id.address_text_view);
         addressTextView.setText("Address: "+getIntent().getExtras().getString("district")+","+getIntent().getExtras().getString("area")+","+getIntent().getExtras().getString("address"));
-
+        viewModel = ViewModelProviders.of(this).get(StoreReliefViewModel.class);
         try{
             latitude = new AppLocationService(StoreRelief.this).getLocation().getLatitude();
             longitude = new AppLocationService(StoreRelief.this).getLocation().getLongitude();
@@ -95,82 +103,36 @@ public class StoreRelief extends BaseActivity {
 
                 //final String name = fullName.getText().toString();
                 if(isFormValid()){
-                    RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-                    String url = "https://aniksen.me/covidbd/api/relief/store";
-                    StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                            new Response.Listener<String>() {
-                                @Override
-                                public void onResponse(String response) {
-                                    progressDialog.dismiss();
-                                    Toast.makeText(StoreRelief.this, response, Toast.LENGTH_SHORT).show();
+                    /**
+                     * Relief Object
+                     *
+                     */
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                    byte[] imageBytes = baos.toByteArray();
+                    final String imageString = Base64.encodeToString(imageBytes, Base64.DEFAULT);
 
-                                }
-                            },
-                            new Response.ErrorListener() {
-                                @Override
-                                public void onErrorResponse(VolleyError error) {
-                                    progressDialog.dismiss();
-                                    Toast.makeText(StoreRelief.this, error.toString(), Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                    ){
+                    final Relief relief = new Relief();
+                    relief.setDivision_id(getIntent().getExtras().getString("divisionId"));
+                    relief.setDistrict_id(getIntent().getExtras().getString("districtId"));
+                    relief.setArea_id(getIntent().getExtras().getString("areaId"));
+                    relief.setAddress(getIntent().getExtras().getString("address"));
+                    relief.setNid(nid.getText().toString());
+                    relief.setMembers_in_family(members.getText().toString());
+                    relief.setEarning_members(earningMembers.getText().toString());
+                    relief.setLat(latitude+"");
+                    relief.setLongitude(longitude+"");
+                    relief.setImage(imageString);
+                    relief.setContact_no(contactNo.getText().toString());
+                    relief.setDate_given(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+                    relief.setGiven_by("1");
+                    relief.setGiven_to("1");
+                    viewModel.storeRelief(relief).observe(StoreRelief.this, new Observer<ReliefStoreResponse>() {
                         @Override
-                        protected Map<String, String> getParams() throws AuthFailureError {
-                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                            byte[] imageBytes = baos.toByteArray();
-                            final String imageString = Base64.encodeToString(imageBytes, Base64.DEFAULT);
-                            Map<String,String> params = new HashMap<>();
-                            params.put("division_id",getIntent().getExtras().getString("divisionId"));
-                            params.put("district_id",getIntent().getExtras().getString("districtId"));
-                            params.put("area_id",getIntent().getExtras().getString("areaId"));
-                            params.put("address",getIntent().getExtras().getString("address"));
-                            params.put("nid",nid.getText().toString());
-                            params.put("members_in_family",members.getText().toString());
-                            params.put("earning_members",earningMembers.getText().toString());
-                            //  params.put("Earnings_member","2");
-                            params.put("lat",latitude+"");
-                            params.put("long",longitude+"");
-                            params.put("image",imageString);
-                            System.out.println(imageString);
-                            params.put("contact_no",contactNo.getText().toString());
-                            params.put("date_given",""+new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
-                            //TODO fix given by id
-                            params.put("given_by","1");
-                            params.put("given_to","1");
-                            return params;
-                        }
-
-                        @Override
-                        public Map getHeaders() throws AuthFailureError {
-                            HashMap headers = new HashMap();
-                            headers.put("Content-Type", "application/json");
-                            headers.put("Content-Type", "application/x-www-form-urlencoded");
-                            headers.put("Authorization","Bearer: "+"eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIyIiwianRpIjoiY2M5MDgzMmYxM2VmNDhkODBmOTM3MDYxMjU4ZjVlODMwODg5ZDE0OWRhZDMwZGZkMzVmN2JmYjZjNTNhNTI4NDExMzhmMmNjM2ExNTk4MjQiLCJpYXQiOjE1ODgxNTQwOTMsIm5iZiI6MTU4ODE1NDA5MywiZXhwIjoxNjE5NjkwMDkzLCJzdWIiOiIyIiwic2NvcGVzIjpbXX0.U1dixRGgiyVopgyBdBRtqS5W6xZXXJMTm5pTDoPCeLKc70p3-zifScXo0AqeSKXYgEOnZPl8sp9nUtRILPuDn3ftDQ3vAsnHqgjhhztDb8LAYtIWLC-pcd48gCCBkLrqfr21oieuZ29-pYrSTwPmM1riMNf_Yy3pooGgLDUddWPJpew5srA_vK_3rlKvGMFg5mMUASVEJIsle6kz2yI71iv8yrQZvLwmKJ6rgVLg_8Rv80Mkyyzht0ZZecFrvISyI8Qpv2fpZE79L8tOWYn2EuORHFdlFTsB4B5PPzPiYVkHhaAnmyFWJQC06PsQOBTIOSisjUcXY9BBby3jFFUmbA-aFg78YEzmw9lvLIb_eQyjGr4DsGzdFsZv3d-FMrtYONSQf5FNoMCh3c-3eIrBVlUhTcHj9qB-7O2wtDe2web9Xoi6rwfO8cZdfdOqr_8T6kpVgz-YepsweeglOcKQtM_QTmP6yVYyajIWO9XnfFWj_xxoxxkWnCpO-wCZihAm_LbijXRLZVxVQp6AqhIWk-ozCeC0ccj4yb2w4xcXCWp1EGc7G2i-Z-u49nNz73nIoF3JIF_qdNzekzJH7MG_9EXuefld_PiSlyZ_8kolOR6Fg-viFhzL5JNFj2LzPI58VuIRGWCYloVkkT_iZDuR13PNcYNPzEOB16cAi3MGQ08");
-                            return headers;
-                        }
-                    };
-
-                    stringRequest.setRetryPolicy(new RetryPolicy() {
-                        @Override
-                        public int getCurrentTimeout() {
-                            return 50000;
-                        }
-
-                        @Override
-                        public int getCurrentRetryCount() {
-                            return 50000;
-                        }
-
-                        @Override
-                        public void retry(VolleyError error) throws VolleyError {
-
+                        public void onChanged(ReliefStoreResponse reliefStoreResponse) {
+                            Log.d(TAG, "onChanged: " + reliefStoreResponse.toString());
                         }
                     });
-                    requestQueue.add(stringRequest);
-                    progressDialog = new ProgressDialog(StoreRelief.this);
-                    progressDialog.setMessage("Adding. Please wait..");
-                    progressDialog.show();
                 }
                 else {
                     Toast toast = Toast.makeText(getApplicationContext(),"All fields are required" , Toast.LENGTH_SHORT);
@@ -202,84 +164,32 @@ public class StoreRelief extends BaseActivity {
 
                         //final String name = fullName.getText().toString();
                         if(isFormValid()){
-                            RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-                            String url = "https://aniksen.me/covidbd/api/relief/store";
-                            StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                                    new Response.Listener<String>() {
-                                        @Override
-                                        public void onResponse(String response) {
-                                            progressDialog.dismiss();
-                                            Toast.makeText(StoreRelief.this, response, Toast.LENGTH_SHORT).show();
-                                            startActivity(new Intent(StoreRelief.this,Nav.class));
+                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                            byte[] imageBytes = baos.toByteArray();
+                            final String imageString = Base64.encodeToString(imageBytes, Base64.DEFAULT);
 
-                                        }
-                                    },
-                                    new Response.ErrorListener() {
-                                        @Override
-                                        public void onErrorResponse(VolleyError error) {
-                                            progressDialog.dismiss();
-                                            Toast.makeText(StoreRelief.this, error.toString(), Toast.LENGTH_SHORT).show();
-                                        }
-                                    }
-                            ){
+                            final Relief relief = new Relief();
+                            relief.setDivision_id(getIntent().getExtras().getString("divisionId"));
+                            relief.setDistrict_id(getIntent().getExtras().getString("districtId"));
+                            relief.setArea_id(getIntent().getExtras().getString("areaId"));
+                            relief.setAddress(getIntent().getExtras().getString("address"));
+                            relief.setNid(nid.getText().toString());
+                            relief.setMembers_in_family(members.getText().toString());
+                            relief.setEarning_members(earningMembers.getText().toString());
+                            relief.setLat(latitude+"");
+                            relief.setLongitude(longitude+"");
+                            relief.setImage(imageString);
+                            relief.setContact_no(contactNo.getText().toString());
+                            relief.setDate_given(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+                            relief.setGiven_by("1");
+                            relief.setGiven_to("1");
+                            viewModel.storeRelief(relief).observe(StoreRelief.this, new Observer<ReliefStoreResponse>() {
                                 @Override
-                                protected Map<String, String> getParams() throws AuthFailureError {
-                                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                                    byte[] imageBytes = baos.toByteArray();
-                                    final String imageString = Base64.encodeToString(imageBytes, Base64.DEFAULT);
-                                    Map<String,String> params = new HashMap<>();
-                                    //TODO fix location crash
-                                    params.put("division_id",getIntent().getExtras().getString("divisionId"));
-                                    params.put("district_id",getIntent().getExtras().getString("districtId"));
-                                    params.put("area_id",getIntent().getExtras().getString("areaId"));
-                                    params.put("address",getIntent().getExtras().getString("address"));
-                                    params.put("nid",nid.getText().toString());
-                                    params.put("members_in_family",members.getText().toString());
-                                    params.put("earning_members",earningMembers.getText().toString());
-                                    //  params.put("Earnings_member","2");
-                                    params.put("lat",latitude+"");
-                                    params.put("long",longitude+"");
-                                    params.put("image",imageString);
-                                    System.out.println(imageString);
-                                    params.put("contact_no",contactNo.getText().toString());
-                                    params.put("date_given",""+new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
-                                    //TODO fix given by id
-                                    params.put("given_by","1");
-                                    params.put("given_to","1");
-                                    return params;
-                                }
-
-                                @Override
-                                public Map getHeaders() throws AuthFailureError {
-                                    HashMap headers = new HashMap();
-                                    headers.put("Content-Type", "application/json");
-                                    headers.put("Content-Type", "application/x-www-form-urlencoded");
-                                    headers.put("Authorization","Bearer: "+"eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIyIiwianRpIjoiY2M5MDgzMmYxM2VmNDhkODBmOTM3MDYxMjU4ZjVlODMwODg5ZDE0OWRhZDMwZGZkMzVmN2JmYjZjNTNhNTI4NDExMzhmMmNjM2ExNTk4MjQiLCJpYXQiOjE1ODgxNTQwOTMsIm5iZiI6MTU4ODE1NDA5MywiZXhwIjoxNjE5NjkwMDkzLCJzdWIiOiIyIiwic2NvcGVzIjpbXX0.U1dixRGgiyVopgyBdBRtqS5W6xZXXJMTm5pTDoPCeLKc70p3-zifScXo0AqeSKXYgEOnZPl8sp9nUtRILPuDn3ftDQ3vAsnHqgjhhztDb8LAYtIWLC-pcd48gCCBkLrqfr21oieuZ29-pYrSTwPmM1riMNf_Yy3pooGgLDUddWPJpew5srA_vK_3rlKvGMFg5mMUASVEJIsle6kz2yI71iv8yrQZvLwmKJ6rgVLg_8Rv80Mkyyzht0ZZecFrvISyI8Qpv2fpZE79L8tOWYn2EuORHFdlFTsB4B5PPzPiYVkHhaAnmyFWJQC06PsQOBTIOSisjUcXY9BBby3jFFUmbA-aFg78YEzmw9lvLIb_eQyjGr4DsGzdFsZv3d-FMrtYONSQf5FNoMCh3c-3eIrBVlUhTcHj9qB-7O2wtDe2web9Xoi6rwfO8cZdfdOqr_8T6kpVgz-YepsweeglOcKQtM_QTmP6yVYyajIWO9XnfFWj_xxoxxkWnCpO-wCZihAm_LbijXRLZVxVQp6AqhIWk-ozCeC0ccj4yb2w4xcXCWp1EGc7G2i-Z-u49nNz73nIoF3JIF_qdNzekzJH7MG_9EXuefld_PiSlyZ_8kolOR6Fg-viFhzL5JNFj2LzPI58VuIRGWCYloVkkT_iZDuR13PNcYNPzEOB16cAi3MGQ08");
-                                    return headers;
-                                }
-                            };
-
-                            stringRequest.setRetryPolicy(new RetryPolicy() {
-                                @Override
-                                public int getCurrentTimeout() {
-                                    return 50000;
-                                }
-
-                                @Override
-                                public int getCurrentRetryCount() {
-                                    return 50000;
-                                }
-
-                                @Override
-                                public void retry(VolleyError error) throws VolleyError {
-
+                                public void onChanged(ReliefStoreResponse reliefStoreResponse) {
+                                    Log.d(TAG, "onChanged: " + reliefStoreResponse.toString());
                                 }
                             });
-                            requestQueue.add(stringRequest);
-                            progressDialog = new ProgressDialog(StoreRelief.this);
-                            progressDialog.setMessage("Adding. Please wait..");
-                            progressDialog.show();
                         }
                         else {
                             Toast toast = Toast.makeText(getApplicationContext(),"All fields are required" , Toast.LENGTH_SHORT);

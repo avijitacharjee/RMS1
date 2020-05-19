@@ -269,7 +269,7 @@ public class AddSchedule extends BaseActivity {
     }
 
     private void setDistricts() {
-        if (divisionSpinner.getSelectedItemPosition() <1) {
+        if (divisionSpinner.getSelectedItemPosition() < 1) {
             final ArrayAdapter<String> adapter = new ArrayAdapter<String>(AddSchedule.this, R.layout.spinner_layout, new String[]{"--Select District--"});
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             districtSpinner.setAdapter(adapter);
@@ -296,7 +296,7 @@ public class AddSchedule extends BaseActivity {
     }
 
     private void setTypes() {
-        if(districtSpinner.getSelectedItemPosition()<1){
+        if (districtSpinner.getSelectedItemPosition() < 1) {
             final ArrayAdapter<String> adapter = new ArrayAdapter<String>(AddSchedule.this, R.layout.spinner_layout, new String[]{"--Select Type--"});
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             typeSpinner.setAdapter(adapter);

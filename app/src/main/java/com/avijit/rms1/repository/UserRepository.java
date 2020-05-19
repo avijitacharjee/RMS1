@@ -4,6 +4,7 @@ import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
+import com.avijit.rms1.data.remote.RetrofitService;
 import com.avijit.rms1.data.remote.api.UserApi;
 import com.avijit.rms1.data.remote.model.User;
 import com.avijit.rms1.data.remote.responses.UserStoreResponse;
@@ -21,6 +22,9 @@ public class UserRepository {
             userRepository= new UserRepository();
         }
         return userRepository;
+    }
+    public UserRepository(){
+        userApi = RetrofitService.createService(UserApi.class);
     }
     public MutableLiveData<UserStoreResponse> addUser(User user){
         final MutableLiveData<UserStoreResponse> userResponse = new MutableLiveData<>();

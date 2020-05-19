@@ -11,6 +11,7 @@ public class User extends BaseModel {
     private String created_at;
     private String id;
     private String password;
+    private String tbl_user_types_id;
 
     public User(String name, String email, String phone, String nid, String updated_at, String created_at, String id) {
         this.name = name;
@@ -23,6 +24,14 @@ public class User extends BaseModel {
         this.id = id;
     }
     public User(){}
+
+    public String getTbl_user_types_id() {
+        return tbl_user_types_id;
+    }
+
+    public void setTbl_user_types_id(String tbl_user_types_id) {
+        this.tbl_user_types_id = tbl_user_types_id;
+    }
 
     public String getPassword() {
         return password;

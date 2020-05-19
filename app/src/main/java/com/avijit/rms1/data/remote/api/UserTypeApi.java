@@ -1,6 +1,7 @@
 package com.avijit.rms1.data.remote.api;
 
 import com.avijit.rms1.data.remote.model.User;
+import com.avijit.rms1.data.remote.responses.UserTypeResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -16,8 +17,8 @@ public interface UserTypeApi {
     @GET("getuser/{id}")
     Call<User> getUser(@Path("id") String id);
 
-    @GET("allusers")
-    Call<User> allUser();
+    @GET("user-type")
+    Call<UserTypeResponse> allTypes();
 
     @POST("saveuser")
     Call<User> storeUser(@Body User user);
