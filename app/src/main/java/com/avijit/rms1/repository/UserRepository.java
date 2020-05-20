@@ -44,4 +44,21 @@ public class UserRepository {
         });
         return userResponse;
     }
+    public MutableLiveData<User> getUserByToken(String token){
+        final MutableLiveData<User> user= new MutableLiveData<>();
+        userApi.getUserByHeader(token).enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if(response.isSuccessful()){
+                    user.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+
+            }
+        });
+        return user;
+    }
 }

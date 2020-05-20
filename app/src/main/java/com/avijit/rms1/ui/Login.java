@@ -1,5 +1,7 @@
 package com.avijit.rms1.ui;
 
+import androidx.annotation.MainThread;
+import androidx.annotation.WorkerThread;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
@@ -62,6 +64,7 @@ public class Login extends BaseActivity {
                         public void onChanged(AuthResponse response) {
                             if(response.isUser()){
                                 getSharedPreferences("RMS",MODE_PRIVATE).edit().putString("token",response.getAccessToken()).apply();
+                                saveUserInfo();
                                 startActivity(new Intent(Login.this,Nav.class));
                             }
                             else {
@@ -85,7 +88,6 @@ public class Login extends BaseActivity {
                 }
             }
         });
-        saveUserInfo();
         signUpIntentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,6 +95,7 @@ public class Login extends BaseActivity {
                 startActivity(intent);
             }
         });
+
     }
 
     @Override
@@ -102,6 +105,7 @@ public class Login extends BaseActivity {
         /*finish();
         overridePendingTransition(0,0);*/
     }
+
     private boolean isFormValid(){
         boolean valid = true;
         if(userNameEditText.getText().toString().isEmpty()){
@@ -113,26 +117,15 @@ public class Login extends BaseActivity {
         return valid;
     }
     public void saveUserInfo(){
-        RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "https://aniksen.me/covidbd/api/user";
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+        String token = getSharedPreferences("RMS",MODE_PRIVATE).getString("token","");
+        if(token.equals("")) {
+            return;
+        }
+        loginViewModel.getUserByToken("Bearer: "+token).observe(this, new Observer<User>() {
             @Override
-            public void onResponse(String response) {
-                getSharedPreferences("RMS",MODE_PRIVATE).edit().putString("user",response).apply();}
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(Login.this, error.toString(), Toast.LENGTH_SHORT).show();
+            public void onChanged(User user) {
+                getSharedPreferences("RMS",MODE_PRIVATE).edit().putString("user",user.toString()).apply();
             }
-        }){
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String,String> headers = new HashMap<>();
-                headers.put("Authorization","Bearer "+getSharedPreferences("RMS",MODE_PRIVATE).getString("token",""));
-                return headers;
-            }
-        };
-        stringRequest.setRetryPolicy(AppUtils.STRING_REQUEST_RETRY_POLICY);
-        queue.add(stringRequest);
+        });
     }
 }

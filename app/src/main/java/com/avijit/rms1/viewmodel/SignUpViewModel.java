@@ -27,4 +27,7 @@ public class SignUpViewModel extends AndroidViewModel {
     public MutableLiveData<UserStoreResponse> saveUser(User user){
         return userRepository.addUser(user);
     }
+    public MutableLiveData<User> getUserByToken(String token){
+        return userRepository.getUserByToken(token);
+    }
 }

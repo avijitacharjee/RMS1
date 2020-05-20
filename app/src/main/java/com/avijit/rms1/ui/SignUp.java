@@ -142,7 +142,7 @@ public class SignUp extends BaseActivity {
         overridePendingTransition(0,0);*/
     }
     /*
-     * Volley request for registration
+     * Post request for registration
      * @Params no params
      */
     public void setTypeSpinner(){
@@ -166,7 +166,7 @@ public class SignUp extends BaseActivity {
     }
 
     /*
-     * Volley request for registration
+     * Post request to save user
      * @Params no params
      */
     public void v() {
@@ -192,6 +192,7 @@ public class SignUp extends BaseActivity {
      */
     private void initEditTexts()
     {
+
         nameEditText = findViewById(R.id.full_name_edit_text);
         emailEditText = findViewById(R.id.email_edit_text);
         phoneEditText = findViewById(R.id.phone_edit_text);
@@ -200,6 +201,11 @@ public class SignUp extends BaseActivity {
         confirmPasswordEditText = findViewById(R.id.confirm_password_edit_text);
     }
 
+    /**
+     *
+     * @return true if form is valid
+     *
+     */
     private boolean formIsValid()
     {
         boolean valid = true;
@@ -232,7 +238,18 @@ public class SignUp extends BaseActivity {
             confirmPasswordEditText.setError("Passwords doesn't matched");
             valid = false;
         }
+
         return valid;
+    }
+
+    /**
+     *
+     * @param a the first value
+     * @param b the second value
+     * @return return the sum
+     */
+    public int sum(int a,int b){
+        return a+b;
     }
 }
 
