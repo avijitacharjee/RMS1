@@ -42,7 +42,9 @@ public class AuthRepository {
             }
             @Override
             public void onFailure(Call<AuthResponse> call, Throwable t) {
-
+                    AuthResponse authResponse1 = new AuthResponse();
+                    authResponse1.setNetworkIsSuccessful(false);
+                    authResponse.setValue(authResponse1);
             }
         });
         return authResponse;

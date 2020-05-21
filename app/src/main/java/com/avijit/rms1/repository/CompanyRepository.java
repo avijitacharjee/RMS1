@@ -37,11 +37,14 @@ public class CompanyRepository {
                 if(response.isSuccessful()){
                     companyResponseMutableLiveData.setValue(response.body());
                 }
+                else {
+                    companyResponseMutableLiveData.setValue(new CompanyResponse.Builder<CompanyResponse>(CompanyResponse.class).setNetworkIsSuccessful(false));
+                }
             }
 
             @Override
             public void onFailure(Call<CompanyResponse> call, Throwable t) {
-
+                companyResponseMutableLiveData.setValue(new CompanyResponse.Builder<CompanyResponse>(CompanyResponse.class).setNetworkIsSuccessful(false));
             }
         });
         return companyResponseMutableLiveData;
@@ -55,11 +58,15 @@ public class CompanyRepository {
                 if(response.isSuccessful()){
                     companyStoreResponseMutableLiveData.setValue(response.body());
                 }
+                else {
+                    companyStoreResponseMutableLiveData.setValue(new CompanyStoreResponse.Builder<CompanyStoreResponse>(CompanyStoreResponse.class).setNetworkIsSuccessful(false));
+                }
             }
 
             @Override
             public void onFailure(Call<CompanyStoreResponse> call, Throwable t) {
                 Log.d(TAG, "onFailure: "+t);
+                companyStoreResponseMutableLiveData.setValue(new CompanyStoreResponse.Builder<CompanyStoreResponse>(CompanyStoreResponse.class).setNetworkIsSuccessful(false));
             }
         });
         return companyStoreResponseMutableLiveData;

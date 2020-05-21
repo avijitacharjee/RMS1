@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.avijit.rms1.data.remote.RetrofitService;
 import com.avijit.rms1.data.remote.api.UserApi;
 import com.avijit.rms1.data.remote.model.User;
+import com.avijit.rms1.data.remote.responses.BaseModel;
 import com.avijit.rms1.data.remote.responses.UserStoreResponse;
 
 import retrofit2.Call;
@@ -26,7 +27,7 @@ public class UserRepository {
     public UserRepository(){
         userApi = RetrofitService.createService(UserApi.class);
     }
-    public MutableLiveData<UserStoreResponse> addUser(User user){
+    public MutableLiveData<UserStoreResponse> addUser(final User user){
         final MutableLiveData<UserStoreResponse> userResponse = new MutableLiveData<>();
         userApi.storeUser(user).enqueue(new Callback<UserStoreResponse>() {
             @Override
@@ -35,11 +36,15 @@ public class UserRepository {
                 if(response.isSuccessful()){
                     userResponse.setValue(response.body());
                 }
+                else {
+                    userResponse.setValue(new BaseModel.Builder<UserStoreResponse>(UserStoreResponse.class).setNetworkIsSuccessful(false));
+                }
             }
 
             @Override
             public void onFailure(Call<UserStoreResponse> call, Throwable t) {
                 Log.d(TAG, "onFailure: "+t);
+                userResponse.setValue(new BaseModel.Builder<UserStoreResponse>(UserStoreResponse.class).setNetworkIsSuccessful(false));
             }
         });
         return userResponse;
@@ -52,11 +57,15 @@ public class UserRepository {
                 if(response.isSuccessful()){
                     user.setValue(response.body());
                 }
+                else {
+                    user.setValue(new User.Builder<User>(User.class).setNetworkIsSuccessful(false));
+                }
             }
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
 
+                user.setValue(new User.Builder<User>(User.class).setNetworkIsSuccessful(false));
             }
         });
         return user;

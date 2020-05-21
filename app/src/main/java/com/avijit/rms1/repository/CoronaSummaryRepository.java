@@ -35,11 +35,19 @@ public class CoronaSummaryRepository {
                 {
                     coronaSummaryResponseMutableLiveData.setValue(response.body());
                 }
+                else {
+                    CoronaSummaryResponse err= new CoronaSummaryResponse();
+                    err.setNetworkIsSuccessful(false);
+                    coronaSummaryResponseMutableLiveData.setValue(err);
+                }
             }
 
             @Override
             public void onFailure(Call<CoronaSummaryResponse> call, Throwable t) {
-
+                /*CoronaSummaryResponse err= new CoronaSummaryResponse();
+                err.setNetworkIsSuccessful(false);
+                coronaSummaryResponseMutableLiveData.setValue(err);*/
+                coronaSummaryResponseMutableLiveData.setValue(new CoronaSummaryResponse.Builder<CoronaSummaryResponse>(CoronaSummaryResponse.class).setNetworkIsSuccessful(false));
             }
         });
         return coronaSummaryResponseMutableLiveData;

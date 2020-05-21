@@ -38,11 +38,16 @@ public class ReliefScheduleRepository {
                 if(response.isSuccessful()){
                     reliefScheduleStoreResponseMutableLiveData.setValue(response.body());
                 }
-            }
+                else {
+                    reliefScheduleStoreResponseMutableLiveData.setValue(new ReliefScheduleStoreResponse.Builder<ReliefScheduleStoreResponse>(ReliefScheduleStoreResponse.class).setNetworkIsSuccessful(false));
+                }
+                 }
 
             @Override
             public void onFailure(Call<ReliefScheduleStoreResponse> call, Throwable t) {
                 Log.d(TAG, "onFailure: "+t);
+
+                reliefScheduleStoreResponseMutableLiveData.setValue(new ReliefScheduleStoreResponse.Builder<ReliefScheduleStoreResponse>(ReliefScheduleStoreResponse.class).setNetworkIsSuccessful(false));
             }
         });
         return reliefScheduleStoreResponseMutableLiveData;
@@ -56,11 +61,15 @@ public class ReliefScheduleRepository {
                 if(response.isSuccessful()){
                     reliefScheduleResponseMutableLiveData.setValue(response.body());
                 }
+                else{
+                    reliefScheduleResponseMutableLiveData.setValue(new ReliefScheduleResponse.Builder<ReliefScheduleResponse>(ReliefScheduleResponse.class).setNetworkIsSuccessful(false));
+                }
             }
 
             @Override
             public void onFailure(Call<ReliefScheduleResponse> call, Throwable t) {
                 Log.d(TAG, "onFailure: "+t);
+                reliefScheduleResponseMutableLiveData.setValue(new ReliefScheduleResponse.Builder<ReliefScheduleResponse>(ReliefScheduleResponse.class).setNetworkIsSuccessful(false));
             }
         });
         return reliefScheduleResponseMutableLiveData;
@@ -75,11 +84,18 @@ public class ReliefScheduleRepository {
                 if(response.isSuccessful()){
                     reliefScheduleResponseMutableLiveData.setValue(response.body());
                 }
+                else {
+                    reliefScheduleResponseMutableLiveData.setValue(new ReliefScheduleResponse.Builder<ReliefScheduleResponse>(ReliefScheduleResponse.class
+                    ).setNetworkIsSuccessful(false));
+                }
             }
 
             @Override
             public void onFailure(Call<ReliefScheduleResponse> call, Throwable t) {
                 Log.d(TAG, "onFailure: "+t);
+                reliefScheduleResponseMutableLiveData.setValue(
+                        new ReliefScheduleResponse.Builder<ReliefScheduleResponse>(ReliefScheduleResponse.class
+                ).setNetworkIsSuccessful(false));
             }
         });
         return reliefScheduleResponseMutableLiveData;

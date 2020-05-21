@@ -2,6 +2,7 @@ package com.avijit.rms1.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.graphics.Color;
@@ -17,6 +18,8 @@ import android.view.Window;
 import android.widget.EditText;
 
 import com.avijit.rms1.R;
+import com.avijit.rms1.ui.fragments.ReliefRequestMainFragment;
+import com.avijit.rms1.utils.AppUtils;
 import com.avijit.rms1.utils.EndDrawerToggle;
 import com.avijit.rms1.viewmodel.ReliefRequestViewModel;
 import com.google.android.material.navigation.NavigationView;
@@ -29,17 +32,25 @@ public class ReliefRequest extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_relief_request);
+        appUtils = new AppUtils(this);
         initViews();
         viewModel = ViewModelProviders.of(this).get(ReliefRequestViewModel.class);
         //viewModel.init();
         initNavDrawer();
+        /**
+         * Fragments
+         */
+        ReliefRequestMainFragment firstFragment = new ReliefRequestMainFragment();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.add(R.id.relief_request_fragment_container,firstFragment);
+        ft.commit();
     }
     private void initViews(){
-        fullNameEdit = findViewById(R.id.full_name_edit_text);
+       /* fullNameEdit = findViewById(R.id.full_name_edit_text);
         addressEditText = findViewById(R.id.address_edit_text);
         phoneEditText = findViewById(R.id.phone_edit_text);
         familyMemberEditText = findViewById(R.id.family_members_edit_text);
-        earningMemberEditText = findViewById(R.id.earning_members_edit_text);
+        earningMemberEditText = findViewById(R.id.earning_members_edit_text);*/
     }
     public void initNavDrawer(){
         Toolbar toolbar = findViewById(R.id.toolbar);

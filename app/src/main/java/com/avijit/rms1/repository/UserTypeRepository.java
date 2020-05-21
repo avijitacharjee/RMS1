@@ -30,11 +30,14 @@ public class UserTypeRepository {
                 if(response.isSuccessful()){
                     result.setValue(response.body());
                 }
+                else {
+                    result.setValue(new UserTypeResponse.Builder<UserTypeResponse>(UserTypeResponse.class).setNetworkIsSuccessful(false));
+                }
             }
 
             @Override
             public void onFailure(Call<UserTypeResponse> call, Throwable t) {
-
+                    result.setValue(new UserTypeResponse.Builder<UserTypeResponse>(UserTypeResponse.class).setNetworkIsSuccessful(false));
             }
         });
         return result;

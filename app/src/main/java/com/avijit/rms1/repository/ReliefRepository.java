@@ -31,11 +31,14 @@ public class ReliefRepository {
                 if(response.isSuccessful()){
                     result.setValue(response.body());
                 }
+                else {
+                    result.setValue((ReliefStoreResponse) new ReliefStoreResponse().setUnSuccess(false));
+                }
             }
 
             @Override
             public void onFailure(Call<ReliefStoreResponse> call, Throwable t) {
-
+                result.setValue(new ReliefStoreResponse.Builder<ReliefStoreResponse>(ReliefStoreResponse.class).setNetworkIsSuccessful(false));
             }
         });
         return result;
