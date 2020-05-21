@@ -237,7 +237,13 @@ public class AddSchedule extends BaseActivity {
                         @Override
                         public void onChanged(ReliefScheduleStoreResponse reliefScheduleStoreResponse) {
                             Log.d("TAG", "onChanged: " + new Gson().toJson(reliefScheduleStoreResponse));
-                            Toast.makeText(AddSchedule.this, "Schedule Added Successfully", Toast.LENGTH_SHORT).show();
+                            if (reliefScheduleStoreResponse.isNetworkIsSuccessful()){
+                                Toast.makeText(AddSchedule.this, "Schedule Added Successfully", Toast.LENGTH_SHORT).show();
+                            }
+                            else {
+                                Toast.makeText(AddSchedule.this, "Failed to connect", Toast.LENGTH_SHORT).show();
+                            }
+
                         }
                     });
                 } else {

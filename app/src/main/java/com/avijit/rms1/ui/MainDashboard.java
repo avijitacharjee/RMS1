@@ -1,6 +1,7 @@
 package com.avijit.rms1.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
@@ -13,9 +14,12 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -36,12 +40,21 @@ public class MainDashboard extends BaseActivity {
     TextView textView;
     MainDashBoardViewModel mainDashBoardViewModel;
     AlertDialog dialog;
+    View view;
+    Animation topAnimation;
+    CardView card1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_dashboard);
         //textView = findViewById(R.id.msg);
+        view = findViewById(R.id.bg_top_header);
+        card1 = findViewById(R.id.card_1);
+
+        topAnimation = AnimationUtils.loadAnimation(this,R.anim.top_animation);
+        card1.startAnimation(topAnimation);
+
         dialog = new AppUtils(this).dialog;
         dialog.show();
         mainDashBoardViewModel = ViewModelProviders.of(this).get(MainDashBoardViewModel.class);

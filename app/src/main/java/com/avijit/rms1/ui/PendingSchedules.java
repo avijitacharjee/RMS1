@@ -17,6 +17,7 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -111,12 +112,16 @@ public class PendingSchedules extends BaseActivity {
         pendingSchedulesViewModel.getPendingSchedules(id).observe(PendingSchedules.this, new Observer<ReliefScheduleResponse>() {
             @Override
             public void onChanged(ReliefScheduleResponse reliefScheduleResponse) {
+                dialog.dismiss();
+                if(!reliefScheduleResponse.isNetworkIsSuccessful()){
+                    Toast.makeText(PendingSchedules.this, "Failed to connect", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 for(int i=0;i<reliefScheduleResponse.getData().size();i++){
                     sls.add(""+(i+1));
                     dates.add(reliefScheduleResponse.getData().get(i).getSchedule_date());
                     names.add(reliefScheduleResponse.getData().get(i).getName());
                 }
-                dialog.dismiss();
                 adapter.notifyDataSetChanged();
             }
         });

@@ -1,6 +1,5 @@
 package com.avijit.rms1.ui;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
@@ -18,7 +17,7 @@ import android.view.Window;
 import android.widget.EditText;
 
 import com.avijit.rms1.R;
-import com.avijit.rms1.ui.fragments.ReliefRequestMainFragment;
+import com.avijit.rms1.ui.relief_request_fragments.ReliefRequestMainFragment;
 import com.avijit.rms1.utils.AppUtils;
 import com.avijit.rms1.utils.EndDrawerToggle;
 import com.avijit.rms1.viewmodel.ReliefRequestViewModel;

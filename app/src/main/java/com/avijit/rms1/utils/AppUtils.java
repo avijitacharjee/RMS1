@@ -30,6 +30,7 @@ import com.avijit.rms1.ui.MainDashboard;
 import com.avijit.rms1.ui.Nav;
 import com.avijit.rms1.ui.PendingSchedules;
 import com.avijit.rms1.ui.ReliefRequest;
+import com.avijit.rms1.ui.SearchByNid;
 import com.google.android.material.navigation.NavigationView;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -149,6 +150,10 @@ public class AppUtils {
                 }
                 case R.id.nav_add_request_for_relief :{
                     context.startActivity(new Intent(context, ReliefRequest.class));
+                    break;
+                }
+                case R.id.nav_search_by_nid :{
+                    context.startActivity(new Intent(context, SearchByNid.class));
                     break;
                 }
 

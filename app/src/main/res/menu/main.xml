@@ -36,6 +36,11 @@
             android:title="@string/add_request_for_relief"
             />
         <item
+            android:id="@+id/nav_search_by_nid"
+            android:icon="@drawable/ic_info_outline_black_24dp"
+            android:title="@string/add_request_for_relief"
+            />
+        <item
             android:id="@+id/logout"
             android:icon="@drawable/ic_exit_to_app_black_24dp"
             android:title="@string/log_out" />
