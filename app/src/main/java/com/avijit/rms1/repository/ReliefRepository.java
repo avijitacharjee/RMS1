@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.avijit.rms1.data.remote.RetrofitService;
 import com.avijit.rms1.data.remote.api.ReliefApi;
 import com.avijit.rms1.data.remote.model.Relief;
+import com.avijit.rms1.data.remote.responses.ReliefSearchResponse;
 import com.avijit.rms1.data.remote.responses.ReliefStoreResponse;
 
 import retrofit2.Call;
@@ -39,6 +40,21 @@ public class ReliefRepository {
             @Override
             public void onFailure(Call<ReliefStoreResponse> call, Throwable t) {
                 result.setValue(new ReliefStoreResponse.Builder<ReliefStoreResponse>(ReliefStoreResponse.class).setNetworkIsSuccessful(false));
+            }
+        });
+        return result;
+    }
+    public MutableLiveData<ReliefSearchResponse> searchRelief(String data){
+        final MutableLiveData<ReliefSearchResponse> result = new MutableLiveData<>();
+        reliefApi.searchRelief(data).enqueue(new Callback<ReliefSearchResponse>() {
+            @Override
+            public void onResponse(Call<ReliefSearchResponse> call, Response<ReliefSearchResponse> response) {
+                result.setValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<ReliefSearchResponse> call, Throwable t) {
+                result.setValue(new ReliefSearchResponse.Builder<ReliefSearchResponse>(ReliefSearchResponse.class).setNetworkIsSuccessful(false));
             }
         });
         return result;

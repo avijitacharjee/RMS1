@@ -13,6 +13,7 @@ import retrofit2.http.Path;
 public interface ReliefApi {
     @POST("relief/store")
     Call<ReliefStoreResponse> storeRelief(@Body Relief relief);
+
     @GET("relief/search/{data}")
     Call<ReliefSearchResponse> searchRelief(@Path("data") String data);
 }

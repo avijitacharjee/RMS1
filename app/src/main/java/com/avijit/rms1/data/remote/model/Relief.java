@@ -22,6 +22,15 @@ public class Relief extends BaseModel {
     private String date_given;
     private String given_by;
     private String given_to;
+    private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public String getId() {
         return id;

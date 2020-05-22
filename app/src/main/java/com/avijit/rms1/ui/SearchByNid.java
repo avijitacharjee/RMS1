@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -38,7 +40,9 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.avijit.rms1.R;
 import com.avijit.rms1.adapters.SearchByNidRecyclerViewAdapter;
+import com.avijit.rms1.data.remote.responses.ReliefSearchResponse;
 import com.avijit.rms1.utils.AppUtils;
+import com.avijit.rms1.viewmodel.SearchByNidViewModel;
 import com.google.android.material.navigation.NavigationView;
 
 import org.json.JSONArray;
@@ -50,7 +54,7 @@ import java.util.List;
 import java.util.Map;
 
 public class SearchByNid extends BaseActivity {
-
+    SearchByNidViewModel viewModel;
     TableLayout tableLayout;
     Button searchButton;
     EditText searchEditText;
@@ -69,6 +73,7 @@ public class SearchByNid extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_by_nid);
+        viewModel = ViewModelProviders.of(this).get(SearchByNidViewModel.class);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -136,6 +141,7 @@ public class SearchByNid extends BaseActivity {
         Toast.makeText(this, "", Toast.LENGTH_SHORT).show();*/
     }
     public void saveUserInfo(){
+
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = "https://aniksen.me/covidbd/api/user";
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
@@ -161,6 +167,21 @@ public class SearchByNid extends BaseActivity {
 
 
     private void fetchData(String param) {
+        viewModel.searchRelief(param).observe(this, new Observer<ReliefSearchResponse>() {
+            @Override
+            public void onChanged(ReliefSearchResponse reliefSearchResponse) {
+                if(!reliefSearchResponse.isNetworkIsSuccessful()){
+                    return;
+                }
+                names.clear();contacts.clear();nids.clear();
+                for (int i = 0; i <reliefSearchResponse.getReliefs().size(); i++) {
+                    names.add(reliefSearchResponse.getReliefs().get(i).getName());
+                    contacts.add(reliefSearchResponse.getReliefs().get(i).getContact_no());
+                    nids.add(reliefSearchResponse.getReliefs().get(i).getNid());
+                }
+                searchByNidRecyclerViewAdapter.notifyDataSetChanged();
+            }
+        });
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = "https://aniksen.me/covidbd/api/relief/search/"+param;
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
