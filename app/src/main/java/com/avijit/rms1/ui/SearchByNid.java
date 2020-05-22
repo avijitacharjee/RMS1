@@ -182,51 +182,7 @@ public class SearchByNid extends BaseActivity {
                 searchByNidRecyclerViewAdapter.notifyDataSetChanged();
             }
         });
-        RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "https://aniksen.me/covidbd/api/relief/search/"+param;
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                // Toast.makeText(SearchByNid.this, response, Toast.LENGTH_SHORT).show();
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
-                    JSONArray reliefs= jsonObject.getJSONArray("reliefs");
-                    String[] address = new String[reliefs.length()];
-                    List<String> s = new ArrayList<>();
-                    List<String> s1 = new ArrayList<>();
-                    List<String> s2 = new ArrayList<>();
-                    names.clear();contacts.clear();nids.clear();
-                    //names.add("Name");contacts.add("Contact");nids.add("NID");
-                    for(int i=0;i<reliefs.length();i++)
-                    {
-                        names.add(reliefs.getJSONObject(i).getString("given_to"));
-                        contacts.add(reliefs.getJSONObject(i).getString("contact_no"));
-                        nids.add(reliefs.getJSONObject(i).getString("nid"));
-                    }
 
-                    searchByNidRecyclerViewAdapter.notifyDataSetChanged();
-                }catch (Exception e)
-                {
-
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(SearchByNid.this, error.toString(), Toast.LENGTH_SHORT).show();
-            }
-        }){
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String,String> headers = new HashMap<>();
-                headers.put("Content-type","Application/json");
-                headers.put("Content-type","Application/x-www-form-urlencoded");
-                headers.put("Authorization","Bearer: "+getSharedPreferences("RMS",MODE_PRIVATE).getString("token",""));
-                return headers;
-            }
-        };
-        stringRequest.setRetryPolicy(AppUtils.STRING_REQUEST_RETRY_POLICY);
-        queue.add(stringRequest);
     }
     private void whiteNotificationBar(View view) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
