@@ -1,6 +1,9 @@
 package com.avijit.rms1.ui;
 
+import androidx.annotation.MainThread;
+import androidx.annotation.RequiresPermission;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.provider.FontsContractCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -77,6 +80,7 @@ public class FamilyAddress extends BaseActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("RMS");
+        getSupportActionBar().setSubtitle("Entry Given Reliefs");
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item,new String[]{"--Select Division--"});
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -200,6 +204,7 @@ public class FamilyAddress extends BaseActivity {
             }
         });
     }
+
     private void setDistricts() {
         if (divisionSpinner.getSelectedItemPosition() <1) {
             final ArrayAdapter<String> adapter = new ArrayAdapter<String>(FamilyAddress.this, android.R.layout.simple_spinner_dropdown_item, new String[]{"--Select District--"});

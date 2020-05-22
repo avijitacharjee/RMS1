@@ -19,6 +19,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.TextAppearanceSpan;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.Menu;
@@ -42,6 +44,7 @@ import com.avijit.rms1.R;
 import com.avijit.rms1.adapters.SearchByNidRecyclerViewAdapter;
 import com.avijit.rms1.data.remote.responses.ReliefSearchResponse;
 import com.avijit.rms1.utils.AppUtils;
+import com.avijit.rms1.utils.EndDrawerToggle;
 import com.avijit.rms1.viewmodel.SearchByNidViewModel;
 import com.google.android.material.navigation.NavigationView;
 
@@ -75,30 +78,7 @@ public class SearchByNid extends BaseActivity {
         setContentView(R.layout.activity_search_by_nid);
         viewModel = ViewModelProviders.of(this).get(SearchByNidViewModel.class);
         toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Search by Nid/contact No");
-        drawer = findViewById(R.id.drawer_layout);
-        navigation = findViewById(R.id.nav_view);
-        navigation.setNavigationItemSelectedListener(new AppUtils(this).navigationItemSelectedListener);
-
-        toggle = new ActionBarDrawerToggle(this,drawer,toolbar,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(drawer.isDrawerOpen(Gravity.RIGHT))
-                {
-                    drawer.closeDrawer(Gravity.RIGHT);
-                }
-                else
-                {
-                    drawer.openDrawer(Gravity.RIGHT);
-                }
-            }
-        });
-        Menu menu = navigation.getMenu();
+        initNavDrawer();
 
         recyclerView = findViewById(R.id.recycler_view);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
@@ -140,6 +120,34 @@ public class SearchByNid extends BaseActivity {
         getSupportActionBar().setTitle("Search Recent Records");
         Toast.makeText(this, "", Toast.LENGTH_SHORT).show();*/
     }
+    private void initNavDrawer(){
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Search by Nid/contact No");
+        drawer = findViewById(R.id.drawer_layout);
+        navigation = findViewById(R.id.nav_view);
+        navigation.setNavigationItemSelectedListener(new AppUtils(this).navigationItemSelectedListener);
+
+        EndDrawerToggle toggle = new EndDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                SearchByNid.super.onBackPressed();
+            }
+        });
+
+        Menu menu = navigation.getMenu();
+        MenuItem tools = menu.findItem(R.id.group_title_1);
+        SpannableString s = new SpannableString(tools.getTitle());
+        s.setSpan(new TextAppearanceSpan(this, R.style.TextAppearance44), 0, s.length(), 0);
+        tools.setTitle(s);
+
+
+    }
     public void saveUserInfo(){
 
         RequestQueue queue = Volley.newRequestQueue(this);
@@ -167,6 +175,7 @@ public class SearchByNid extends BaseActivity {
 
 
     private void fetchData(String param) {
+        param = param.equals("")?"1":param;
         viewModel.searchRelief(param).observe(this, new Observer<ReliefSearchResponse>() {
             @Override
             public void onChanged(ReliefSearchResponse reliefSearchResponse) {

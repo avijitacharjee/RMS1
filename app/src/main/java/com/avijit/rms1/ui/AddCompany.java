@@ -1,11 +1,5 @@
 package com.avijit.rms1.ui;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -15,14 +9,17 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.avijit.rms1.R;
-import com.avijit.rms1.data.remote.responses.CompanyStoreResponse;
 import com.avijit.rms1.utils.AppUtils;
 import com.avijit.rms1.utils.EndDrawerToggle;
 import com.avijit.rms1.viewmodel.AddCompanyViewModel;
@@ -32,6 +29,8 @@ public class AddCompany extends BaseActivity {
     private EditText companyNameEditText;
     private TextView nextButton;
     private AddCompanyViewModel addCompanyViewModel;
+    Animation topAnimation;
+    LinearLayout view;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,21 +41,18 @@ public class AddCompany extends BaseActivity {
         initNavDrawer();
         addCompanyViewModel= ViewModelProviders.of(this).get(AddCompanyViewModel.class);
         addCompanyViewModel.init();
-        nextButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(formIsValid()){
-                    addCompanyViewModel.addCompany(companyNameEditText.getText().toString()).observe(AddCompany.this, new Observer<CompanyStoreResponse>() {
-                        @Override
-                        public void onChanged(CompanyStoreResponse companyStoreResponse) {
-                            Log.d("Observer", "onChanged: "+companyStoreResponse);
-                            startActivity(new Intent(AddCompany.this,AddUserInCompany.class));
-                        }
-                    });
-                    Log.d("Observer", "onClick: Called");
-                }
+        nextButton.setOnClickListener(v -> {
+            if(formIsValid()){
+                addCompanyViewModel.addCompany(companyNameEditText.getText().toString()).observe(AddCompany.this, companyStoreResponse -> {
+                    Log.d("Observer", "onChanged: "+companyStoreResponse);
+                    startActivity(new Intent(AddCompany.this,AddUserInCompany.class));
+                });
+                Log.d("Observer", "onClick: Called");
             }
         });
+
+        topAnimation = AnimationUtils.loadAnimation(this,R.anim.top_animation);
+        view.startAnimation(topAnimation);
     }
     public void initNavDrawer(){
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -68,7 +64,6 @@ public class AddCompany extends BaseActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        Window window = getWindow();
 
         drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -80,17 +75,7 @@ public class AddCompany extends BaseActivity {
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                if (drawer.isDrawerOpen(Gravity.RIGHT)) {
-                    drawer.closeDrawer(Gravity.RIGHT);
-                } else {
-                    drawer.openDrawer(Gravity.RIGHT);
-                }
-            }
-        });
+        toolbar.setNavigationOnClickListener(v -> AddCompany.super.onBackPressed());
         Log.d("debug", "initNavDrawer: "+Runtime.getRuntime().availableProcessors());
         Menu menu = navigationView.getMenu();
         MenuItem tools= menu.findItem(R.id.group_title_1);
@@ -108,5 +93,16 @@ public class AddCompany extends BaseActivity {
     private void initViews(){
         companyNameEditText = findViewById(R.id.company_name_edit_text);
         nextButton = findViewById(R.id.next_button);
+        view= findViewById(R.id.view);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(drawer.isDrawerOpen(Gravity.RIGHT)){
+            drawer.closeDrawer(Gravity.RIGHT);
+        }
+        else {
+            super.onBackPressed();
+        }
     }
 }

@@ -1,5 +1,7 @@
 package com.avijit.rms1.repository;
 
+import android.util.Log;
+
 import androidx.lifecycle.MutableLiveData;
 
 import com.avijit.rms1.data.remote.RetrofitService;
@@ -13,6 +15,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ReliefRepository {
+    private static final String TAG = "ReliefRepository";
     private static ReliefRepository reliefRepository;
     private ReliefApi reliefApi;
     public static ReliefRepository getInstance(){
@@ -49,11 +52,13 @@ public class ReliefRepository {
         reliefApi.searchRelief(data).enqueue(new Callback<ReliefSearchResponse>() {
             @Override
             public void onResponse(Call<ReliefSearchResponse> call, Response<ReliefSearchResponse> response) {
+                Log.d(TAG, "onResponse: "+response.body().toString());
                 result.setValue(response.body());
             }
 
             @Override
             public void onFailure(Call<ReliefSearchResponse> call, Throwable t) {
+                Log.d(TAG, "onFailure: "+t);
                 result.setValue(new ReliefSearchResponse.Builder<ReliefSearchResponse>(ReliefSearchResponse.class).setNetworkIsSuccessful(false));
             }
         });

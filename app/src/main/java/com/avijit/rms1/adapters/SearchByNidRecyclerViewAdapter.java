@@ -40,9 +40,9 @@ public class SearchByNidRecyclerViewAdapter extends RecyclerView.Adapter<SearchB
         holder.nidTextView.setText(nids.get(position));
         if(position%2==0)
         {
-            holder.nameTextView.setBackgroundColor(Color.parseColor("#DFE6E9"));
-            holder.contactTextView.setBackgroundColor(Color.parseColor("#DFE6E9"));
-            holder.nidTextView.setBackgroundColor(Color.parseColor("#DFE6E9"));
+            holder.nameTextView.setBackgroundColor(Color.parseColor("#FFFFFF"));
+            holder.contactTextView.setBackgroundColor(Color.parseColor("#FFFFFF"));
+            holder.nidTextView.setBackgroundColor(Color.parseColor("#FFFFFF"));
         }
     }
     @Override

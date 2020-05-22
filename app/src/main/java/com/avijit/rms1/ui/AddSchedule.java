@@ -166,8 +166,7 @@ public class AddSchedule extends BaseActivity {
         divisionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                ((TextView) parent.getChildAt(0)).setTextColor(Color.BLACK);
-                ((TextView) parent.getChildAt(0)).setBackgroundColor(Color.WHITE);
+                setDropdownFirstItemStyle(parent);
                 if (position > 0) {
                     setDistricts();
                 }
@@ -181,8 +180,7 @@ public class AddSchedule extends BaseActivity {
         districtSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                ((TextView) parent.getChildAt(0)).setTextColor(Color.BLACK);
-                ((TextView) parent.getChildAt(0)).setBackgroundColor(Color.WHITE);
+                setDropdownFirstItemStyle(parent);
                 if (position > 0) {
                     setTypes();
                 }
@@ -196,8 +194,7 @@ public class AddSchedule extends BaseActivity {
         typeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                ((TextView) parent.getChildAt(0)).setTextColor(Color.BLACK);
-                ((TextView) parent.getChildAt(0)).setBackgroundColor(Color.WHITE);
+                setDropdownFirstItemStyle(parent);
                 if (position > 0) {
                     setAreas();
                 }
@@ -211,8 +208,7 @@ public class AddSchedule extends BaseActivity {
         areaSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                ((TextView) parent.getChildAt(0)).setTextColor(Color.BLACK);
-                ((TextView) parent.getChildAt(0)).setBackgroundColor(Color.WHITE);
+                setDropdownFirstItemStyle(parent);
             }
 
             @Override
