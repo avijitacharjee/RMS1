@@ -83,8 +83,8 @@ public class Nav extends BaseActivity {
         if(getSharedPreferences("RMS",MODE_PRIVATE).getString("token","").equals("")){
             startActivity(new Intent(Nav.this,Login.class));
         }
-        setLocations();
-        saveUserInfo();
+        //setLocations();
+        //saveUserInfo();
         //broadcastIntent();
     }
     public void saveUserInfo(){

@@ -1,15 +1,144 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="@color/white_1"
-    android:layout_height="match_parent">
-    <TextView
-        android:textColor="@color/black"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context=".ui.SignUp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:id="@+id/req_for_self_text_view"
-        android:text="Request For Self"
-        android:textSize="30sp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_margin="20dp"
+        android:elevation="10dp"
+        android:background="@drawable/shape1"
+        android:orientation="vertical">
 
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@color/white_1"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <ImageView
+                    android:id="@+id/logo_image"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:transitionName="tran1"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/logo_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/bungee"
+                    android:text="Hello there, Welcome Back"
+                    android:textColor="#000"
+                    android:textSize="30sp"
+                    android:transitionName="logo_text"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/slogan_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Sign In to continue"
+                    android:textSize="18sp"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/username"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Family Members"
+                        app:hintAnimationEnabled="true"
+                        android:textColorHint="@color/black_1"
+                        app:boxStrokeColor="@color/black"
+                        app:hintTextColor="@color/black_1">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/full_name_edit_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black_1"
+                            android:inputType="number"
+                            android:textColorHint="@color/black_1" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/phone_no"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Phone no"
+                        app:hintAnimationEnabled="true"
+                        android:textColorHint="@color/black_1"
+                        app:boxStrokeColor="@color/black_1"
+                        app:hintTextColor="@color/black">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/phone_edit_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="number"
+                            android:textColor="@color/black"
+                            android:textColorHint="@color/black" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/nid"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Address"
+                        app:hintAnimationEnabled="true"
+                        android:textColorHint="@color/black"
+                        android:transitionName="tran2"
+                        app:boxStrokeColor="@color/black"
+                        app:hintTextColor="@color/black">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/nid_edit_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:textColorHint="@color/black" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+
+
+                    <TextView
+                        android:id="@+id/go"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:background="@color/black_1"
+                        android:gravity="center"
+                        android:padding="10dp"
+                        android:text="GO"
+                        android:textColor="@color/white_1"
+                        android:transitionName="tran4" />
+
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
 </LinearLayout>
