@@ -9,6 +9,7 @@
     android:orientation="vertical"
     tools:context=".ui.SignUp">
     <LinearLayout
+        android:transitionName="element"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

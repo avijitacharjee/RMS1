@@ -3,8 +3,10 @@ package com.avijit.rms1.ui;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.transition.TransitionInflater;
 
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.TextAppearanceSpan;
@@ -43,6 +45,9 @@ public class ReliefRequest extends BaseActivity {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.add(R.id.relief_request_fragment_container,firstFragment);
         ft.commit();
+       /* if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            setSharedElementEnterTransition(TransitionInflater.from(getContext()).inflateTransition(android.R.transition.move));
+        }*/
     }
     private void initViews(){
        /* fullNameEdit = findViewById(R.id.full_name_edit_text);
