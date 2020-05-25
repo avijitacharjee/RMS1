@@ -3,10 +3,8 @@ package com.avijit.rms1.ui;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.transition.TransitionInflater;
 
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.TextAppearanceSpan;
@@ -22,11 +20,9 @@ import com.avijit.rms1.R;
 import com.avijit.rms1.ui.relief_request_fragments.ReliefRequestMainFragment;
 import com.avijit.rms1.utils.AppUtils;
 import com.avijit.rms1.utils.EndDrawerToggle;
-import com.avijit.rms1.viewmodel.ReliefRequestViewModel;
 import com.google.android.material.navigation.NavigationView;
 
 public class ReliefRequest extends BaseActivity {
-    ReliefRequestViewModel viewModel;
     private EditText fullNameEdit,addressEditText,phoneEditText,familyMemberEditText,earningMemberEditText;
 
     @Override
@@ -35,7 +31,6 @@ public class ReliefRequest extends BaseActivity {
         setContentView(R.layout.activity_relief_request);
         appUtils = new AppUtils(this);
         initViews();
-        viewModel = ViewModelProviders.of(this).get(ReliefRequestViewModel.class);
         //viewModel.init();
         initNavDrawer();
         /**

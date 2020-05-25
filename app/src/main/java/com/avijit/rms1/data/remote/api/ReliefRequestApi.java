@@ -1,6 +1,8 @@
 package com.avijit.rms1.data.remote.api;
 
 import com.avijit.rms1.data.remote.model.ReliefRequest;
+import com.avijit.rms1.data.remote.responses.NetworkResponse;
+import com.avijit.rms1.data.remote.responses.SaveReliefRequestResponse;
 
 import org.json.JSONObject;
 
@@ -14,4 +16,6 @@ public interface ReliefRequestApi {
 
     @POST("reject/{id}")
     Call<JSONObject> rejectReliefRequest();
+    @POST("saverequest")
+    Call<NetworkResponse<ReliefRequest>> saveRequest(@Body ReliefRequest reliefRequest);
 }

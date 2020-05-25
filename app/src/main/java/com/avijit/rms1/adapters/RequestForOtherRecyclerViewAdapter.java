@@ -50,7 +50,7 @@ public class RequestForOtherRecyclerViewAdapter extends RecyclerView.Adapter<Req
         public EditText editText;
         public ViewHolder(@NonNull View itemView){
             super(itemView);
-            editText = itemView.findViewById(R.id.abcd);
+            //editText = itemView.findViewById(R.id.abcd);
         }
     }
 

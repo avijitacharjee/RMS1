@@ -1,6 +1,8 @@
 {
-  "uri": "https://google.com",
-  "method": "GET",
+  "uri": "http://https://www.aniksen.me/covidbd/api/saverequest?contact_no\u003d0182+0173+0191\u0026created_by\u003dcreated_by\u0026family_member\u003d2+3+5\u0026family_no\u003d3\u0026nid\u003d12365+25698+45632\u0026request_for\u003dothers\u0026request_time\u003d2020-05-19\u0026request_type\u003drelief\u0026user_id\u003d1",
+  "method": "POST",
   "body": "",
-  "headers": {}
+  "headers": {
+    "Accept": "*/*"
+  }
 }

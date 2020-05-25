@@ -6,8 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/white_1"
     android:gravity="center"
-    android:orientation="vertical"
-    tools:context=".ui.SignUp">
+    android:orientation="vertical">
     <LinearLayout
         android:transitionName="element"
         android:layout_width="match_parent"
@@ -29,33 +28,6 @@
                 android:background="@color/white_1"
                 android:orientation="vertical"
                 android:padding="20dp">
-
-                <ImageView
-                    android:id="@+id/logo_image"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
-                    android:transitionName="tran1"
-                    android:visibility="gone" />
-
-                <TextView
-                    android:id="@+id/logo_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/bungee"
-                    android:text="Hello there, Welcome Back"
-                    android:textColor="#000"
-                    android:textSize="30sp"
-                    android:transitionName="logo_text"
-                    android:visibility="gone" />
-
-                <TextView
-                    android:id="@+id/slogan_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Sign In to continue"
-                    android:textSize="18sp"
-                    android:visibility="gone" />
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -75,7 +47,7 @@
                         app:hintTextColor="@color/black_1">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/full_name_edit_text"
+                            android:id="@+id/family_members_edit_text"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textColor="@color/black_1"
@@ -104,7 +76,6 @@
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/nid"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -116,7 +87,7 @@
                         app:hintTextColor="@color/black">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/nid_edit_text"
+                            android:id="@+id/address_edit_text"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textColor="@color/black"
