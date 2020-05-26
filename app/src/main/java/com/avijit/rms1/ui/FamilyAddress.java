@@ -67,7 +67,6 @@ public class FamilyAddress extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_family_address);
-        //TODO locations background task
         viewModel = ViewModelProviders.of(this).get(FamilyAddressViewModel.class);
 
         divisionSpinner= findViewById(R.id.division_spinner);

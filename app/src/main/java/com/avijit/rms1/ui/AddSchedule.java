@@ -229,12 +229,15 @@ public class AddSchedule extends BaseActivity {
                     reliefSchedule.setDivision_id(divisionList.get(divisionSpinner.getSelectedItemPosition() - 1).divisionId);
                     reliefSchedule.setArea_id(areaList.get(areaSpinner.getSelectedItemPosition() - 1).areaId);
                     Log.d("JSON", "onClick: " + new Gson().toJson(reliefSchedule));
+                    dialog = utils.dialog;
+                    dialog.show();
                     addScheduleVIewModel.addSchedule(reliefSchedule).observe(AddSchedule.this, new Observer<ReliefScheduleStoreResponse>() {
                         @Override
                         public void onChanged(ReliefScheduleStoreResponse reliefScheduleStoreResponse) {
+                            dialog.dismiss();
                             Log.d("TAG", "onChanged: " + new Gson().toJson(reliefScheduleStoreResponse));
                             if (reliefScheduleStoreResponse.isNetworkIsSuccessful()){
-                                Toast.makeText(AddSchedule.this, "Schedule Added Successfully", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(AddSchedule.this, reliefScheduleStoreResponse.getMessage(), Toast.LENGTH_SHORT).show();
                             }
                             else {
                                 Toast.makeText(AddSchedule.this, "Failed to connect", Toast.LENGTH_SHORT).show();

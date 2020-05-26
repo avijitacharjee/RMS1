@@ -182,6 +182,9 @@ public class SearchByNid extends BaseActivity {
                 if(!reliefSearchResponse.isNetworkIsSuccessful()){
                     return;
                 }
+                if(reliefSearchResponse.getReliefs()==null){
+                    return;
+                }
                 names.clear();contacts.clear();nids.clear();
                 for (int i = 0; i <reliefSearchResponse.getReliefs().size(); i++) {
                     names.add(reliefSearchResponse.getReliefs().get(i).getName());

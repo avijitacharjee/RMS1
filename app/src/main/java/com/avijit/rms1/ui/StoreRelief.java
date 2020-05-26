@@ -131,6 +131,12 @@ public class StoreRelief extends BaseActivity {
                         @Override
                         public void onChanged(ReliefStoreResponse reliefStoreResponse) {
                             Log.d(TAG, "onChanged: " + reliefStoreResponse.toString());
+                            if(reliefStoreResponse.isNetworkIsSuccessful()){
+                                Toast.makeText(StoreRelief.this, "Successfully added", Toast.LENGTH_SHORT).show();
+                            }
+                            else {
+                                Toast.makeText(StoreRelief.this, "Failed to connect", Toast.LENGTH_SHORT).show();
+                            }
                         }
                     });
                 }

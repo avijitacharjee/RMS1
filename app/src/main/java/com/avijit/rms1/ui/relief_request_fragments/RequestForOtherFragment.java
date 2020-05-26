@@ -38,13 +38,13 @@ import java.util.List;
 
 public class RequestForOtherFragment extends Fragment {
     private static final String TAG = "RequestForOtherFragment";
-    ReliefRequestForOtherViewModel viewModel;
-    TextView numberPickerButton;
-    LinearLayout elements;
-    NumberPicker numberPicker;
-    List<View> viewList;
-    LinearLayout linearLayout;
-    TextView goButton;
+    private ReliefRequestForOtherViewModel viewModel;
+    private TextView numberPickerButton;
+    private LinearLayout elements;
+    private NumberPicker numberPicker;
+    private List<View> viewList;
+    private LinearLayout linearLayout;
+    private TextView goButton;
 
     @Nullable
     @Override
