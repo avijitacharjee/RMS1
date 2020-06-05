@@ -33,6 +33,10 @@
             android:title="@string/add_a_company"
             />
         <item
+            android:id="@+id/nav_add_user_in_company"
+            android:icon="@drawable/ic_info_outline_black_24dp"
+            android:title="Add user in company"/>
+        <item
             android:id="@+id/nav_add_request_for_relief"
             android:icon="@drawable/ic_info_outline_black_24dp"
             android:title="@string/add_request_for_relief"

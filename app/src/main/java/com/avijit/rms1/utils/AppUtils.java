@@ -23,6 +23,7 @@ import com.avijit.rms1.MainActivity;
 import com.avijit.rms1.R;
 import com.avijit.rms1.ui.AddCompany;
 import com.avijit.rms1.ui.AddSchedule;
+import com.avijit.rms1.ui.AddUserInCompany;
 import com.avijit.rms1.ui.CompletedSchedules;
 import com.avijit.rms1.ui.FamilyAddress;
 import com.avijit.rms1.ui.Login;
@@ -154,6 +155,10 @@ public class AppUtils {
                 }
                 case R.id.nav_search_by_nid :{
                     context.startActivity(new Intent(context, SearchByNid.class));
+                    break;
+                }
+                case R.id.nav_add_user_in_company : {
+                    context.startActivity(new Intent(context, AddUserInCompany.class));
                     break;
                 }
 

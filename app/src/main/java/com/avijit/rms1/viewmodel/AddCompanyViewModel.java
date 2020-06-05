@@ -8,9 +8,11 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.avijit.rms1.data.local.entities.Division;
+import com.avijit.rms1.data.remote.model.Company;
 import com.avijit.rms1.data.remote.model.CompanyUser;
 import com.avijit.rms1.data.remote.responses.CompanyStoreResponse;
 import com.avijit.rms1.data.remote.responses.CompanyUserStoreResponse;
+import com.avijit.rms1.data.remote.responses.NetworkResponse;
 import com.avijit.rms1.repository.CompanyRepository;
 import com.avijit.rms1.repository.LocationRepository;
 
@@ -37,8 +39,8 @@ public class AddCompanyViewModel extends AndroidViewModel {
         super(application);
         this.application = application;
     }
-    public MutableLiveData<CompanyStoreResponse> addCompany(String companyName){
-        return companyRepository.addCompany(companyName);
+    public MutableLiveData<NetworkResponse<Company>> addCompany(String companyName, String email){
+        return companyRepository.addCompany(companyName,email);
     }
     public MutableLiveData<CompanyUserStoreResponse> addUserToCompany(CompanyUser user){
         return companyRepository.addUserToCompany(user);

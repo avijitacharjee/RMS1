@@ -1,11 +1,13 @@
 package com.avijit.rms1.data.remote.api;
 
+import com.avijit.rms1.data.remote.model.Company;
 import com.avijit.rms1.data.remote.model.CompanyUser;
 import com.avijit.rms1.data.remote.responses.CompanyResponse;
 import com.avijit.rms1.data.remote.responses.CompanySearchResponse;
 import com.avijit.rms1.data.remote.responses.CompanyStoreResponse;
 import com.avijit.rms1.data.remote.responses.CompanyUserStoreResponse;
 import com.avijit.rms1.data.remote.responses.CoronaSummaryResponse;
+import com.avijit.rms1.data.remote.responses.NetworkResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -19,7 +21,7 @@ import retrofit2.http.Query;
 public interface CompanyApi {
     @FormUrlEncoded
     @POST("company/store")
-    Call<CompanyStoreResponse> storeCompany(@Field("name") String name);
+    Call<NetworkResponse<Company>> storeCompany(@Field("name") String name, @Field("email") String email);
 
     @GET("company/list")
     Call<CompanyResponse> getCompanyList();

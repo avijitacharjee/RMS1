@@ -15,15 +15,18 @@ import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.avijit.rms1.R;
+import com.avijit.rms1.data.remote.model.User;
 import com.avijit.rms1.utils.AppUtils;
 import com.avijit.rms1.utils.EndDrawerToggle;
 import com.avijit.rms1.viewmodel.AddCompanyViewModel;
 import com.google.android.material.navigation.NavigationView;
+import com.google.gson.Gson;
 
 public class AddCompany extends BaseActivity {
     private EditText companyNameEditText;
@@ -31,6 +34,8 @@ public class AddCompany extends BaseActivity {
     private AddCompanyViewModel addCompanyViewModel;
     Animation topAnimation;
     LinearLayout view;
+    String email;
+    User user;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,13 +46,26 @@ public class AddCompany extends BaseActivity {
         initNavDrawer();
         addCompanyViewModel= ViewModelProviders.of(this).get(AddCompanyViewModel.class);
         addCompanyViewModel.init();
+        try {
+            user = new Gson().fromJson(getSharedPreferences("RMS",MODE_PRIVATE).getString("user",""),User.class);
+            email=user.getEmail();
+        }
+        catch (Exception e){
+            email="";
+        }
         nextButton.setOnClickListener(v -> {
             if(formIsValid()){
                 appUtils.dialog.show();
-                addCompanyViewModel.addCompany(companyNameEditText.getText().toString()).observe(AddCompany.this, companyStoreResponse -> {
+                addCompanyViewModel.addCompany(companyNameEditText.getText().toString(),email).observe(AddCompany.this, companyStoreResponse -> {
                     appUtils.dialog.dismiss();
                     Log.d("Observer", "onChanged: "+companyStoreResponse);
-                    startActivity(new Intent(AddCompany.this,AddUserInCompany.class));
+                    if(companyStoreResponse.isNetworkIsSuccessful()) {
+                        Toast.makeText(this, "Company Added", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(AddCompany.this, AddUserInCompany.class));
+                    }
+                    else{
+                        Toast.makeText(this, "Failed to add", Toast.LENGTH_SHORT).show();
+                    }
                 });
                 Log.d("Observer", "onClick: Called");
             }

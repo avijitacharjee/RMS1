@@ -6,10 +6,12 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.avijit.rms1.data.remote.RetrofitService;
 import com.avijit.rms1.data.remote.api.CompanyApi;
+import com.avijit.rms1.data.remote.model.Company;
 import com.avijit.rms1.data.remote.model.CompanyUser;
 import com.avijit.rms1.data.remote.responses.CompanyResponse;
 import com.avijit.rms1.data.remote.responses.CompanyStoreResponse;
 import com.avijit.rms1.data.remote.responses.CompanyUserStoreResponse;
+import com.avijit.rms1.data.remote.responses.NetworkResponse;
 import com.google.gson.Gson;
 
 import retrofit2.Call;
@@ -49,24 +51,24 @@ public class CompanyRepository {
         });
         return companyResponseMutableLiveData;
     }
-    public MutableLiveData<CompanyStoreResponse> addCompany(String companyName){
-        final MutableLiveData<CompanyStoreResponse> companyStoreResponseMutableLiveData = new MutableLiveData<>();
-        companyApi.storeCompany(companyName).enqueue(new Callback<CompanyStoreResponse>() {
+    public MutableLiveData<NetworkResponse<Company>> addCompany(String companyName,String email){
+        final MutableLiveData<NetworkResponse<Company>> companyStoreResponseMutableLiveData = new MutableLiveData<>();
+        companyApi.storeCompany(companyName,email).enqueue(new Callback<NetworkResponse<Company>>() {
             @Override
-            public void onResponse(Call<CompanyStoreResponse> call, Response<CompanyStoreResponse> response) {
+            public void onResponse(Call<NetworkResponse<Company>> call, Response<NetworkResponse<Company>> response) {
                 Log.d(TAG, "onResponse: "+ new Gson().toJson(response));
                 if(response.isSuccessful()){
                     companyStoreResponseMutableLiveData.setValue(response.body());
                 }
-                else {
-                    companyStoreResponseMutableLiveData.setValue(new CompanyStoreResponse.Builder<CompanyStoreResponse>(CompanyStoreResponse.class).setNetworkIsSuccessful(false));
-                }
+
             }
 
             @Override
-            public void onFailure(Call<CompanyStoreResponse> call, Throwable t) {
+            public void onFailure(Call<NetworkResponse<Company>> call, Throwable t) {
                 Log.d(TAG, "onFailure: "+t);
-                companyStoreResponseMutableLiveData.setValue(new CompanyStoreResponse.Builder<CompanyStoreResponse>(CompanyStoreResponse.class).setNetworkIsSuccessful(false));
+                NetworkResponse<Company> c = new NetworkResponse<>();
+                c.setNetworkIsSuccessful(false);
+                companyStoreResponseMutableLiveData.setValue(c);
             }
         });
         return companyStoreResponseMutableLiveData;

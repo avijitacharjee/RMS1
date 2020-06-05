@@ -50,7 +50,7 @@ public class AddUserInCompany extends BaseActivity {
         userTypes.add("--Select user type--");
         userTypes.add("New User");
         userTypes.add("Registered User");
-        final ArrayAdapter<String> userTypeArrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_dropdown_item,userTypes);
+        final ArrayAdapter<String> userTypeArrayAdapter = new ArrayAdapter<>(this,android.R.layout.simple_spinner_dropdown_item,userTypes);
         userTypeArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         userTypeSpinner.setAdapter(userTypeArrayAdapter);
 
@@ -94,33 +94,30 @@ public class AddUserInCompany extends BaseActivity {
 
             }
         });
-        goButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(formIsValid()){
-                    CompanyUser companyUser = new CompanyUser();
-                    companyUser.setCompany_id("1");
-                    companyUser.setRole("2");
-                    companyUser.setUser_id(emailEditText.getText().toString());
-                    if(userTypeSpinner.getSelectedItemPosition()==1){
-                        addUserInCompanyViewModel.addUser(companyUser).observe(AddUserInCompany.this, new Observer<CompanyUserStoreResponse>() {
-                            @Override
-                            public void onChanged(CompanyUserStoreResponse companyUserStoreResponse) {
-                                Toast.makeText(AddUserInCompany.this, "User Added Successfully", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
-                    else if(userTypeSpinner.getSelectedItemPosition()==2){
-                        User user = new User();
-                        user.setName(fullNameEditText.getText().toString());
-                        user.setEmail(emailEditText.getText().toString());
-                        user.setNid(nidEditText.getText().toString());
-                        user.setPhone(phoneNoEditText.getText().toString());
-                        user.setPassword(passwordEditText.getText().toString());
-                        Log.d(TAG, "onClick: "+user.toString());
-                        addUserInCompanyViewModel.registerNewUser(user);
-                        addUserInCompanyViewModel.addUser(companyUser);
-                    }
+        goButton.setOnClickListener(v -> {
+            if(formIsValid()){
+                CompanyUser companyUser = new CompanyUser();
+                companyUser.setCompany_id("1");
+                companyUser.setRole("2");
+                companyUser.setUser_id(emailEditText.getText().toString());
+                if(userTypeSpinner.getSelectedItemPosition()==1){
+                    addUserInCompanyViewModel.addUser(companyUser).observe(AddUserInCompany.this, new Observer<CompanyUserStoreResponse>() {
+                        @Override
+                        public void onChanged(CompanyUserStoreResponse companyUserStoreResponse) {
+                            Toast.makeText(AddUserInCompany.this, "User Added Successfully", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+                else if(userTypeSpinner.getSelectedItemPosition()==2){
+                    User user = new User();
+                    user.setName(fullNameEditText.getText().toString());
+                    user.setEmail(emailEditText.getText().toString());
+                    user.setNid(nidEditText.getText().toString());
+                    user.setPhone(phoneNoEditText.getText().toString());
+                    user.setPassword(passwordEditText.getText().toString());
+                    Log.d(TAG, "onClick: "+user.toString());
+                    addUserInCompanyViewModel.registerNewUser(user);
+                    addUserInCompanyViewModel.addUser(companyUser);
                 }
             }
         });
