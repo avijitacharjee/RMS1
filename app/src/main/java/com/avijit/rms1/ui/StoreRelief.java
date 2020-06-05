@@ -43,6 +43,7 @@ import com.avijit.rms1.R;
 import com.avijit.rms1.data.remote.model.Relief;
 import com.avijit.rms1.data.remote.responses.ReliefStoreResponse;
 import com.avijit.rms1.location.AppLocationService;
+import com.avijit.rms1.utils.AppUtils;
 import com.avijit.rms1.viewmodel.StoreReliefViewModel;
 
 import java.io.ByteArrayOutputStream;
@@ -76,7 +77,7 @@ public class StoreRelief extends BaseActivity {
          /*getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("RMS"); */
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        appUtils= new AppUtils(this);
         chooseImageButton = findViewById(R.id.img);
         imageView=findViewById(R.id.imageinsert);
         fullName = findViewById(R.id.full_name_edit_text);
@@ -127,9 +128,11 @@ public class StoreRelief extends BaseActivity {
                     relief.setDate_given(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
                     relief.setGiven_by("1");
                     relief.setGiven_to("1");
+                    appUtils.dialog.show();
                     viewModel.storeRelief(relief).observe(StoreRelief.this, new Observer<ReliefStoreResponse>() {
                         @Override
                         public void onChanged(ReliefStoreResponse reliefStoreResponse) {
+                            appUtils.dialog.dismiss();
                             Log.d(TAG, "onChanged: " + reliefStoreResponse.toString());
                             if(reliefStoreResponse.isNetworkIsSuccessful()){
                                 Toast.makeText(StoreRelief.this, "Successfully added", Toast.LENGTH_SHORT).show();

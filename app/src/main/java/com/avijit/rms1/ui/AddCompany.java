@@ -43,7 +43,9 @@ public class AddCompany extends BaseActivity {
         addCompanyViewModel.init();
         nextButton.setOnClickListener(v -> {
             if(formIsValid()){
+                appUtils.dialog.show();
                 addCompanyViewModel.addCompany(companyNameEditText.getText().toString()).observe(AddCompany.this, companyStoreResponse -> {
+                    appUtils.dialog.dismiss();
                     Log.d("Observer", "onChanged: "+companyStoreResponse);
                     startActivity(new Intent(AddCompany.this,AddUserInCompany.class));
                 });
