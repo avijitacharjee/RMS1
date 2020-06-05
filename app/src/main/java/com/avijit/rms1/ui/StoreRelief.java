@@ -190,9 +190,11 @@ public class StoreRelief extends BaseActivity {
                             relief.setDate_given(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
                             relief.setGiven_by("1");
                             relief.setGiven_to("1");
+                            appUtils.dialog.show();
                             viewModel.storeRelief(relief).observe(StoreRelief.this, new Observer<ReliefStoreResponse>() {
                                 @Override
                                 public void onChanged(ReliefStoreResponse reliefStoreResponse) {
+                                    appUtils.dialog.dismiss();
                                     Log.d(TAG, "onChanged: " + reliefStoreResponse.toString());
                                 }
                             });

@@ -1,8 +1,11 @@
 package com.avijit.rms1.data.remote.api;
 
 import com.avijit.rms1.data.remote.model.Relief;
+import com.avijit.rms1.data.remote.responses.NetworkResponse;
 import com.avijit.rms1.data.remote.responses.ReliefSearchResponse;
 import com.avijit.rms1.data.remote.responses.ReliefStoreResponse;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -15,5 +18,5 @@ public interface ReliefApi {
     Call<ReliefStoreResponse> storeRelief(@Body Relief relief);
 
     @GET("relief/search/{data}")
-    Call<ReliefSearchResponse> searchRelief(@Path("data") String data);
+    Call<NetworkResponse<List<Relief>>> searchRelief(@Path("data") String data);
 }

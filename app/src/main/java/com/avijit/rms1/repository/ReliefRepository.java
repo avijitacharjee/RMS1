@@ -7,8 +7,11 @@ import androidx.lifecycle.MutableLiveData;
 import com.avijit.rms1.data.remote.RetrofitService;
 import com.avijit.rms1.data.remote.api.ReliefApi;
 import com.avijit.rms1.data.remote.model.Relief;
+import com.avijit.rms1.data.remote.responses.NetworkResponse;
 import com.avijit.rms1.data.remote.responses.ReliefSearchResponse;
 import com.avijit.rms1.data.remote.responses.ReliefStoreResponse;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -47,19 +50,21 @@ public class ReliefRepository {
         });
         return result;
     }
-    public MutableLiveData<ReliefSearchResponse> searchRelief(String data){
-        final MutableLiveData<ReliefSearchResponse> result = new MutableLiveData<>();
-        reliefApi.searchRelief(data).enqueue(new Callback<ReliefSearchResponse>() {
+    public MutableLiveData<NetworkResponse<List<Relief>>> searchRelief(String data){
+        final MutableLiveData<NetworkResponse<List<Relief>>> result = new MutableLiveData<>();
+        reliefApi.searchRelief(data).enqueue(new Callback<NetworkResponse<List<Relief>>>() {
             @Override
-            public void onResponse(Call<ReliefSearchResponse> call, Response<ReliefSearchResponse> response) {
+            public void onResponse(Call<NetworkResponse<List<Relief>>> call, Response<NetworkResponse<List<Relief>>> response) {
                 Log.d(TAG, "onResponse: "+response.body().toString());
                 result.setValue(response.body());
             }
 
             @Override
-            public void onFailure(Call<ReliefSearchResponse> call, Throwable t) {
+            public void onFailure(Call<NetworkResponse<List<Relief>>> call, Throwable t) {
                 Log.d(TAG, "onFailure: "+t);
-                result.setValue(new ReliefSearchResponse.Builder<ReliefSearchResponse>(ReliefSearchResponse.class).setNetworkIsSuccessful(false));
+                NetworkResponse<List<Relief>> r = new NetworkResponse<>();
+                r.setNetworkIsSuccessful(false);
+                result.setValue(r);
             }
         });
         return result;

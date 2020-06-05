@@ -54,8 +54,8 @@
         android:layout_height="wrap_content"
         android:hint="Phone no"
         android:textColorHint="@color/black_1"
-        app:boxStrokeColor="@color/black_1"
         android:visibility="visible"
+        app:boxStrokeColor="@color/black_1"
         app:hintAnimationEnabled="true"
         app:hintTextColor="@color/black">
 
@@ -111,8 +111,6 @@
 
 
     <!--
-
-
         <TextView
             android:id="@+id/go"
             android:layout_width="match_parent"

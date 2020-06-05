@@ -42,6 +42,8 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.avijit.rms1.R;
 import com.avijit.rms1.adapters.SearchByNidRecyclerViewAdapter;
+import com.avijit.rms1.data.remote.model.Relief;
+import com.avijit.rms1.data.remote.responses.NetworkResponse;
 import com.avijit.rms1.data.remote.responses.ReliefSearchResponse;
 import com.avijit.rms1.utils.AppUtils;
 import com.avijit.rms1.utils.EndDrawerToggle;
@@ -176,20 +178,20 @@ public class SearchByNid extends BaseActivity {
 
     private void fetchData(String param) {
         param = param.equals("")?"1":param;
-        viewModel.searchRelief(param).observe(this, new Observer<ReliefSearchResponse>() {
+        viewModel.searchRelief(param).observe(this, new Observer<NetworkResponse<List<Relief>>>() {
             @Override
-            public void onChanged(ReliefSearchResponse reliefSearchResponse) {
+            public void onChanged(NetworkResponse<List<Relief>> reliefSearchResponse) {
                 if(!reliefSearchResponse.isNetworkIsSuccessful()){
                     return;
                 }
-                if(reliefSearchResponse.getReliefs()==null){
+                if(reliefSearchResponse.getData()==null){
                     return;
                 }
                 names.clear();contacts.clear();nids.clear();
-                for (int i = 0; i <reliefSearchResponse.getReliefs().size(); i++) {
-                    names.add(reliefSearchResponse.getReliefs().get(i).getName());
-                    contacts.add(reliefSearchResponse.getReliefs().get(i).getContact_no());
-                    nids.add(reliefSearchResponse.getReliefs().get(i).getNid());
+                for (int i = 0; i <reliefSearchResponse.getData().size(); i++) {
+                    names.add(reliefSearchResponse.getData().get(i).getName());
+                    contacts.add(reliefSearchResponse.getData().get(i).getContact_no());
+                    nids.add(reliefSearchResponse.getData().get(i).getNid());
                 }
                 searchByNidRecyclerViewAdapter.notifyDataSetChanged();
             }

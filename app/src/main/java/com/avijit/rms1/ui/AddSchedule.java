@@ -155,9 +155,8 @@ public class AddSchedule extends BaseActivity {
                 for (int i = 0; i < divisionList.size(); i++) {
                     divs[i + 1] = divisionList.get(i).name;
                 }
-                final ArrayAdapter<String> adapter = new ArrayAdapter<String>(AddSchedule.this, R.layout.spinner_layout, divs);
+                final ArrayAdapter<String> adapter = new ArrayAdapter<>(AddSchedule.this, android.R.layout.simple_spinner_dropdown_item, divs);
                 divisionSpinner.setAdapter(adapter);
-
             }
         });
         setDistricts();
