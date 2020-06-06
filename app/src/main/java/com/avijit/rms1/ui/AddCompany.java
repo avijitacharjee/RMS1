@@ -61,6 +61,7 @@ public class AddCompany extends BaseActivity {
                     Log.d("Observer", "onChanged: "+companyStoreResponse);
                     if(companyStoreResponse.isNetworkIsSuccessful()) {
                         Toast.makeText(this, "Company Added", Toast.LENGTH_SHORT).show();
+                        getSharedPreferences("RMS",MODE_PRIVATE).edit().putString("company",new Gson().toJson(companyStoreResponse.getData())).apply();
                         startActivity(new Intent(AddCompany.this, AddUserInCompany.class));
                     }
                     else{

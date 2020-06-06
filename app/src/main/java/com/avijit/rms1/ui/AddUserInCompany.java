@@ -5,6 +5,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,11 +19,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.avijit.rms1.R;
+import com.avijit.rms1.data.remote.model.Company;
 import com.avijit.rms1.data.remote.model.CompanyUser;
 import com.avijit.rms1.data.remote.model.User;
 import com.avijit.rms1.data.remote.responses.CompanyUserStoreResponse;
 import com.avijit.rms1.utils.AppUtils;
 import com.avijit.rms1.viewmodel.AddUserInCompanyViewModel;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +48,10 @@ public class AddUserInCompany extends BaseActivity {
         addUserInCompanyViewModel.init();
         appUtils = new AppUtils(this);
         initViews();
+        if(getSharedPreferences("RMS",MODE_PRIVATE).getString("company","").equals("")){
+            startActivity(new Intent(this,AddCompany.class));
+            Toast.makeText(this, "Please make a company first", Toast.LENGTH_SHORT).show();
+        }
 
         userTypes = new ArrayList<>();
         userTypes.add("--Select user type--");
@@ -95,18 +102,25 @@ public class AddUserInCompany extends BaseActivity {
             }
         });
         goButton.setOnClickListener(v -> {
-            if(formIsValid()){
+            if(true){
                 CompanyUser companyUser = new CompanyUser();
-                companyUser.setCompany_id("1");
+                String companyId= new Gson().fromJson(getSharedPreferences("RMS",MODE_PRIVATE).getString("company",""), Company.class).getId()+"";
+                companyUser.setCompany_id(companyId);
                 companyUser.setRole("2");
                 companyUser.setUser_id(emailEditText.getText().toString());
-                if(userTypeSpinner.getSelectedItemPosition()==1){
-                    addUserInCompanyViewModel.addUser(companyUser).observe(AddUserInCompany.this, new Observer<CompanyUserStoreResponse>() {
-                        @Override
-                        public void onChanged(CompanyUserStoreResponse companyUserStoreResponse) {
+                if(userTypeSpinner.getSelectedItemPosition()==2){
+                    appUtils.dialog.show();
+                    addUserInCompanyViewModel.addUser(emailEditText.getText().toString(),companyId,"2").observe(AddUserInCompany.this, response -> {
+                        appUtils.dialog.dismiss();
+                        if(response.isNetworkIsSuccessful()){
                             Toast.makeText(AddUserInCompany.this, "User Added Successfully", Toast.LENGTH_SHORT).show();
                         }
+                        else {
+                            Toast.makeText(this, "Failed to connect", Toast.LENGTH_SHORT).show();
+                        }
+
                     });
+
                 }
                 else if(userTypeSpinner.getSelectedItemPosition()==2){
                     User user = new User();
@@ -116,8 +130,15 @@ public class AddUserInCompany extends BaseActivity {
                     user.setPhone(phoneNoEditText.getText().toString());
                     user.setPassword(passwordEditText.getText().toString());
                     Log.d(TAG, "onClick: "+user.toString());
-                    addUserInCompanyViewModel.registerNewUser(user);
-                    addUserInCompanyViewModel.addUser(companyUser);
+                    addUserInCompanyViewModel.registerNewUser(user).observe(this,response->{
+                        if(response.isNetworkIsSuccessful()){
+                            addUserInCompanyViewModel.addUser(user.getEmail(),companyId,"2");
+                            Toast.makeText(this, "User added successfully", Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+                            Toast.makeText(this, "Failed to connect", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
             }
         });
@@ -134,6 +155,10 @@ public class AddUserInCompany extends BaseActivity {
         newUserLayout = findViewById(R.id.new_user_layout);
         goButton = findViewById(R.id.go);
         typeSpinner = findViewById(R.id.type_spinner);
+    }
+    private boolean form1Valid(){
+        boolean valid = true;
+        return valid;
     }
     private boolean formIsValid(){
         boolean valid= true;

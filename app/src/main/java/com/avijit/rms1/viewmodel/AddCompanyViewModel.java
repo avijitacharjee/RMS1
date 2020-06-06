@@ -42,8 +42,8 @@ public class AddCompanyViewModel extends AndroidViewModel {
     public MutableLiveData<NetworkResponse<Company>> addCompany(String companyName, String email){
         return companyRepository.addCompany(companyName,email);
     }
-    public MutableLiveData<CompanyUserStoreResponse> addUserToCompany(CompanyUser user){
-        return companyRepository.addUserToCompany(user);
+    public MutableLiveData<NetworkResponse<CompanyUser>> addUserToCompany(String email,String company_id,String role){
+        return companyRepository.addUserToCompany(email, company_id, role);
     }
     public LiveData<List<Division>> getDivisions(){
         return division;

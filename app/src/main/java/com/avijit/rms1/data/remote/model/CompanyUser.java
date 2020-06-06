@@ -3,10 +3,10 @@ package com.avijit.rms1.data.remote.model;
 import com.avijit.rms1.data.remote.responses.BaseModel;
 import com.google.gson.annotations.SerializedName;
 
-public class CompanyUser extends BaseModel {
-    String company_id;
-    String user_id;
-    String role;
+public class CompanyUser  {
+    private String company_id;
+    private String user_id;
+    private String role;
 
     public String getCompany_id() {
         return company_id;

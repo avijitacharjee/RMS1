@@ -29,7 +29,8 @@ public interface CompanyApi {
     @GET("company/search/{data}")
     Call<CompanySearchResponse> searchCompany(@Path("data") String data);
 
+    @FormUrlEncoded
     @POST("company/user/store")
-    Call<CompanyUserStoreResponse> storeUser(@Body CompanyUser companyUser);
+    Call<NetworkResponse<CompanyUser>> storeUser(@Field("email") String email,@Field("company_id") String company_id,@Field("role") String role);
 
 }

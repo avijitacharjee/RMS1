@@ -73,11 +73,11 @@ public class CompanyRepository {
         });
         return companyStoreResponseMutableLiveData;
     }
-    public MutableLiveData<CompanyUserStoreResponse> addUserToCompany(CompanyUser user){
-        final MutableLiveData<CompanyUserStoreResponse> companyUserStoreResponseMutableLiveData = new MutableLiveData<>();
-        companyApi.storeUser(user).enqueue(new Callback<CompanyUserStoreResponse>() {
+    public MutableLiveData<NetworkResponse<CompanyUser>> addUserToCompany(String email,String company_id,String role){
+        final MutableLiveData<NetworkResponse<CompanyUser>> companyUserStoreResponseMutableLiveData = new MutableLiveData<>();
+        companyApi.storeUser(email,company_id,role).enqueue(new Callback<NetworkResponse<CompanyUser>>() {
             @Override
-            public void onResponse(Call<CompanyUserStoreResponse> call, Response<CompanyUserStoreResponse> response) {
+            public void onResponse(Call<NetworkResponse<CompanyUser>> call, Response<NetworkResponse<CompanyUser>> response) {
                 if(response.isSuccessful()){
                     companyUserStoreResponseMutableLiveData.setValue(response.body());
                 }
@@ -85,7 +85,8 @@ public class CompanyRepository {
             }
 
             @Override
-            public void onFailure(Call<CompanyUserStoreResponse> call, Throwable t) {
+            public void onFailure(Call<NetworkResponse<CompanyUser>> call, Throwable t) {
+                companyUserStoreResponseMutableLiveData.setValue(new NetworkResponse<>());
                 Log.d(TAG, "onFailure: "+t);
             }
         });
