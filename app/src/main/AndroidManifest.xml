@@ -14,7 +14,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MaterialComponents.NoActionBar">
-        <activity android:name=".ui.ReliefRequest"></activity>
+        <activity android:name=".ui.News"></activity>
+        <activity android:name=".ui.ReliefRequest" />
         <activity android:name=".ui.AddUserInCompany" />
         <activity android:name=".ui.AddCompany" />
         <activity android:name=".ui.PendingSchedules" />

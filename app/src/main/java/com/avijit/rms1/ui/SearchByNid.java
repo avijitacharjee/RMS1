@@ -134,13 +134,7 @@ public class SearchByNid extends BaseActivity {
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                SearchByNid.super.onBackPressed();
-            }
-        });
+        toolbar.setNavigationOnClickListener(v -> SearchByNid.super.onBackPressed());
 
         Menu menu = navigation.getMenu();
         MenuItem tools = menu.findItem(R.id.group_title_1);

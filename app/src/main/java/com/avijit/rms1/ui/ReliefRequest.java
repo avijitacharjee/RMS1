@@ -55,7 +55,7 @@ public class ReliefRequest extends BaseActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
 
         toolbar.setTitle("RMS");
-        toolbar.setSubtitle("Add a company");
+        toolbar.setSubtitle("Add relief request");
         //toolbar.setLogo(R.drawable.ic_exit_to_app_black_24dp);
         toolbar.setBackgroundColor(Color.BLACK);
         setSupportActionBar(toolbar);
@@ -73,17 +73,7 @@ public class ReliefRequest extends BaseActivity {
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                if (drawer.isDrawerOpen(Gravity.RIGHT)) {
-                    drawer.closeDrawer(Gravity.RIGHT);
-                } else {
-                    drawer.openDrawer(Gravity.RIGHT);
-                }
-            }
-        });
+        toolbar.setNavigationOnClickListener(v->super.onBackPressed());
         Log.d("debug", "initNavDrawer: "+Runtime.getRuntime().availableProcessors());
         Menu menu = navigationView.getMenu();
         MenuItem tools= menu.findItem(R.id.group_title_1);
