@@ -38,7 +38,7 @@
                     <EditText
                         android:id="@+id/news_type_edit_text"
                         android:layout_width="match_parent"
-                        android:hint="Type Name"
+                        android:hint="Subtype name"
                         android:background="@color/white"
                         android:padding="10dp"
                         android:textColor="@color/black_1"

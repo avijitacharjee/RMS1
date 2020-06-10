@@ -23,6 +23,10 @@
             android:icon="@drawable/ic_home_black_24dp"
             android:title="Add news type"/>
         <item
+            android:id="@+id/nav_add_news_sub_type"
+            android:icon="@drawable/ic_home_black_24dp"
+            android:title="Add news sub type"/>
+        <item
             android:id="@+id/logout"
             android:icon="@drawable/ic_exit_to_app_black_24dp"
             android:title="@string/log_out" />

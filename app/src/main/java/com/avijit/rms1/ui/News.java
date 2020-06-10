@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.avijit.rms1.R;
+import com.avijit.rms1.ui.news_fragments.AddNewsSubTypeFragment;
 import com.avijit.rms1.ui.news_fragments.AddNewsTypeFragment;
 import com.avijit.rms1.ui.news_fragments.NewsHomeFragment;
 import com.avijit.rms1.utils.AppUtils;
@@ -64,6 +65,12 @@ public class News extends BaseActivity {
                     ft=getSupportFragmentManager().beginTransaction();
                     ft.replace(R.id.news_fragment_container,new NewsHomeFragment());
                     ft.commit();
+                    closeDrawer();
+                    break;
+                }
+                case R.id.nav_add_news_sub_type : {
+                    ft=getSupportFragmentManager().beginTransaction();
+                    ft.replace(R.id.news_fragment_container,new AddNewsSubTypeFragment()).commit();
                     closeDrawer();
                     break;
                 }

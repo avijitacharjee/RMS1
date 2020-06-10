@@ -5,6 +5,8 @@ import com.avijit.rms1.data.remote.model.NewsSubtype;
 import com.avijit.rms1.data.remote.model.NewsType;
 import com.avijit.rms1.data.remote.responses.NetworkResponse;
 
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -14,7 +16,7 @@ import retrofit2.http.Path;
 public interface NewsApi {
     //News Type
     @GET("types")
-    Call<NetworkResponse<NewsType>> getNewsTypes();
+    Call<NetworkResponse<List<NewsType>>> getNewsTypes();
     @POST("storenewstypes")
     Call<NetworkResponse<NewsType>> storeNewsType(@Body NewsType newsType);
     @POST("newstypesupdate/{id}")
@@ -24,7 +26,7 @@ public interface NewsApi {
 
     //News Subtype
     @GET("subtypes")
-    Call<NetworkResponse<NewsSubtype>> getNewsSubTypes();
+    Call<NetworkResponse<List<NewsSubtype>>> getNewsSubTypes();
     @POST("storenewssubtypes")
     Call<NetworkResponse<NewsSubtype>> storeNewsSubTypes(@Body NewsSubtype newsSubtype);
     @POST("newssubtypesupdate/{id}")

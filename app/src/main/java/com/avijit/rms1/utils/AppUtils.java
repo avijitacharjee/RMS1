@@ -4,8 +4,11 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
@@ -15,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.android.volley.Response;
 import com.android.volley.RetryPolicy;
@@ -44,6 +48,29 @@ public class AppUtils {
     public AppUtils(Context context) {
         this.context = context;
         setProgressDialog();
+    }
+
+    /**
+     * return void
+     * @param message default for null
+     */
+    public void showValidationMessage(@Nullable String message){
+        if(message==null){
+            message= "All Fields are required";
+        }
+        Toast toast = Toast.makeText(context,message , Toast.LENGTH_SHORT);
+        View view = toast.getView();
+
+        //Gets the actual oval background of the Toast then sets the colour filter
+        view.getBackground().setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
+
+        //Gets the TextView from the Toast so it can be editted
+        TextView text = view.findViewById(android.R.id.message);
+        text.setTextSize(TypedValue.COMPLEX_UNIT_SP,16);
+        text.setTextColor(Color.WHITE);
+
+        toast.show();
+
     }
     public static final RetryPolicy STRING_REQUEST_RETRY_POLICY = new RetryPolicy() {
         @Override
