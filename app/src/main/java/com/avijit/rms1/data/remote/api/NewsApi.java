@@ -1,5 +1,6 @@
 package com.avijit.rms1.data.remote.api;
 
+import com.avijit.rms1.data.remote.model.News;
 import com.avijit.rms1.data.remote.model.NewsSubtype;
 import com.avijit.rms1.data.remote.model.NewsType;
 import com.avijit.rms1.data.remote.responses.NetworkResponse;
@@ -32,6 +33,8 @@ public interface NewsApi {
     Call<NetworkResponse<NewsSubtype>> deleteNewsSubType(@Path("id") String id);
 
     //News
-
-
+    @POST("newsstore")
+    Call<NetworkResponse<News>> storeNews(@Body News news);
+    @POST("newsstore")
+    Call<String> store(@Body News news);
 }

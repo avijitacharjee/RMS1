@@ -1,0 +1,91 @@
+<LinearLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.news_fragments.AddNewsTypeFragment"
+    android:gravity="center"
+    android:id="@+id/view"
+    android:orientation="vertical"
+    android:background="@color/white_1"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_margin="20dp"
+        android:elevation="10dp"
+        android:background="@drawable/shape1"
+        android:layout_height="wrap_content">
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:background="@color/white_1"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:boxStrokeColor="@color/black"
+                    android:transitionName="tran2"
+                    android:layout_margin="10dp"
+                    android:elevation="5dp"
+                    android:background="@drawable/shape1">
+
+                    <EditText
+                        android:id="@+id/news_type_edit_text"
+                        android:layout_width="match_parent"
+                        android:hint="Company Name"
+                        android:background="@color/white"
+                        android:padding="10dp"
+                        android:textColor="@color/black_1"
+                        android:textColorHint="@color/black_1"
+                        android:layout_height="50dp"/>
+                </LinearLayout>
+                <!-- <LinearLayout
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     app:boxStrokeColor="@color/black"
+                     android:transitionName="tran2"
+                     android:layout_margin="10dp"
+                     android:gravity="center_vertical"
+                     android:elevation="50dp"
+                     android:background="@drawable/shape1"
+                     app:hintTextColor="@color/black">
+
+                     <TextView
+                         android:id="@+id/date_picker"
+                         android:layout_width="match_parent"
+                         android:text="Date"
+                         android:gravity="center_vertical"
+                         android:background="@color/anik2"
+                         android:padding="10dp"
+                         android:textColor="@color/white"
+                         android:textColorHint="@color/black"
+                         android:layout_height="50dp"/>
+                 </LinearLayout>-->
+
+
+                <TextView
+                    android:id="@+id/next_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_margin="20dp"
+                    android:background="@color/black_1"
+                    android:fontFamily="@font/oxygen_light"
+                    android:paddingLeft="20dp"
+                    android:paddingTop="10dp"
+                    android:paddingRight="20dp"
+                    android:paddingBottom="10dp"
+                    android:text="Add"
+                    android:textColor="#fff"
+                    android:textSize="24sp"
+                    android:transitionName="tran4" />
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+</LinearLayout>
