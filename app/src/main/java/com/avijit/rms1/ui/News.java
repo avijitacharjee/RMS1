@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.avijit.rms1.R;
+import com.avijit.rms1.ui.news_fragments.AddNewsFragment;
 import com.avijit.rms1.ui.news_fragments.AddNewsSubTypeFragment;
 import com.avijit.rms1.ui.news_fragments.AddNewsTypeFragment;
 import com.avijit.rms1.ui.news_fragments.NewsHomeFragment;
@@ -50,10 +51,6 @@ public class News extends BaseActivity {
         navigationView.setNavigationItemSelectedListener(item->{
             int id = item.getItemId();
             switch (id){
-                case R.id.nav_add_news :{
-                    closeDrawer();
-                    break;
-                }
                 case R.id.nav_add_news_type : {
                     ft=getSupportFragmentManager().beginTransaction();
                     ft.replace(R.id.news_fragment_container,new AddNewsTypeFragment());
@@ -71,6 +68,12 @@ public class News extends BaseActivity {
                 case R.id.nav_add_news_sub_type : {
                     ft=getSupportFragmentManager().beginTransaction();
                     ft.replace(R.id.news_fragment_container,new AddNewsSubTypeFragment()).commit();
+                    closeDrawer();
+                    break;
+                }
+                case R.id.nav_add_news : {
+                    ft = getSupportFragmentManager().beginTransaction();
+                    ft.replace(R.id.news_fragment_container, new AddNewsFragment()).commit();
                     closeDrawer();
                     break;
                 }
@@ -99,6 +102,5 @@ public class News extends BaseActivity {
         if(drawer.isDrawerOpen(Gravity.RIGHT)){
             drawer.closeDrawer(Gravity.RIGHT);
         }
-
     }
 }

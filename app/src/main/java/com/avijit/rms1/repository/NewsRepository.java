@@ -108,11 +108,13 @@ public class NewsRepository {
         newsApi.getNewsTypes().enqueue(new Callback<NetworkResponse<List<NewsType>>>() {
             @Override
             public void onResponse(Call<NetworkResponse<List<NewsType>>> call, Response<NetworkResponse<List<NewsType>>> response) {
+                Log.d(TAG, "onResponse: "+response.toString());
                 result.setValue(response.isSuccessful()?response.body():new NetworkResponse<>(false));
             }
 
             @Override
             public void onFailure(Call<NetworkResponse<List<NewsType>>> call, Throwable t) {
+                Log.d(TAG, "onFailure: "+t);
                 result.setValue(new NetworkResponse<>(false));
             }
         });

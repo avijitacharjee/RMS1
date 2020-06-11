@@ -9,8 +9,8 @@ import java.sql.Timestamp;
 public class NewsSubtype {
     private String id;
     private String news_subtypes;
-    private Timestamp created_at;
-    private Timestamp updated_at;
+    private String created_at;
+    private String updated_at;
 
     public String getId() {
         return id;
@@ -28,19 +28,19 @@ public class NewsSubtype {
         this.news_subtypes = news_subtypes;
     }
 
-    public Timestamp getCreated_at() {
+    public String getCreated_at() {
         return created_at;
     }
 
-    public void setCreated_at(Timestamp created_at) {
+    public void setCreated_at(String created_at) {
         this.created_at = created_at;
     }
 
-    public Timestamp getUpdated_at() {
+    public String getUpdated_at() {
         return updated_at;
     }
 
-    public void setUpdated_at(Timestamp updated_at) {
+    public void setUpdated_at(String updated_at) {
         this.updated_at = updated_at;
     }
 }

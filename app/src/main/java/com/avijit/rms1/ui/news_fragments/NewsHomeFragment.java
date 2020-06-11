@@ -67,8 +67,13 @@ public class NewsHomeFragment extends Fragment {
 
     }
     private void chooseImage(View view){
-        Intent intent = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-        startActivityForResult(intent,SELECT_FILE);
+        /*Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+        startActivityForResult(intent,SELECT_FILE);*/
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), SELECT_FILE);
+
     }
     private void initViews(View view){
         selectImageTextView = view.findViewById(R.id.gallery_text_view);
