@@ -73,7 +73,7 @@ public class AddNewsFragment extends BaseFragment {
                         typeList.clear();
                         typeList.addAll(newsTypeResponse.getData());
                         typesStringList.addAll(filterNewsType(newsTypeResponse.getData()));
-
+                        newsTypeAdapter.notifyDataSetChanged();
                     }
                     else{
                         Toast.makeText(getContext(), "Failed to connect", Toast.LENGTH_SHORT).show();
@@ -91,6 +91,7 @@ public class AddNewsFragment extends BaseFragment {
                         subTypeList.clear();
                         subTypeList.addAll(newsSubTypeResponse.getData());
                         subTypeStringList.addAll(filterNewsSubType(newsSubTypeResponse.getData()));
+                        newsSubTypeAdapter.notifyDataSetChanged();
                     }
                     else{
                         Toast.makeText(getContext(), "Failed to connect", Toast.LENGTH_SHORT).show();
