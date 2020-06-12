@@ -46,7 +46,7 @@ public class RequestForOtherRecyclerViewAdapter extends RecyclerView.Adapter<Req
         return position;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder {
         public EditText editText;
         public ViewHolder(@NonNull View itemView){
             super(itemView);

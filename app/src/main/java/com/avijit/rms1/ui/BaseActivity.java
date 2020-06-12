@@ -14,9 +14,9 @@ import com.avijit.rms1.R;
 import com.avijit.rms1.utils.AppUtils;
 
 public class BaseActivity extends AppCompatActivity {
-    DrawerLayout drawer;
-    Toolbar toolbar;
-    AppUtils appUtils;
+    protected DrawerLayout drawer;
+    protected Toolbar toolbar;
+    protected AppUtils appUtils;
     protected void setDropdownFirstItemStyle(AdapterView<?> parent){
         ((TextView) parent.getChildAt(0)).setTextColor(getResources().getColor(R.color.anik2));
         ((TextView) parent.getChildAt(0)).setBackgroundColor(getResources().getColor(R.color.anik1));

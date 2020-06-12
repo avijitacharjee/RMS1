@@ -30,6 +30,7 @@ public class News extends BaseActivity {
         setContentView(R.layout.activity_news);
         appUtils = new AppUtils(this);
         initViews();
+
     }
     private void initViews(){
         //Fragments

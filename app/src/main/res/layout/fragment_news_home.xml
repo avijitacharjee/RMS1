@@ -1,21 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
     android:background="@color/anik1"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/gallery_text_view"
-        android:text="Add photo"
-        android:layout_margin="100dp"
-        android:textColor="@color/anik2"
-        android:textSize="40dp"
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/news_home_container"
+        android:layout_marginTop="?attr/actionBarSize"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-    <ImageView
-        android:id="@+id/image_view"
-        android:src="@drawable/ic_profile"
+        android:layout_height="match_parent">
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:tabTextColor="@color/anik2"
+            android:background="@color/colorAccent"
+            app:tabIndicatorColor="@color/red"
+            app:tabIndicatorHeight="1dp"
+            android:layout_marginTop="?attr/actionBarSize"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:tabSelectedTextColor="@color/red"/>
+    </androidx.viewpager.widget.ViewPager>
+    <!--<FrameLayout
+        android:id="@+id/news_home_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>-->
+    <!--<com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_nav_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/anik2"/>
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginTop="?attr/actionBarSize"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:labelVisibilityMode="labeled"/>-->
+
 </LinearLayout>

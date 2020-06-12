@@ -39,4 +39,6 @@ public interface NewsApi {
     Call<NetworkResponse<News>> storeNews(@Body News news);
     @POST("newsstore")
     Call<String> store(@Body News news);
+    @GET("newsshow")
+    Call<NetworkResponse<List<News>>> getAllNews();
 }

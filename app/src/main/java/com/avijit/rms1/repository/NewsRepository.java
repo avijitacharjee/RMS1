@@ -135,5 +135,29 @@ public class NewsRepository {
         });
         return result;
     }
+    public MutableLiveData<NetworkResponse<List<News>>> getAllNews(){
+        MutableLiveData<NetworkResponse<List<News>>> result = new MutableLiveData<>();
+        newsApi.getAllNews().enqueue(new Callback<NetworkResponse<List<News>>>() {
+            @Override
+            public void onResponse(Call<NetworkResponse<List<News>>> call, Response<NetworkResponse<List<News>>> response) {
+                Log.d(TAG, "onResponse: "+response.toString());
+                if (response.isSuccessful()){
+                    result.setValue(response.body());
+                }
+                else {
+                    NetworkResponse networkResponse = new NetworkResponse();
+                    networkResponse.setNetworkIsSuccessful(false);
+                    result.setValue(networkResponse);
+                }
+            }
 
+            @Override
+            public void onFailure(Call<NetworkResponse<List<News>>> call, Throwable t) {
+                NetworkResponse<List<News>> networkResponse = new NetworkResponse<>();
+                networkResponse.setNetworkIsSuccessful(false);
+                result.setValue(networkResponse);
+            }
+        });
+        return result;
+    }
 }
