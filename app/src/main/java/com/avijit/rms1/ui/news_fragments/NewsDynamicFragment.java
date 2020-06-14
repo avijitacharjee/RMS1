@@ -100,7 +100,7 @@ public class NewsDynamicFragment extends BaseFragment {
         String type = getArguments().getString("someValue");
         this.newsList.clear();
         for(int i =0;i<list.size();i++){
-            if (list.get(i).getNews_types_id().equals(type)){
+            if (list.get(i).getNews_types().equals(type)){
                 this.newsList.add(list.get(i));
             }
         }

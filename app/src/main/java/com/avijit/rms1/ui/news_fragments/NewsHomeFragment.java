@@ -62,7 +62,6 @@ public class NewsHomeFragment extends BaseFragment {
     private TabLayout tab;
     private List<News> newsList= new ArrayList<>();
     private List<String> newsTypeList = new ArrayList<>();
-
     private ViewPager viewPager;
     @Nullable
     @Override

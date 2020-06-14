@@ -86,7 +86,7 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter<NewsRecyclerVi
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.titleTextView.setText(newsList.get(position).getNews_title());
-        holder.subTypeTextView.setText(newsList.get(position).getNews_subtypes_id());
+        holder.subTypeTextView.setText(newsList.get(position).getNews_subtypes());
         holder.reporterTextView.setText(newsList.get(position).getReporters_name());
         Picasso.get().load("https://aniksen.me/covidbd/uploads/news/"+newsList.get(position).getNews_image()).into(holder.imageView);
 
