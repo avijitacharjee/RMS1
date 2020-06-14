@@ -7,6 +7,8 @@ import com.avijit.rms1.data.remote.model.News;
 import com.avijit.rms1.data.remote.responses.NetworkResponse;
 import com.avijit.rms1.repository.NewsRepository;
 
+import java.util.List;
+
 /**
  * Created by Avijit Acharjee on 6/8/2020 at 6:54 PM.
  * Email: avijitach@gmail.com.
@@ -18,5 +20,8 @@ public class NewsHomeFragmentViewModel extends ViewModel {
     }
     public MutableLiveData<NetworkResponse<News>> storeNews(News news){
         return newsRepository.storeNews(news);
+    }
+    public MutableLiveData<NetworkResponse<List<News>>> getAllNews(){
+        return newsRepository.getAllNews();
     }
 }

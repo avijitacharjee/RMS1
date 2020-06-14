@@ -35,6 +35,7 @@ import com.avijit.rms1.R;
 import com.avijit.rms1.data.remote.model.User;
 import com.avijit.rms1.data.remote.responses.UserStoreResponse;
 import com.avijit.rms1.data.remote.responses.UserTypeResponse;
+import com.avijit.rms1.utils.AppUtils;
 import com.avijit.rms1.viewmodel.SignUpViewModel;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -62,6 +63,7 @@ public class SignUp extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+        appUtils= new AppUtils(this);
         loginIntentButton = findViewById(R.id.signup_intent_button);
         goButton = findViewById(R.id.go);
         logoImage = findViewById(R.id.logo_image);
@@ -177,11 +179,16 @@ public class SignUp extends BaseActivity {
         user.setNid(nidEditText.getText().toString());
         user.setPassword(passwordEditText.getText().toString());
         user.setTbl_user_types_id(typeIds[typeSpinner.getSelectedItemPosition()-1]);
-
-        viewModel.saveUser(user).observe(this, new Observer<UserStoreResponse>() {
-            @Override
-            public void onChanged(UserStoreResponse userStoreResponse) {
-                Log.d(TAG, "onChanged: "+userStoreResponse.toString());
+        appUtils.dialog.show();
+        viewModel.saveUser(user).observe(this, userStoreResponse ->
+        { Log.d(TAG, "onChanged: "+userStoreResponse.toString());
+            appUtils.dialog.dismiss();;
+            if(userStoreResponse.isNetworkIsSuccessful()){
+                Toast.makeText(this, "Registered successfully", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this,Nav.class));
+            }
+            else {
+                Toast.makeText(this, "Failed to connect", Toast.LENGTH_SHORT).show();
             }
         });
     }

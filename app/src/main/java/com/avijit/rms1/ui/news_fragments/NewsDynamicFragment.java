@@ -24,7 +24,10 @@ import com.avijit.rms1.data.remote.responses.NetworkResponse;
 import com.avijit.rms1.ui.BaseFragment;
 import com.avijit.rms1.viewmodel.NewsDynamicFragmentViewModel;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Array;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,10 +52,11 @@ public class NewsDynamicFragment extends BaseFragment {
             startActivity(intent);
         }
     };
-    public static NewsDynamicFragment newInstance(String val) {
+    public static NewsDynamicFragment newInstance(String val, String newsListJson) {
         NewsDynamicFragment fragment = new NewsDynamicFragment();
         Bundle args = new Bundle();
         args.putString("someValue", val);
+        args.putString("news",newsListJson);
         fragment.setArguments(args);
         return fragment;
     }
@@ -72,22 +76,34 @@ public class NewsDynamicFragment extends BaseFragment {
         viewModel = ViewModelProviders.of(this).get(NewsDynamicFragmentViewModel.class);
         initViews(view);
         newsList = new ArrayList<>();
-        viewModel.getAllNews().observe(this, this::setNews);
+        //viewModel.getAllNews().observe(this, this::setNews);
         adapter = new NewsRecyclerViewAdapter(newsList, onItemClickListener);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
-
+        setNews();
     }
 
     private void initViews(View view) {
         recyclerView = view.findViewById(R.id.recycler_view);
     }
 
-    private void setNews(NetworkResponse<List<News>> newsList) {
+    private void setNews() {
         Log.d(TAG, "setNews: " + new Gson().toJson(newsList));
+        String newsListJson = getArguments().getString("news");
+        List<News> list= new ArrayList<>();
+        try {
+            Type type = new TypeToken<List<News>>() {}.getType();
+            list= new Gson().fromJson(newsListJson,type);
+        }catch (Exception e) {
+        }
+        String type = getArguments().getString("someValue");
         this.newsList.clear();
-        this.newsList.addAll(newsList.getData());
+        for(int i =0;i<list.size();i++){
+            if (list.get(i).getNews_types_id().equals(type)){
+                this.newsList.add(list.get(i));
+            }
+        }
         adapter.notifyDataSetChanged();
     }
 
