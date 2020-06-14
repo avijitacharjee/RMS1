@@ -158,6 +158,7 @@ public class AddNewsFragment extends BaseFragment {
             appUtils.showValidationMessage(null);
             return;
         }
+        appUtils.dialog.show();
         try {
             user = new Gson().fromJson(getContext().getSharedPreferences("RMS", Context.MODE_PRIVATE).getString("user",""),User.class);
         }
@@ -181,7 +182,7 @@ public class AddNewsFragment extends BaseFragment {
         news.setNews_image(bitmapToString(newsImageBitmap));
         news.setSubnews_image(bitmapToString(subNewsImageBitmap));
         Log.d(TAG, "sendRequest: "+new Gson().toJson(news));
-        appUtils.dialog.show();
+
         viewModel.storeNews(news).observe(this,
                 response->{
                     appUtils.dialog.dismiss();

@@ -73,17 +73,6 @@ public class NewsRepository {
                 result.setValue(new NetworkResponse<>(false));
             }
         });
-        newsApi.store(news).enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                Log.d(TAG, "onResponse: "+new Gson().toJson(response));
-            }
-
-            @Override
-            public void onFailure(Call<String> call, Throwable t) {
-                Log.d(TAG, "onFailure: "+new Gson().toJson(t));
-            }
-        });
         return result;
     }
     public MutableLiveData<NetworkResponse<NewsSubtype>> storeNewsSubType(NewsSubtype subtype){

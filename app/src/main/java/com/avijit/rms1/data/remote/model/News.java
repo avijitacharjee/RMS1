@@ -39,6 +39,24 @@ public class News {
     private String date;
     private String created_at;
     private String updated_at;
+    private String news_types;
+    private String news_subtypes;
+
+    public String getNews_types() {
+        return news_types;
+    }
+
+    public void setNews_types(String news_types) {
+        this.news_types = news_types;
+    }
+
+    public String getNews_subtypes() {
+        return news_subtypes;
+    }
+
+    public void setNews_subtypes(String news_subtypes) {
+        this.news_subtypes = news_subtypes;
+    }
 
     public String getId() {
         return id;

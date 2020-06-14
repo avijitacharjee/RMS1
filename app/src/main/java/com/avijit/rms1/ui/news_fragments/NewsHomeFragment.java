@@ -153,8 +153,8 @@ public class NewsHomeFragment extends BaseFragment {
     private void setNewsTypeList(List<News> newsList){
         newsTypeList.clear();
         for(int i=0;i<newsList.size();i++){
-            if(!newsTypeList.contains(newsList.get(i).getNews_types_id())){
-                newsTypeList.add(newsList.get(i).getNews_types_id());
+            if(!newsTypeList.contains(newsList.get(i).getNews_types())){
+                newsTypeList.add(newsList.get(i).getNews_types());
             }
         }
     }

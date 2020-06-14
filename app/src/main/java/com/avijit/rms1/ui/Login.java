@@ -61,11 +61,11 @@ public class Login extends BaseActivity {
                     final AuthBody user = new AuthBody();
                     user.setUsername(userNameEditText.getText().toString());
                     user.setPassword(passwordEditText.getText().toString());
-                    dialog.show();
+                    appUtils.dialog.show();
                     loginViewModel.getAuth(user).observe(Login.this, new Observer<AuthResponse>() {
                         @Override
                         public void onChanged(AuthResponse response) {
-                            dialog.dismiss();
+                            appUtils.dialog.dismiss();
                             if(!response.isNetworkIsSuccessful()){
                                 Toast.makeText(Login.this, "Failed to connect", Toast.LENGTH_SHORT).show();
                                 return;
