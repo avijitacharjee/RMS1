@@ -45,6 +45,7 @@ public class Login extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        appUtils = new AppUtils(this);
         userNameEditText = findViewById(R.id.user_name_edit_text);
         passwordEditText = findViewById(R.id.password_edit_text);
         loginButton = findViewById(R.id.login_button);
@@ -52,6 +53,7 @@ public class Login extends BaseActivity {
 
         loginViewModel= ViewModelProviders.of(this).get(LoginViewModel.class);
         loginViewModel.init();
+
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -59,9 +61,15 @@ public class Login extends BaseActivity {
                     final AuthBody user = new AuthBody();
                     user.setUsername(userNameEditText.getText().toString());
                     user.setPassword(passwordEditText.getText().toString());
+                    dialog.show();
                     loginViewModel.getAuth(user).observe(Login.this, new Observer<AuthResponse>() {
                         @Override
                         public void onChanged(AuthResponse response) {
+                            dialog.dismiss();
+                            if(!response.isNetworkIsSuccessful()){
+                                Toast.makeText(Login.this, "Failed to connect", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
                             if(response.isUser()){
                                 getSharedPreferences("RMS",MODE_PRIVATE).edit().putString("token",response.getAccessToken()).apply();
                                 saveUserInfo();

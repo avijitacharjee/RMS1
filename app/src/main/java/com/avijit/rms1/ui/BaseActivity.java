@@ -1,5 +1,6 @@
 package com.avijit.rms1.ui;
 
+import android.app.AlertDialog;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.util.TypedValue;
@@ -17,6 +18,7 @@ public class BaseActivity extends AppCompatActivity {
     protected DrawerLayout drawer;
     protected Toolbar toolbar;
     protected AppUtils appUtils;
+    AlertDialog dialog = appUtils.dialog;
     protected void setDropdownFirstItemStyle(AdapterView<?> parent){
         ((TextView) parent.getChildAt(0)).setTextColor(getResources().getColor(R.color.anik2));
         ((TextView) parent.getChildAt(0)).setBackgroundColor(getResources().getColor(R.color.anik1));
