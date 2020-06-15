@@ -264,9 +264,8 @@
                                     android:padding="10dp"
                                     android:fontFamily="@font/oxygen_bold"
                                     android:text="GO"
-                                    android:textColor="#fff"
+                                    android:textColor="@color/white_1"
                                     android:transitionName="tran4" />
-
                         </LinearLayout>
                     </LinearLayout>
                 </ScrollView>
