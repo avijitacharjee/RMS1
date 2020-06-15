@@ -55,12 +55,9 @@ public class CompletedSchedules extends BaseActivity {
         appUtils = new AppUtils(this);
         this.dialog = appUtils.dialog;
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-
+        setToolbar();
         toolbar.setTitle("RMS");
         toolbar.setSubtitle("Completed schedules for giving relief");
-        //toolbar.setLogo(R.drawable.ic_exit_to_app_black_24dp);
-        toolbar.setBackgroundColor(Color.BLACK);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

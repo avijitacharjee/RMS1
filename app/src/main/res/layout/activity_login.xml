@@ -37,10 +37,23 @@
                     android:id="@+id/logo_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/bungee"
-                    android:text="Hello there, Welcome Back"
+                    android:fontFamily="@font/oxygen_bold"
+                    android:gravity="center"
+                    android:text="Welcome."
                     android:textColor="#000"
+                    android:layout_gravity="center"
                     android:textSize="30sp"
+                    android:transitionName="kj" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/oxygen_bold"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:text="Please login to continue"
+                    android:textColor="#000"
+                    android:textSize="20sp"
                     android:transitionName="kj" />
                 <TextView
                     android:id="@+id/slogan_name"

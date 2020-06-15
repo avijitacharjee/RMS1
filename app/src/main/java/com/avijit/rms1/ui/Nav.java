@@ -45,11 +45,10 @@ public class Nav extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nav);
         AppUtils appUtils = new AppUtils(this);
+        setToolbar();
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("RMS");
         toolbar.setSubtitle("Home");
-        //toolbar.setLogo(R.drawable.ic_exit_to_app_black_24dp);
-        toolbar.setBackgroundColor(Color.BLACK);
         setSupportActionBar(toolbar);
         /*getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);*/

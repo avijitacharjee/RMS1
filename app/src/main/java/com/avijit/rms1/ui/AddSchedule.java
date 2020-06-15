@@ -80,7 +80,7 @@ public class AddSchedule extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_schedule);
-
+        setToolbar();
         dateEditText = findViewById(R.id.date_picker);
         AppUtils utils = new AppUtils(this);
         dialog = new AppUtils(this).dialog;
@@ -109,11 +109,9 @@ public class AddSchedule extends BaseActivity {
             }
         });
         addScheduleVIewModel = ViewModelProviders.of(this).get(AddScheduleVIewModel.class);
-        Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("RMS");
         toolbar.setSubtitle("Add a schedule for giving relief");
         //toolbar.setLogo(R.drawable.ic_exit_to_app_black_24dp);
-        toolbar.setBackgroundColor(Color.BLACK);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

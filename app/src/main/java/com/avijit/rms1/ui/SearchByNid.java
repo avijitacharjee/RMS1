@@ -63,7 +63,6 @@ public class SearchByNid extends BaseActivity {
     TableLayout tableLayout;
     Button searchButton;
     EditText searchEditText;
-    Toolbar toolbar;
     DrawerLayout drawer;
     NavigationView navigation;
     ActionBarDrawerToggle toggle;
@@ -79,7 +78,6 @@ public class SearchByNid extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_by_nid);
         viewModel = ViewModelProviders.of(this).get(SearchByNidViewModel.class);
-        toolbar = findViewById(R.id.toolbar);
         initNavDrawer();
 
         recyclerView = findViewById(R.id.recycler_view);
@@ -123,6 +121,7 @@ public class SearchByNid extends BaseActivity {
         Toast.makeText(this, "", Toast.LENGTH_SHORT).show();*/
     }
     private void initNavDrawer(){
+        setToolbar();
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Search by Nid/contact No");

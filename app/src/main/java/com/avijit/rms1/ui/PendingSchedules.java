@@ -57,14 +57,13 @@ public class PendingSchedules extends BaseActivity {
         appUtils = new AppUtils(this);
         this.dialog = appUtils.dialog;
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        super.setToolbar();
         pendingSchedulesViewModel = ViewModelProviders.of(this).get(PendingSchedulesViewModel.class);
         pendingSchedulesViewModel.init();
 
         toolbar.setTitle("RMS");
         toolbar.setSubtitle("Pending schedules for giving relief");
         //toolbar.setLogo(R.drawable.ic_exit_to_app_black_24dp);
-        toolbar.setBackgroundColor(Color.BLACK);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

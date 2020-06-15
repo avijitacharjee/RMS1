@@ -35,8 +35,7 @@
             android:name=".ui.Nav"
             android:theme="@style/Theme.MaterialComponents.NoActionBar" />
         <activity
-            android:name=".ui.MainDashboard"
-            android:theme="@style/Theme.AppCompat" />
+            android:name=".ui.MainDashboard" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -123,10 +123,10 @@
                                 android:id="@+id/address_edit_text"
                                 android:layout_width="match_parent"
                                 android:hint="Address"
-                                android:background="@color/white"
+                                android:background="@color/white_1"
                                 android:padding="10dp"
-                                android:textColor="@color/black"
-                                android:textColorHint="@color/black"
+                                android:textColor="@color/black_1"
+                                android:textColorHint="@color/black_1"
                                 android:layout_height="50dp"/>
                         </LinearLayout>
                         <LinearLayout

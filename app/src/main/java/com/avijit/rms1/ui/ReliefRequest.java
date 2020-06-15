@@ -52,16 +52,14 @@ public class ReliefRequest extends BaseActivity {
         earningMemberEditText = findViewById(R.id.earning_members_edit_text);*/
     }
     public void initNavDrawer(){
-        Toolbar toolbar = findViewById(R.id.toolbar);
 
+        setToolbar();
         toolbar.setTitle("RMS");
         toolbar.setSubtitle("Add relief request");
         //toolbar.setLogo(R.drawable.ic_exit_to_app_black_24dp);
-        toolbar.setBackgroundColor(Color.BLACK);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        Window window = getWindow();
 
         drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);

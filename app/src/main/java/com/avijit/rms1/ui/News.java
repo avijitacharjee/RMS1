@@ -39,10 +39,9 @@ public class News extends BaseActivity {
         ft.add(R.id.news_fragment_container,homeFragment);
         ft.commit();
         //toolbar & nav drawer
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        setToolbar();
         toolbar.setTitle("RMS");
         toolbar.setSubtitle("News");
-        toolbar.setBackgroundColor(Color.BLACK);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);

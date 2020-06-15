@@ -76,13 +76,12 @@ public class AddCompany extends BaseActivity {
         view.startAnimation(topAnimation);
     }
     public void initNavDrawer(){
-        Toolbar toolbar = findViewById(R.id.toolbar);
-
+        setToolbar();
         toolbar.setTitle("RMS");
         toolbar.setSubtitle("Add a company");
         //toolbar.setLogo(R.drawable.ic_exit_to_app_black_24dp);
-        toolbar.setBackgroundColor(Color.BLACK);
         setSupportActionBar(toolbar);
+        //getWindow().setStatusBarColor(getResources().getColor(R.color.anik2));
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

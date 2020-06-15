@@ -51,7 +51,10 @@ public class MainDashboard extends BaseActivity {
         //textView = findViewById(R.id.msg);
         view = findViewById(R.id.bg_top_header);
         card1 = findViewById(R.id.card_1);
-
+        setToolbar();
+        toolbar.setTitle("RMS");
+        toolbar.setSubtitle("Covid-19 Disease update");
+        setSupportActionBar(toolbar);
         topAnimation = AnimationUtils.loadAnimation(this,R.anim.top_animation);
         card1.startAnimation(topAnimation);
 

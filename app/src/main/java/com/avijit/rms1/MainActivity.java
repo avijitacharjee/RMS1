@@ -7,10 +7,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.widget.ImageView;
 
+import com.avijit.rms1.ui.BaseActivity;
 import com.avijit.rms1.ui.MainDashboard;
 import com.bumptech.glide.Glide;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
     static int SPLASH_TIME = 5000;
 
     @Override
@@ -24,13 +25,10 @@ public class MainActivity extends AppCompatActivity {
     }
     public void splash()
     {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent splashIntent= new Intent(MainActivity.this, MainDashboard.class );
-                startActivity(splashIntent);
-                finish();
-            }
+        new Handler().postDelayed(() -> {
+            Intent splashIntent= new Intent(MainActivity.this, MainDashboard.class );
+            startActivity(splashIntent);
+            finish();
         },SPLASH_TIME);
     }
 }

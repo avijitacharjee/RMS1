@@ -51,6 +51,7 @@ public class AddUserInCompany extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_user_in_company);
+        super.setToolbar();
         addUserInCompanyViewModel = ViewModelProviders.of(this).get(AddUserInCompanyViewModel.class);
         addUserInCompanyViewModel.init();
         appUtils = new AppUtils(this);
@@ -206,11 +207,9 @@ public class AddUserInCompany extends BaseActivity {
         return valid;
     }
     private void initNavDrawer(){
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        setToolbar();
         toolbar.setTitle("RMS");
         toolbar.setSubtitle("Add user in company");
-        //toolbar.setLogo(R.drawable.ic_exit_to_app_black_24dp);
-        toolbar.setBackgroundColor(Color.BLACK);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
