@@ -58,14 +58,14 @@ public class MainDashboard extends BaseActivity {
         topAnimation = AnimationUtils.loadAnimation(this,R.anim.top_animation);
         card1.startAnimation(topAnimation);
 
-        dialog = new AppUtils(this).dialog;
-        dialog.show();
+        appUtils = new AppUtils(this);
         mainDashBoardViewModel = ViewModelProviders.of(this).get(MainDashBoardViewModel.class);
         mainDashBoardViewModel.init();
+        appUtils.dialog.show();
         mainDashBoardViewModel.getStudentRepository().observe(this, new Observer<CoronaSummaryResponse>() {
             @Override
             public void onChanged(CoronaSummaryResponse coronaSummaryResponse) {
-               dialog.dismiss();
+               appUtils.dialog.dismiss();
                if(!coronaSummaryResponse.isNetworkIsSuccessful()){
                    Toast.makeText(MainDashboard.this, "Failed to connect to server", Toast.LENGTH_SHORT).show();
                }
