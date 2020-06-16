@@ -115,6 +115,11 @@ public class SignUp extends BaseActivity {
             public void onClick(View v) {
                 if(formIsValid())
                 {
+                    if(!confirmPasswordEditText.getText().toString().equals(passwordEditText.getText().toString()))
+                    {
+                        appUtils.showValidationMessage("Passwords didn't match");
+                        return;
+                    }
                     v();
                 }
                 else {
@@ -216,6 +221,7 @@ public class SignUp extends BaseActivity {
     private boolean formIsValid()
     {
         boolean valid = true;
+
         if(nameEditText.getText().toString().equals(""))
         {
             valid = false;
@@ -240,10 +246,9 @@ public class SignUp extends BaseActivity {
         {
             valid = false;
         }
-        if(!confirmPasswordEditText.getText().toString().equals(passwordEditText.getText().toString()))
-        {
-            confirmPasswordEditText.setError("Passwords doesn't matched");
-            valid = false;
+
+        if(typeSpinner.getSelectedItemPosition()==0){
+            valid=false;
         }
 
         return valid;
