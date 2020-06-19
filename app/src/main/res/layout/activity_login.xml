@@ -75,7 +75,7 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/username"
                         app:boxStrokeColor="@color/black"
-                        android:hint="Username"
+                        android:hint="Email"
                         app:hintTextColor="@color/black"
                         app:hintAnimationEnabled="true"
                         android:textColorHint="@color/black"

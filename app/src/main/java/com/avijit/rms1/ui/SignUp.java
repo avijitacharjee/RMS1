@@ -54,8 +54,8 @@ public class SignUp extends BaseActivity {
     ImageView logoImage;
     TextInputLayout tran2,tran3;
     Spinner typeSpinner;
-    String types[] = new String[]{"As Individual","As Thana User","As Company"};
-    String typeIds[];
+    String[] types = new String[]{"--Select User Type--"};
+    String[] typeIds;
     EditText nameEditText,emailEditText,phoneEditText,nidEditText,passwordEditText,confirmPasswordEditText;
 
     private static final String TAG = "SignUp";
@@ -96,18 +96,7 @@ public class SignUp extends BaseActivity {
         loginIntentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(),Login.class);
-                Pair[] pairs = new Pair[5];
-                pairs[1]= new Pair<View,String>(loginIntentButton,"tran0");
-                pairs[0]= new Pair<View,String>(logoImage,"tran1");
-                pairs[2]= new Pair<View,String>(tran2,"tran2");
-                pairs[3]= new Pair<View,String>(tran3,"tran3");
-                pairs[4]= new Pair<View,String>(goButton,"tran4");
-                ActivityOptions options = null;
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-                    options = ActivityOptions.makeSceneTransitionAnimation(SignUp.this,pairs);
-                }
-                startActivity(intent,options.toBundle());
+                goToLogin();
             }
         });
         goButton.setOnClickListener(new View.OnClickListener() {
@@ -153,9 +142,19 @@ public class SignUp extends BaseActivity {
      * @Params no params
      */
     public void setTypeSpinner(){
+        appUtils.dialog.show();
         viewModel.getUserTypes().observe(this, new Observer<UserTypeResponse>() {
             @Override
             public void onChanged(UserTypeResponse userTypeResponse) {
+                appUtils.dialog.dismiss();
+                if(!userTypeResponse.isNetworkIsSuccessful()){
+                    Toast.makeText(SignUp.this, "Failed to connect", Toast.LENGTH_SHORT).show();
+                    ArrayAdapter<String> adapter2 = new ArrayAdapter<>(SignUp.this,android.R.layout.simple_spinner_dropdown_item,types);
+                    adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    typeSpinner.setAdapter(adapter2);
+                    startActivity(new Intent(SignUp.this,Login.class));
+                    return;
+                }
                 String[] t = new String[userTypeResponse.getData().size()+1];
                 t[0]="--Select User Type--";
                 typeIds = new String[userTypeResponse.getData().size()];
@@ -165,7 +164,7 @@ public class SignUp extends BaseActivity {
                     typeIds[i]=userTypeResponse.getData().get(i).getId();
                 }
                 types=t;
-                ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(SignUp.this,android.R.layout.simple_spinner_dropdown_item,types);
+                ArrayAdapter<String> adapter2 = new ArrayAdapter<>(SignUp.this,android.R.layout.simple_spinner_dropdown_item,types);
                 adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 typeSpinner.setAdapter(adapter2);
             }
@@ -190,12 +189,26 @@ public class SignUp extends BaseActivity {
             appUtils.dialog.dismiss();;
             if(userStoreResponse.isNetworkIsSuccessful()){
                 Toast.makeText(this, "Registered successfully", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(this,Nav.class));
+                goToLogin();
             }
             else {
-                Toast.makeText(this, "Failed to connect", Toast.LENGTH_SHORT).show();
+                appUtils.makeToast("Failed to connect");
             }
         });
+    }
+    private void goToLogin(){
+        Intent intent = new Intent(getApplicationContext(),Login.class);
+        Pair[] pairs = new Pair[5];
+        pairs[1]= new Pair<View,String>(loginIntentButton,"tran0");
+        pairs[0]= new Pair<View,String>(logoImage,"tran1");
+        pairs[2]= new Pair<View,String>(tran2,"tran2");
+        pairs[3]= new Pair<View,String>(tran3,"tran3");
+        pairs[4]= new Pair<View,String>(goButton,"tran4");
+        ActivityOptions options = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            options = ActivityOptions.makeSceneTransitionAnimation(SignUp.this,pairs);
+        }
+        startActivity(intent,options.toBundle());
     }
 
     /*

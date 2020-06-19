@@ -50,6 +50,22 @@ public class AppUtils {
         setProgressDialog();
     }
 
+    public void makeToast(@NonNull String message){
+
+        Toast toast = Toast.makeText(context,message , Toast.LENGTH_SHORT);
+        View view = toast.getView();
+
+        //Gets the actual oval background of the Toast then sets the colour filter
+        view.getBackground().setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
+
+        //Gets the TextView from the Toast so it can be editted
+        TextView text = view.findViewById(android.R.id.message);
+        text.setTextSize(TypedValue.COMPLEX_UNIT_SP,16);
+        text.setTextColor(Color.WHITE);
+
+        toast.show();
+
+    }
     /**
      * return void
      * @param message default for null
