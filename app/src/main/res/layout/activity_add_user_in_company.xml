@@ -181,6 +181,7 @@
                                     <com.google.android.material.textfield.TextInputEditText
                                         android:id="@+id/nid_edit_text"
                                         android:layout_width="match_parent"
+                                        android:inputType="number"
                                         android:layout_height="wrap_content"
                                         android:textColor="@color/black_1"/>
                                 </com.google.android.material.textfield.TextInputLayout>

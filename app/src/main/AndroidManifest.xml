@@ -14,7 +14,8 @@
         android:roundIcon="@mipmap/ic_launcher_fahim_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MaterialComponents.NoActionBar">
-        <activity android:name=".ui.news_fragments.NewsDetails"></activity>
+        <activity android:name=".ui.Profile"></activity>
+        <activity android:name=".ui.news_fragments.NewsDetails" />
         <activity android:name=".ui.News" />
         <activity android:name=".ui.ReliefRequest" />
         <activity android:name=".ui.AddUserInCompany" />
@@ -34,8 +35,7 @@
         <activity
             android:name=".ui.Nav"
             android:theme="@style/Theme.MaterialComponents.NoActionBar" />
-        <activity
-            android:name=".ui.MainDashboard" />
+        <activity android:name=".ui.MainDashboard" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

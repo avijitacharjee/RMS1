@@ -172,7 +172,9 @@ public class AddNewsFragment extends BaseFragment {
         news.setDate(new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(new Date()));
         news.setNews(newsEditText.getText().toString());
         news.setNews_title(newsTitleEditText.getText().toString());
-        news.setSubnews(subNewsEditText.getText().toString());
+        if(!subNewsEditText.getText().toString().equals("")) {
+            news.setSubnews(subNewsEditText.getText().toString());
+        }
         news.setStatus("1");
         news.setReporters_name(user.getName());
         news.setReporters_id(user.getId());
@@ -180,8 +182,9 @@ public class AddNewsFragment extends BaseFragment {
         news.setNews_subtypes_id(subTypeList.get(newsSubTypeSpinner.getSelectedItemPosition()-1).getId());
         news.setNews_types_id(typeList.get(newsTypeSpinner.getSelectedItemPosition()-1).getId());
         news.setNews_image(bitmapToString(newsImageBitmap));
-        news.setSubnews_image(bitmapToString(subNewsImageBitmap));
-        Log.d(TAG, "sendRequest: "+new Gson().toJson(news));
+        if(subNewsImageBitmap!=null) {
+            news.setSubnews_image(bitmapToString(subNewsImageBitmap));
+        }Log.d(TAG, "sendRequest: "+new Gson().toJson(news));
 
         viewModel.storeNews(news).observe(this,
                 response->{
@@ -254,11 +257,11 @@ public class AddNewsFragment extends BaseFragment {
         if(newsTypeSpinner.getSelectedItemPosition()==0 || newsSubTypeSpinner.getSelectedItemPosition()==0){
             valid = false;
         }
-        if(newsEditText.equals("") || subNewsEditText.equals("") || newsTitleEditText.equals(""))
+        if(newsEditText.getText().toString().equals("")|| newsTitleEditText.getText().toString().equals(""))
         {
             valid = false;
         }
-        if(newsImageBitmap==null || subNewsImageBitmap == null){
+        if(newsImageBitmap==null){
             valid=false;
         }
         return valid;

@@ -112,13 +112,13 @@ public class AddUserInCompany extends BaseActivity {
             }
         });
         goButton.setOnClickListener(v -> {
-            if (true) {
-                CompanyUser companyUser = new CompanyUser();
-                String companyId = new Gson().fromJson(getSharedPreferences("RMS", MODE_PRIVATE).getString("company", ""), Company.class).getId() + "";
-                companyUser.setCompany_id(companyId);
-                companyUser.setRole("2");
-                companyUser.setUser_id(emailEditText.getText().toString());
-                if (userTypeSpinner.getSelectedItemPosition() == 2 || userTypeSpinner.getSelectedItemPosition()==0) {
+            CompanyUser companyUser = new CompanyUser();
+            String companyId = new Gson().fromJson(getSharedPreferences("RMS", MODE_PRIVATE).getString("company", ""), Company.class).getId() + "";
+            companyUser.setCompany_id(companyId);
+            companyUser.setRole("2");
+            companyUser.setUser_id(emailEditText.getText().toString());
+            if (userTypeSpinner.getSelectedItemPosition() == 2 || userTypeSpinner.getSelectedItemPosition()==0) {
+                if(oldUserFormValid()) {
                     appUtils.dialog.show();
                     addUserInCompanyViewModel.addUser(emailEditText.getText().toString(), companyId, "2").observe(AddUserInCompany.this, response -> {
                         appUtils.dialog.dismiss();
@@ -129,34 +129,47 @@ public class AddUserInCompany extends BaseActivity {
                         }
 
                     });
-
-                } else if (userTypeSpinner.getSelectedItemPosition() == 1) {
-                    User user = new User();
-                    user.setName(fullNameEditText.getText().toString());
-                    user.setEmail(emailEditText.getText().toString());
-                    user.setNid(nidEditText.getText().toString());
-                    user.setPhone(phoneNoEditText.getText().toString());
-                    user.setPassword(passwordEditText.getText().toString());
-                    Log.d(TAG, "onClick: " + user.toString());
-                    appUtils.dialog.show();
-                    addUserInCompanyViewModel.registerNewUser(user).observe(this, response -> {
-                        appUtils.dialog.dismiss();
-                        Log.d(TAG, "onCreate: "+new Gson().toJson(response));
-                        if (response.isNetworkIsSuccessful()) {
-                            addUserInCompanyViewModel.addUser(user.getEmail(), companyId, "2").observe(AddUserInCompany.this, response1 -> {
-                                Log.d(TAG, "onCreate: "+response1.toString());
-                                if (response1.isNetworkIsSuccessful()) {
-                                    Toast.makeText(this, "User added successfully", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    Toast.makeText(this, "Failed to connect", Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        }
-                    });
                 }
+            } else if (userTypeSpinner.getSelectedItemPosition() == 1) {
+                if(!newUserformIsValid()){
+                    //appUtils.makeToast("All fields are required");
+                    return;
+                }
+                User user = new User();
+                user.setName(fullNameEditText.getText().toString());
+                user.setEmail(emailEditText.getText().toString());
+                user.setNid(nidEditText.getText().toString());
+                user.setPhone(phoneNoEditText.getText().toString());
+                user.setPassword(passwordEditText.getText().toString());
+                Log.d(TAG, "onClick: " + user.toString());
+                appUtils.dialog.show();
+                addUserInCompanyViewModel.registerNewUser(user).observe(this, response -> {
+                    appUtils.dialog.dismiss();
+                    Log.d(TAG, "onCreate: "+new Gson().toJson(response));
+                    if (response.isNetworkIsSuccessful()) {
+                        addUserInCompanyViewModel.addUser(user.getEmail(), companyId, "2").observe(AddUserInCompany.this, response1 -> {
+                            Log.d(TAG, "onCreate: "+response1.toString());
+                            if (response1.isNetworkIsSuccessful()) {
+                                Toast.makeText(this, "User added successfully", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(this, "Failed to connect", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                });
             }
         });
 
+    }
+    private boolean oldUserFormValid(){
+        boolean valid=true;
+        if(emailEditText.getText().toString().equals("")){
+            valid=false;
+        }
+        if(!valid){
+            appUtils.makeToast("Email Field is required");
+        }
+        return valid;
     }
 
     private void initViews() {
@@ -178,10 +191,14 @@ public class AddUserInCompany extends BaseActivity {
         return valid;
     }
 
-    private boolean formIsValid() {
+    private boolean newUserformIsValid() {
         boolean valid = true;
-        if (userTypeSpinner.getSelectedItemPosition() == 1) {
-            return !emailEditText.getText().toString().isEmpty();
+        if (!passwordEditText.getText().toString().equals(confirmPasswordEditText.getText().toString())) {
+            appUtils.makeToast("Passwords didn't match");
+            return false;
+        }
+        if (userTypeSpinner.getSelectedItemPosition() != 1) {
+            valid=false;
         }
         if (emailEditText.getText().toString().isEmpty()) {
             valid = false;
@@ -201,8 +218,8 @@ public class AddUserInCompany extends BaseActivity {
         if (confirmPasswordEditText.getText().toString().isEmpty()) {
             valid = false;
         }
-        if (passwordEditText.getText().toString().equals(confirmPasswordEditText.getText().toString())) {
-            confirmPasswordEditText.setError("Passwords didn't match");
+        if(!valid){
+            appUtils.makeToast("All fields are required");
         }
         return valid;
     }
