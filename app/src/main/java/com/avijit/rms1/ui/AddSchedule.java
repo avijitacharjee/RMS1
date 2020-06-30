@@ -235,6 +235,7 @@ public class AddSchedule extends BaseActivity {
                             Log.d("TAG", "onChanged: " + new Gson().toJson(reliefScheduleStoreResponse));
                             if (reliefScheduleStoreResponse.isNetworkIsSuccessful()){
                                 Toast.makeText(AddSchedule.this, reliefScheduleStoreResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                                clearFields();
                             }
                             else {
                                 Toast.makeText(AddSchedule.this, "Failed to connect", Toast.LENGTH_SHORT).show();
@@ -445,5 +446,10 @@ public class AddSchedule extends BaseActivity {
         }, new AppUtils(AddSchedule.this).errorListener);
         stringRequest.setRetryPolicy(AppUtils.STRING_REQUEST_RETRY_POLICY);
         queue.add(stringRequest);
+    }
+    private void clearFields()
+    {
+        addressEditText.setText("");
+        dateEditText.setText("");
     }
 }

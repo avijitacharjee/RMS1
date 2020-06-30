@@ -63,6 +63,7 @@ public class AddCompany extends BaseActivity {
                         Toast.makeText(this, "Company Added", Toast.LENGTH_SHORT).show();
                         getSharedPreferences("RMS",MODE_PRIVATE).edit().putString("company",new Gson().toJson(companyStoreResponse.getData())).apply();
                         startActivity(new Intent(AddCompany.this, AddUserInCompany.class));
+                        companyNameEditText.setText("");
                     }
                     else{
                         Toast.makeText(this, "Failed to add", Toast.LENGTH_SHORT).show();

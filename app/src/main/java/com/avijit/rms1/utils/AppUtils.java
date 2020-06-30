@@ -35,6 +35,7 @@ import com.avijit.rms1.ui.MainDashboard;
 import com.avijit.rms1.ui.Nav;
 import com.avijit.rms1.ui.News;
 import com.avijit.rms1.ui.PendingSchedules;
+import com.avijit.rms1.ui.Profile;
 import com.avijit.rms1.ui.ReliefRequest;
 import com.avijit.rms1.ui.SearchByNid;
 import com.google.android.material.navigation.NavigationView;
@@ -208,6 +209,9 @@ public class AppUtils {
                 case R.id.nav_news_home: {
                     context.startActivity(new Intent(context,News.class));
                     break;
+                }
+                case R.id.nav_profile: {
+                    context.startActivity(new Intent(context, Profile.class));
                 }
 
                 /*case R.id.logout: {

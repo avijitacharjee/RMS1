@@ -12,4 +12,6 @@
     <color name="anik1">#DFE6E9</color>
     <color name="anik2">#34495E</color>
     <color name="red">#FF0000</color>
+    <color name="startblue">#09c6df</color>
+    <color name="endblue">#0bc6ee</color>
 </resources>

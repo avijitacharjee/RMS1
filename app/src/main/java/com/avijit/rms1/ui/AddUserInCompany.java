@@ -124,6 +124,7 @@ public class AddUserInCompany extends BaseActivity {
                         appUtils.dialog.dismiss();
                         if (response.isNetworkIsSuccessful()) {
                             Toast.makeText(AddUserInCompany.this, "User Added Successfully", Toast.LENGTH_SHORT).show();
+                            clearFields();
                         } else {
                             Toast.makeText(this, "Failed to connect", Toast.LENGTH_SHORT).show();
                         }
@@ -151,6 +152,7 @@ public class AddUserInCompany extends BaseActivity {
                             Log.d(TAG, "onCreate: "+response1.toString());
                             if (response1.isNetworkIsSuccessful()) {
                                 Toast.makeText(this, "User added successfully", Toast.LENGTH_SHORT).show();
+                                clearFields();
                             } else {
                                 Toast.makeText(this, "Failed to connect", Toast.LENGTH_SHORT).show();
                             }
@@ -244,5 +246,14 @@ public class AddUserInCompany extends BaseActivity {
         SpannableString s = new SpannableString(tools.getTitle());
         s.setSpan(new TextAppearanceSpan(this, R.style.TextAppearance44), 0, s.length(), 0);
         tools.setTitle(s);
+    }
+    private void clearFields()
+    {
+        fullNameEditText.setText("");
+        emailEditText.setText("");
+        confirmPasswordEditText.setText("");
+        passwordEditText.setText("");
+        nidEditText.setText("");
+        phoneNoEditText.setText("");
     }
 }

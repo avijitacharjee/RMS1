@@ -136,6 +136,7 @@ public class StoreRelief extends BaseActivity {
                             Log.d(TAG, "onChanged: " + reliefStoreResponse.toString());
                             if(reliefStoreResponse.isNetworkIsSuccessful()){
                                 Toast.makeText(StoreRelief.this, "Successfully added", Toast.LENGTH_SHORT).show();
+                                clearFields();
                             }
                             else {
                                 Toast.makeText(StoreRelief.this, "Failed to connect", Toast.LENGTH_SHORT).show();
@@ -197,6 +198,7 @@ public class StoreRelief extends BaseActivity {
                             viewModel.storeRelief(relief).observe(StoreRelief.this, new Observer<ReliefStoreResponse>() {
                                 @Override
                                 public void onChanged(ReliefStoreResponse reliefStoreResponse) {
+                                    clearFields();
                                     appUtils.dialog.dismiss();
                                     Log.d(TAG, "onChanged: " + reliefStoreResponse.toString());
                                 }
@@ -334,5 +336,14 @@ public class StoreRelief extends BaseActivity {
             valid = false;
         }
         return valid;
+    }
+    private void clearFields()
+    {
+        fullName.getText().clear();
+        nid.getText().clear();
+        contactNo.getText().clear();
+        members.getText().clear();
+        earningMembers.getText().clear();
+        imageView.setImageBitmap(null);
     }
 }
