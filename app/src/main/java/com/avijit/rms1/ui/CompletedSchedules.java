@@ -92,6 +92,7 @@ public class CompletedSchedules extends BaseActivity {
 
         adapter = new ReliefScheduleRecyclerViewAdapter(sls,dates,names);
         recyclerView.setAdapter(adapter);
+        setNavDrawer(navigationView);
     }
     private void fetchData(String id) {
 

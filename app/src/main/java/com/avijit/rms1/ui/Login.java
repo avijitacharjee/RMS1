@@ -65,17 +65,31 @@ public class Login extends BaseActivity {
                     loginViewModel.getAuth(user).observe(Login.this, new Observer<AuthResponse>() {
                         @Override
                         public void onChanged(AuthResponse response) {
-                            appUtils.dialog.dismiss();
+
                             if(!response.isNetworkIsSuccessful()){
+                                appUtils.dialog.dismiss();
                                 Toast.makeText(Login.this, "Failed to connect", Toast.LENGTH_SHORT).show();
                                 return;
                             }
                             if(response.isUser()){
                                 getSharedPreferences("RMS",MODE_PRIVATE).edit().putString("token",response.getAccessToken()).apply();
-                                saveUserInfo();
-                                startActivity(new Intent(Login.this,Nav.class));
+                                loginViewModel.getUserByToken("Bearer "+response.getAccessToken()).observe(Login.this, new Observer<User>() {
+                                    @Override
+                                    public void onChanged(User user) {
+                                        appUtils.dialog.dismiss();
+                                        if(!user.isNetworkIsSuccessful()){
+                                            Toast.makeText(Login.this, "Failed to connect", Toast.LENGTH_SHORT).show();
+                                            return;
+                                        }
+                                        getSharedPreferences("RMS",MODE_PRIVATE).edit().putString("user",user.toString()).apply();
+                                        startActivity(new Intent(Login.this,Nav.class));
+
+                                    }
+                                });
+
                             }
                             else {
+                                appUtils.dialog.dismiss();
                                 Toast.makeText(Login.this, "Incorrect username/password", Toast.LENGTH_SHORT).show();
                             }
                         }

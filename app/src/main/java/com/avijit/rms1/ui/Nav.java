@@ -85,6 +85,7 @@ public class Nav extends BaseActivity {
         //setLocations();
         //saveUserInfo();
         //broadcastIntent();
+        setNavDrawer(navigationView);
     }
     public void saveUserInfo(){
         RequestQueue queue = Volley.newRequestQueue(this);

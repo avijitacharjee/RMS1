@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.avijit.rms1.R;
+import com.avijit.rms1.data.remote.model.User;
 import com.avijit.rms1.ui.news_fragments.AddNewsFragment;
 import com.avijit.rms1.ui.news_fragments.AddNewsSubTypeFragment;
 import com.avijit.rms1.ui.news_fragments.AddNewsTypeFragment;
@@ -20,6 +21,7 @@ import com.avijit.rms1.ui.news_fragments.NewsHomeFragment;
 import com.avijit.rms1.utils.AppUtils;
 import com.avijit.rms1.utils.EndDrawerToggle;
 import com.google.android.material.navigation.NavigationView;
+import com.google.gson.Gson;
 
 public class News extends BaseActivity {
     FragmentTransaction ft;
@@ -81,6 +83,18 @@ public class News extends BaseActivity {
 
             return true;
         });
+        User user=null;
+        try {
+            user = new Gson().fromJson(getSharedPreferences("RMS",MODE_PRIVATE).getString("user",""),User.class);
+        }catch (Exception e){
+            user= new User();
+            user.setTbl_user_types_id("4");
+        }
+        if(user.getTbl_user_types_id().equals("3") || user.getTbl_user_types_id().equals("2") || user.getTbl_user_types_id().equals("4")){
+            navigationView.getMenu().findItem(R.id.nav_add_news_type).setVisible(false);
+            navigationView.getMenu().findItem(R.id.nav_add_news_sub_type).setVisible(false);
+            navigationView.getMenu().findItem(R.id.nav_add_news).setVisible(false);
+        }
         EndDrawerToggle toggle = new EndDrawerToggle(
                 this,
                 drawer,

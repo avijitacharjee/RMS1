@@ -16,7 +16,10 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.avijit.rms1.R;
+import com.avijit.rms1.data.remote.model.User;
 import com.avijit.rms1.utils.AppUtils;
+import com.google.android.material.navigation.NavigationView;
+import com.google.gson.Gson;
 
 public class BaseActivity extends AppCompatActivity {
     private static final String TAG = "BaseActivity";
@@ -42,6 +45,30 @@ public class BaseActivity extends AppCompatActivity {
         toolbar.setBackgroundColor(getResources().getColor(R.color.black_1));
         toolbar.setTitleTextColor(getResources().getColor(R.color.white_1));
         toolbar.setSubtitleTextColor(getResources().getColor(R.color.white_1));
+    }
+    protected void setNavDrawer(NavigationView navigationView){
+        User user=new User();
+        try {
+            user = new Gson().fromJson(getSharedPreferences("RMS", MODE_PRIVATE).getString("user", ""), User.class);
+        } catch (Exception e) {
+
+        }
+        if(user==null){
+            return;
+        }
+        if(user.getTbl_user_types_id()==null){
+            return;
+        }
+        if(user.getTbl_user_types_id().equals("1") || user.getTbl_user_types_id().equals("2") || user.getTbl_user_types_id().equals("3")){
+            navigationView.getMenu().findItem(R.id.nav_add_company).setVisible(false);
+            navigationView.getMenu().findItem(R.id.nav_add_user_in_company).setVisible(false);
+        }
+        else if(user.getTbl_user_types_id().equals("1")){
+            navigationView.getMenu().findItem(R.id.nav_entry_giving_reliefs).setVisible(false);
+            navigationView.getMenu().findItem(R.id.nav_add_request_for_relief).setVisible(false);
+            navigationView.getMenu().findItem(R.id.nav_add_donate_schedule).setVisible(false);
+        }
+
     }
 
 }

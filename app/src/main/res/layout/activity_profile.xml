@@ -51,19 +51,21 @@
             android:orientation="horizontal"
             android:paddingLeft="25dp">
 
-            <ImageView
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:src="@drawable/ic_email_black_24dp" />
+            <TextView
+                android:textColor="@color/black_1"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:text="Email: "/>
 
             <TextView
                 android:id="@+id/email_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:textColor="@color/black_1"
                 android:paddingLeft="20dp"
                 android:text="Wiliam@gmail.com"
+                android:textColor="@color/black_1"
+
                 android:textStyle="bold" />
         </LinearLayout>
 
@@ -74,70 +76,79 @@
             android:orientation="horizontal"
             android:paddingLeft="25dp">
 
-            <ImageView
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:src="@drawable/ic_phone_android_black_24dp" />
+            <TextView
+                android:textColor="@color/black_1"
+                android:text="phone: "
+                android:layout_height="wrap_content"
+                android:layout_width="80dp"/>
 
             <TextView
                 android:id="@+id/phone_text_view"
                 android:layout_width="wrap_content"
-                android:textColor="@color/black_1"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:paddingLeft="20dp"
                 android:text="+266 225 225"
+                android:textColor="@color/black_1"
                 android:textStyle="bold" />
         </LinearLayout>
 
         <LinearLayout
-            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
             android:orientation="horizontal"
-            android:paddingLeft="25dp">
+            android:paddingLeft="25dp"
+            android:visibility="visible">
 
-            <ImageView
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:src="@drawable/ic_email_black_24dp" />
             <TextView
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:text="User type: "
+                android:textColor="@color/black_1"/>
+
+            <TextView
+                android:id="@+id/user_type_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:paddingLeft="20dp"
+                android:text="Individual"
+                android:textColor="@color/black_1"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:orientation="horizontal"
+            android:paddingLeft="25dp"
+            android:visibility="visible">
+
+            <TextView
+                android:textColor="@color/black_1"
+                android:text="Nid: "
+                android:layout_width="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+
                 android:id="@+id/nid_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:textColor="@color/black_1"
                 android:paddingLeft="20dp"
-                android:text="Add to group"
-                android:textStyle="bold" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:visibility="gone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
-            android:orientation="horizontal"
-            android:paddingLeft="25dp">
-
-            <ImageView
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:src="@drawable/ic_email_black_24dp" />
-
-            <TextView
-                android:id="@+id/type_text_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:text="123456"
                 android:textColor="@color/black_1"
-                android:layout_gravity="center_vertical"
-                android:paddingLeft="20dp"
-                android:text="Show all comments"
-                android:textStyle="bold" />
-        </LinearLayout>
+                android:textStyle="bold"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginLeft="80dp"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
-
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -145,7 +156,7 @@
         android:layout_marginTop="35dp"
         android:background="@drawable/ic_email_black_24dp"
         android:text="Follow Me"
-        android:visibility="gone"
-        android:textColor="#fff" />
+        android:textColor="#fff"
+        android:visibility="gone" />
 
 </LinearLayout>

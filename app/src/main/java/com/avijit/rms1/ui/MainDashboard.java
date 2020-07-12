@@ -76,6 +76,7 @@ public class MainDashboard extends BaseActivity {
         binding.setLifecycleOwner(this);
         binding.setViewmodel(mainDashBoardViewModel);
 
+
     }
 
     @Override

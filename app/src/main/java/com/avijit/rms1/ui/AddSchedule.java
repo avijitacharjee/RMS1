@@ -135,6 +135,7 @@ public class AddSchedule extends BaseActivity {
         SpannableString s = new SpannableString(tools.getTitle());
         s.setSpan(new TextAppearanceSpan(this, R.style.TextAppearance44), 0, s.length(), 0);
         tools.setTitle(s);
+        setNavDrawer(navigationView);
 
 
         divisionSpinner = findViewById(R.id.division_spinner);
