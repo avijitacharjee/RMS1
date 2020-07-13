@@ -30,7 +30,6 @@ import androidx.viewpager.widget.ViewPager;
 import com.avijit.rms1.R;
 import com.avijit.rms1.adapters.NewsFragmentPagerAdapter;
 import com.avijit.rms1.data.remote.responses.NetworkResponse;
-import com.avijit.rms1.generated.callback.OnClickListener;
 import com.avijit.rms1.data.remote.model.News;
 import com.avijit.rms1.ui.BaseFragment;
 import com.avijit.rms1.utils.AppUtils;

@@ -22,11 +22,12 @@ import androidx.lifecycle.ViewModel;
 import com.avijit.rms1.MainActivity;
 import com.avijit.rms1.data.remote.responses.CoronaSummaryResponse;
 import com.avijit.rms1.repository.CoronaSummaryRepository;
+import com.avijit.rms1.repository.LocationRepository;
 import com.avijit.rms1.ui.MainDashboard;
 import com.avijit.rms1.ui.Nav;
 
 public class MainDashBoardViewModel extends AndroidViewModel {
-
+    LocationRepository locationRepository;
     AlertDialog dialog;
     Context context;
 
@@ -36,6 +37,7 @@ public class MainDashBoardViewModel extends AndroidViewModel {
     public MainDashBoardViewModel(@NonNull Application application) {
         super(application);
         context=application;
+        locationRepository=LocationRepository.getInstance(application);
     }
 
     public void init()
@@ -52,8 +54,9 @@ public class MainDashBoardViewModel extends AndroidViewModel {
     {
         return mutableLiveData;
     }
-    public void buttonClicked(){
-        context.startActivity(new Intent(context, Nav.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+
+    public MutableLiveData<Boolean> cacheLocations(){
+        return locationRepository.cacheLocation();
     }
 
 }

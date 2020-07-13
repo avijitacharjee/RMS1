@@ -351,6 +351,8 @@
         </GridLayout>
 
         <LinearLayout
+            android:id="@+id/next_button"
+            android:onClick="nextButtonClick"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -359,7 +361,7 @@
             android:layout_margin="20dp"
             app:layout_constraintEnd_toEndOf="parent" >
             <TextView
-                android:onClick="@{()->viewmodel.buttonClicked()}"
+
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:background="@color/black_1"

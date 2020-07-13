@@ -6,8 +6,6 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class Division {
-
-
     @SerializedName("division_name")
     @Expose
     private String divisionName;

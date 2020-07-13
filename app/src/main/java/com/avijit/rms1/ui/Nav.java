@@ -14,6 +14,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.lifecycle.Observer;
+
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -26,6 +28,7 @@ import com.avijit.rms1.data.local.AppDatabase;
 import com.avijit.rms1.utils.AppUtils;
 import com.avijit.rms1.utils.EndDrawerToggle;
 import com.avijit.rms1.utils.MyBroadcastReceiver;
+import com.avijit.rms1.viewmodel.NavViewModel;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.navigation.NavigationView;
 
@@ -40,11 +43,12 @@ import java.util.Map;
 import com.avijit.rms1.data.local.entities.*;
 public class Nav extends BaseActivity {
     MyBroadcastReceiver myBroadcastReceiver;
+    NavViewModel viewModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nav);
-        AppUtils appUtils = new AppUtils(this);
+        appUtils = new AppUtils(this);
         setToolbar();
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("RMS");
@@ -82,6 +86,7 @@ public class Nav extends BaseActivity {
         if(getSharedPreferences("RMS",MODE_PRIVATE).getString("token","").equals("")){
             startActivity(new Intent(Nav.this,Login.class));
         }
+
         //setLocations();
         //saveUserInfo();
         //broadcastIntent();
@@ -116,6 +121,7 @@ public class Nav extends BaseActivity {
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                appUtils.dialog.dismiss();
                 try {
                     final AppDatabase db = AppDatabase.getInstance(Nav.this);
 
@@ -180,6 +186,7 @@ public class Nav extends BaseActivity {
             }
         },new AppUtils(Nav.this).errorListener);
         stringRequest.setRetryPolicy(AppUtils.STRING_REQUEST_RETRY_POLICY);
+        appUtils.dialog.show();
         queue.add(stringRequest);
     }
 

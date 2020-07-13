@@ -9,10 +9,12 @@ import androidx.lifecycle.ViewModelProviders;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +38,7 @@ import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.Manifest.permission.CAMERA;
 
 public class MainDashboard extends BaseActivity {
+    private static final String TAG = "MainDashboard";
     private static final int PERMISSION_REQUEST_CODE = 200;
     TextView textView;
     MainDashBoardViewModel mainDashBoardViewModel;
@@ -43,12 +46,16 @@ public class MainDashboard extends BaseActivity {
     View view;
     Animation topAnimation;
     CardView card1;
+    LinearLayout nextButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_dashboard);
         //textView = findViewById(R.id.msg);
+        appUtils = new AppUtils(this);
+        initView();
+
         view = findViewById(R.id.bg_top_header);
         card1 = findViewById(R.id.card_1);
         setToolbar();
@@ -62,20 +69,17 @@ public class MainDashboard extends BaseActivity {
         mainDashBoardViewModel = ViewModelProviders.of(this).get(MainDashBoardViewModel.class);
         mainDashBoardViewModel.init();
         appUtils.dialog.show();
-        mainDashBoardViewModel.getStudentRepository().observe(this, new Observer<CoronaSummaryResponse>() {
-            @Override
-            public void onChanged(CoronaSummaryResponse coronaSummaryResponse) {
-               appUtils.dialog.dismiss();
-               if(!coronaSummaryResponse.isNetworkIsSuccessful()){
-                   Toast.makeText(MainDashboard.this, "Failed to connect to server", Toast.LENGTH_SHORT).show();
-               }
-               requestPermission();
-            }
+        mainDashBoardViewModel.getStudentRepository().observe(this, coronaSummaryResponse -> {
+           appUtils.dialog.dismiss();
+           if(!coronaSummaryResponse.isNetworkIsSuccessful()){
+               Toast.makeText(MainDashboard.this, "Failed to connect to server", Toast.LENGTH_SHORT).show();
+           }
+           requestPermission();
         });
         ActivityMainDashboardBinding binding = DataBindingUtil.setContentView(this,R.layout.activity_main_dashboard);
         binding.setLifecycleOwner(this);
         binding.setViewmodel(mainDashBoardViewModel);
-
+        //nextButton.setOnClickListener(this::nextButtonClick);
 
     }
 
@@ -162,5 +166,20 @@ public class MainDashboard extends BaseActivity {
                 .create()
                 .show();
     }
-
+    public void initView(){
+        nextButton = findViewById(R.id.next_button);
+    }
+    public void nextButtonClick(View view){
+        Log.d(TAG, "nextButtonClick: ");
+        appUtils.dialog.show();
+        mainDashBoardViewModel.cacheLocations().observe(this,successful->{
+            appUtils.dialog.dismiss();
+            if(successful){
+                startActivity(new Intent(MainDashboard.this,Nav.class));
+            }
+            else {
+                Toast.makeText(this, "Failed to connect. Try again.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 }
