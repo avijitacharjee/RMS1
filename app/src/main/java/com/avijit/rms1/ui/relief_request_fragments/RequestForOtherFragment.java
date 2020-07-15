@@ -154,7 +154,7 @@ public class RequestForOtherFragment extends Fragment {
                     Log.d(TAG, "onChanged: "+new Gson().toJson(reliefRequest));
                     Log.d(TAG, "onChanged: "+reliefRequestNetworkResponse.toString());
                     if(reliefRequestNetworkResponse.isNetworkIsSuccessful()){
-                        Toast.makeText(getContext(), "Inserted Successfully", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Added successfully", Toast.LENGTH_SHORT).show();
                     }
                     else {
                         Toast.makeText(getContext(), "Failed to connect", Toast.LENGTH_SHORT).show();
