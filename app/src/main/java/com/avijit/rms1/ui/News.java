@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.SpannableString;
@@ -79,6 +80,15 @@ public class News extends BaseActivity {
                     closeDrawer();
                     break;
                 }
+                case R.id.nav_news_home: {
+                    startActivity(new Intent(News.this,Nav.class));
+                    break;
+                }
+                case R.id.logout: {
+                    getSharedPreferences("RMS",MODE_PRIVATE).edit().putString("token","").apply();
+                    startActivity(new Intent(News.this,Login.class));
+                }
+
             }
 
             return true;
