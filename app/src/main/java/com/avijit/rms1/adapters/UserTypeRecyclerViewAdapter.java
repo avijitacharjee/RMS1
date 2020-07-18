@@ -1,16 +1,20 @@
 package com.avijit.rms1.adapters;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.avijit.rms1.R;
 import com.avijit.rms1.data.remote.model.UserType;
+import com.avijit.rms1.viewmodel.UserTypeViewModel;
 
 import java.util.List;
 
@@ -20,8 +24,10 @@ import java.util.List;
  */
 public class UserTypeRecyclerViewAdapter extends RecyclerView.Adapter<UserTypeRecyclerViewAdapter.ViewHolder> {
     private List<UserType> userTypeList;
-    public UserTypeRecyclerViewAdapter(List<UserType> userTypeList){
+    private UserTypeViewModel viewModel;
+    public UserTypeRecyclerViewAdapter(List<UserType> userTypeList, Context context){
         this.userTypeList=userTypeList;
+        viewModel= ViewModelProviders.of((com.avijit.rms1.ui.UserType)context).get(UserTypeViewModel.class);
     }
 
     /**
@@ -73,6 +79,10 @@ public class UserTypeRecyclerViewAdapter extends RecyclerView.Adapter<UserTypeRe
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.nameTextView.setText(userTypeList.get(position).getName());
+        holder.deleteButton.setOnClickListener(v -> {
+            viewModel.delete(userTypeList.get(position).getId());
+        });
+
     }
     @Override
     public int getItemViewType(int position) {
@@ -89,9 +99,12 @@ public class UserTypeRecyclerViewAdapter extends RecyclerView.Adapter<UserTypeRe
     }
     static class ViewHolder extends RecyclerView.ViewHolder {
         private TextView nameTextView;
+        ImageView updateButton,deleteButton;
         ViewHolder(@NonNull View itemView) {
             super(itemView);
             nameTextView=itemView.findViewById(R.id.name_text_view);
+            updateButton=itemView.findViewById(R.id.update_button);
+            deleteButton=itemView.findViewById(R.id.delete_button);
         }
     }
 }
