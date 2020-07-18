@@ -8,7 +8,10 @@ import com.avijit.rms1.data.remote.RetrofitService;
 import com.avijit.rms1.data.remote.api.UserApi;
 import com.avijit.rms1.data.remote.model.User;
 import com.avijit.rms1.data.remote.responses.BaseModel;
+import com.avijit.rms1.data.remote.responses.NetworkResponse;
 import com.avijit.rms1.data.remote.responses.UserStoreResponse;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -27,24 +30,24 @@ public class UserRepository {
     public UserRepository(){
         userApi = RetrofitService.createService(UserApi.class);
     }
-    public MutableLiveData<UserStoreResponse> addUser(final User user){
-        final MutableLiveData<UserStoreResponse> userResponse = new MutableLiveData<>();
-        userApi.storeUser(user).enqueue(new Callback<UserStoreResponse>() {
+    public MutableLiveData<NetworkResponse<User>> addUser(final User user){
+        final MutableLiveData<NetworkResponse<User>> userResponse = new MutableLiveData<>();
+        userApi.storeUser(user).enqueue(new Callback<NetworkResponse<User>>() {
             @Override
-            public void onResponse(Call<UserStoreResponse> call, Response<UserStoreResponse> response) {
+            public void onResponse(Call<NetworkResponse<User>> call, Response<NetworkResponse<User>> response) {
                 Log.d(TAG, "onResponse: "+response.toString());
                 if(response.isSuccessful()){
                     userResponse.setValue(response.body());
                 }
                 else {
-                    userResponse.setValue(new BaseModel.Builder<UserStoreResponse>(UserStoreResponse.class).setNetworkIsSuccessful(false));
+                    userResponse.setValue(new BaseModel.Builder<NetworkResponse<User>>(NetworkResponse.class).setNetworkIsSuccessful(false));
                 }
             }
 
             @Override
-            public void onFailure(Call<UserStoreResponse> call, Throwable t) {
+            public void onFailure(Call<NetworkResponse<User>> call, Throwable t) {
                 Log.d(TAG, "onFailure: "+t);
-                userResponse.setValue(new BaseModel.Builder<UserStoreResponse>(UserStoreResponse.class).setNetworkIsSuccessful(false));
+                userResponse.setValue(new BaseModel.Builder<NetworkResponse<User>>(NetworkResponse.class).setNetworkIsSuccessful(false));
             }
         });
         return userResponse;
@@ -70,4 +73,77 @@ public class UserRepository {
         });
         return user;
     }
+    public MutableLiveData<NetworkResponse<List<User>>> getAllUser(){
+        MutableLiveData<NetworkResponse<List<User>>> result= new MutableLiveData<>();
+        userApi.allUser().enqueue(new Callback<NetworkResponse<List<User>>>() {
+            @Override
+            public void onResponse(Call<NetworkResponse<List<User>>> call, Response<NetworkResponse<List<User>>> response) {
+                if(response.isSuccessful()){
+                    result.setValue(response.body());
+                }
+                else {
+                    NetworkResponse<List<User>> fail= new NetworkResponse<>();
+                    fail.setNetworkIsSuccessful(false);
+                    result.setValue(fail);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<NetworkResponse<List<User>>> call, Throwable t) {
+                NetworkResponse<List<User>> fail= new NetworkResponse<>();
+                fail.setNetworkIsSuccessful(false);
+                result.setValue(fail);
+            }
+        });
+        return result;
+    }
+    public MutableLiveData<NetworkResponse<User>> updateUser(String id, User user){
+        MutableLiveData<NetworkResponse<User>> rslt = new MutableLiveData<>();
+        userApi.update(id,user).enqueue(new Callback<NetworkResponse<User>>() {
+            @Override
+            public void onResponse(Call<NetworkResponse<User>> call, Response<NetworkResponse<User>> response) {
+                if(response.isSuccessful()){
+                    rslt.setValue(response.body());
+                }
+                else {
+                    NetworkResponse<User> fail = new NetworkResponse<>();
+                    fail.setNetworkIsSuccessful(false);
+                    rslt.setValue(fail);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<NetworkResponse<User>> call, Throwable t) {
+                NetworkResponse<User> fail = new NetworkResponse<>();
+                fail.setNetworkIsSuccessful(false);
+                rslt.setValue(fail);
+            }
+        });
+        return rslt;
+    }
+    public MutableLiveData<NetworkResponse<User>> deleteUser(String id){
+        MutableLiveData<NetworkResponse<User>> rslt = new MutableLiveData<>();
+        userApi.delete(id).enqueue(new Callback<NetworkResponse<User>>() {
+            @Override
+            public void onResponse(Call<NetworkResponse<User>> call, Response<NetworkResponse<User>> response) {
+                if(response.isSuccessful()){
+                    rslt.setValue(response.body());
+                }
+                else {
+                    NetworkResponse<User> fail = new NetworkResponse<>();
+                    fail.setNetworkIsSuccessful(false);
+                    rslt.setValue(fail);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<NetworkResponse<User>> call, Throwable t) {
+                NetworkResponse<User> fail = new NetworkResponse<>();
+                fail.setNetworkIsSuccessful(false);
+                rslt.setValue(fail);
+            }
+        });
+        return rslt;
+    }
+
 }

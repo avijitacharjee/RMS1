@@ -1,11 +1,14 @@
 package com.avijit.rms1.adapters;
 
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.avijit.rms1.R;
 
 /**
  * Created by Avijit Acharjee on 7/18/2020 at 11:58 PM.
@@ -34,7 +37,7 @@ public class UserCrudRecyclerViewAdapter extends RecyclerView.Adapter<UserCrudRe
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return null;
+        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_user_list,parent,false));
     }
 
     /**
