@@ -1,20 +1,36 @@
 package com.avijit.rms1.adapters;
 
+import android.app.Activity;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.avijit.rms1.R;
+import com.avijit.rms1.data.remote.model.User;
+import com.avijit.rms1.ui.UserCrud;
+import com.avijit.rms1.viewmodel.UserCrudViewModel;
+
+import java.util.List;
 
 /**
  * Created by Avijit Acharjee on 7/18/2020 at 11:58 PM.
  * Email: avijitach@gmail.com.
  */
 public class UserCrudRecyclerViewAdapter extends RecyclerView.Adapter<UserCrudRecyclerViewAdapter.ViewHolder>{
+    private List<User> userList;
+    Context context;
+    UserCrudViewModel viewModel;
+    public UserCrudRecyclerViewAdapter(Context context,List<User> userList){
+        this.userList = userList;
+        this.context = context;
+        viewModel= ViewModelProviders.of((UserCrud)context).get(UserCrudViewModel.class);
+    }
     /**
      * Called when RecyclerView needs a new {@link ViewHolder} of the given type to represent
      * an item.
