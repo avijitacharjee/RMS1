@@ -38,6 +38,7 @@ import com.avijit.rms1.ui.PendingSchedules;
 import com.avijit.rms1.ui.Profile;
 import com.avijit.rms1.ui.ReliefRequest;
 import com.avijit.rms1.ui.SearchByNid;
+import com.avijit.rms1.ui.UserType;
 import com.google.android.material.navigation.NavigationView;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -212,6 +213,11 @@ public class AppUtils {
                 }
                 case R.id.nav_profile: {
                     context.startActivity(new Intent(context, Profile.class));
+                    break;
+                }
+                case R.id.nav_user_type: {
+                    context.startActivity(new Intent(context, UserType.class));
+                    break;
                 }
 
                 /*case R.id.logout: {

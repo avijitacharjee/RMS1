@@ -143,31 +143,32 @@ public class SignUp extends BaseActivity {
      */
     public void setTypeSpinner(){
         appUtils.dialog.show();
-        viewModel.getUserTypes().observe(this, new Observer<UserTypeResponse>() {
-            @Override
-            public void onChanged(UserTypeResponse userTypeResponse) {
-                appUtils.dialog.dismiss();
-                if(!userTypeResponse.isNetworkIsSuccessful()){
-                    Toast.makeText(SignUp.this, "Failed to connect", Toast.LENGTH_SHORT).show();
-                    ArrayAdapter<String> adapter2 = new ArrayAdapter<>(SignUp.this,android.R.layout.simple_spinner_dropdown_item,types);
-                    adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    typeSpinner.setAdapter(adapter2);
-                    startActivity(new Intent(SignUp.this,Login.class));
-                    return;
-                }
-                String[] t = new String[userTypeResponse.getData().size()+1];
-                t[0]="--Select User Type--";
-                typeIds = new String[userTypeResponse.getData().size()];
-                for(int i=0;i<userTypeResponse.getData().size();i++)
-                {
-                    t[i+1] = userTypeResponse.getData().get(i).getName();
-                    typeIds[i]=userTypeResponse.getData().get(i).getId();
-                }
-                types=t;
+        viewModel.getUserTypes().observe(this, userTypeResponse -> {
+            appUtils.dialog.dismiss();
+            if(!userTypeResponse.isNetworkIsSuccessful()){
+                Toast.makeText(SignUp.this, "Failed to connect", Toast.LENGTH_SHORT).show();
                 ArrayAdapter<String> adapter2 = new ArrayAdapter<>(SignUp.this,android.R.layout.simple_spinner_dropdown_item,types);
                 adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 typeSpinner.setAdapter(adapter2);
+                startActivity(new Intent(SignUp.this,Login.class));
+                return;
             }
+            if(userTypeResponse.getData()==null){
+                startActivity(new Intent(SignUp.this,Login.class));
+                return;
+            }
+            String[] t = new String[userTypeResponse.getData().size()+1];
+            t[0]="--Select User Type--";
+            typeIds = new String[userTypeResponse.getData().size()];
+            for(int i=0;i<userTypeResponse.getData().size();i++)
+            {
+                t[i+1] = userTypeResponse.getData().get(i).getName();
+                typeIds[i]=userTypeResponse.getData().get(i).getId();
+            }
+            types=t;
+            ArrayAdapter<String> adapter2 = new ArrayAdapter<>(SignUp.this,android.R.layout.simple_spinner_dropdown_item,types);
+            adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            typeSpinner.setAdapter(adapter2);
         });
     }
 

@@ -7,13 +7,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.avijit.rms1.R;
 import com.avijit.rms1.data.remote.model.UserType;
+import com.avijit.rms1.utils.AppUtils;
 import com.avijit.rms1.viewmodel.UserTypeViewModel;
 
 import java.util.List;
@@ -25,9 +28,13 @@ import java.util.List;
 public class UserTypeRecyclerViewAdapter extends RecyclerView.Adapter<UserTypeRecyclerViewAdapter.ViewHolder> {
     private List<UserType> userTypeList;
     private UserTypeViewModel viewModel;
+    AppUtils appUtils;
+    Context context;
     public UserTypeRecyclerViewAdapter(List<UserType> userTypeList, Context context){
         this.userTypeList=userTypeList;
+        this.context=context;
         viewModel= ViewModelProviders.of((com.avijit.rms1.ui.UserType)context).get(UserTypeViewModel.class);
+        appUtils=new AppUtils(context);
     }
 
     /**
@@ -78,9 +85,22 @@ public class UserTypeRecyclerViewAdapter extends RecyclerView.Adapter<UserTypeRe
      */
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        UserType userType = userTypeList.get(position);
         holder.nameTextView.setText(userTypeList.get(position).getName());
-        holder.deleteButton.setOnClickListener(v -> {
-            viewModel.delete(userTypeList.get(position).getId());
+        holder.updateButton.setText(userType.getStatus().equals("On")?"Disable":"Enable");
+        holder.updateButton.setOnClickListener(v -> {
+            Toast.makeText(context, "Abcd", Toast.LENGTH_SHORT).show();
+            appUtils.dialog.show();
+            userType.setStatus(userType.getStatus().equals("On")?"Off":"On");
+            viewModel.update(userTypeList.get(position).getId(),userType).observe((LifecycleOwner) context, response->{
+                appUtils.dialog.dismiss();
+                if(response.isNetworkIsSuccessful()){
+                    holder.updateButton.setText(!userType.getStatus().equals("On")?"Disable":"Enable");
+                }
+                else {
+                    Toast.makeText(context, "Failed to connect", Toast.LENGTH_SHORT).show();
+                }
+            });
         });
 
     }
@@ -99,7 +119,8 @@ public class UserTypeRecyclerViewAdapter extends RecyclerView.Adapter<UserTypeRe
     }
     static class ViewHolder extends RecyclerView.ViewHolder {
         private TextView nameTextView;
-        ImageView updateButton,deleteButton;
+        ImageView deleteButton;
+        TextView updateButton;
         ViewHolder(@NonNull View itemView) {
             super(itemView);
             nameTextView=itemView.findViewById(R.id.name_text_view);

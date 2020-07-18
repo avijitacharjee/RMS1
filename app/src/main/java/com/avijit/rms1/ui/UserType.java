@@ -1,12 +1,14 @@
 package com.avijit.rms1.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import com.avijit.rms1.R;
 import com.avijit.rms1.adapters.UserTypeRecyclerViewAdapter;
@@ -28,8 +30,12 @@ public class UserType extends BaseActivity {
         initViews();
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
+        setToolbar();
+        toolbar.setTitle("RMS");
+        toolbar.setSubtitle("User Type");
         appUtils= new AppUtils(this);
         appUtils.dialog.show();
+        viewModel= ViewModelProviders.of(this).get(UserTypeViewModel.class);
         viewModel.getAll().observe(this,listNetworkResponse -> {
             appUtils.dialog.dismiss();
             if(!listNetworkResponse.isNetworkIsSuccessful()){
@@ -38,11 +44,12 @@ public class UserType extends BaseActivity {
             }
             if(listNetworkResponse.getData()==null) return;
             userTypeList.addAll(listNetworkResponse.getData());
+            recyclerViewAdapter.notifyDataSetChanged();
         });
         recyclerViewAdapter= new UserTypeRecyclerViewAdapter(userTypeList,this);
         recyclerView.setAdapter(recyclerViewAdapter);
     }
     private void initViews(){
-        recyclerView= findViewById(R.id.recycler_view);
+        recyclerView= findViewById(R.id.user_type_recycler_view);
     }
 }
