@@ -30,7 +30,7 @@ public class ReliefScheduleRecyclerViewAdapter extends RecyclerView.Adapter<Reli
     public ReliefScheduleRecyclerViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v =  LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_relief_list, parent, false);
-        ReliefScheduleRecyclerViewAdapter.ViewHolder vh = new ReliefScheduleRecyclerViewAdapter.ViewHolder(v);
+        ReliefScheduleRecyclerViewAdapter.ViewHolder vh = new ViewHolder(v);
         return vh;
     }
 
@@ -55,9 +55,9 @@ public class ReliefScheduleRecyclerViewAdapter extends RecyclerView.Adapter<Reli
     public int getItemCount() {
         return names.size();
     }
-    public class ViewHolder extends RecyclerView.ViewHolder{
-        public TextView nameTextView,nidTextView,contactTextView;
-        public ViewHolder(@NonNull View itemView) {
+    static class ViewHolder extends RecyclerView.ViewHolder{
+        TextView nameTextView,nidTextView,contactTextView;
+        ViewHolder(@NonNull View itemView) {
             super(itemView);
             nameTextView=(TextView)itemView.findViewById(R.id.name_text_view);
             nidTextView=itemView.findViewById(R.id.nid_text_view);

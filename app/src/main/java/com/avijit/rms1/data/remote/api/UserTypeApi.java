@@ -1,7 +1,13 @@
 package com.avijit.rms1.data.remote.api;
 
+import androidx.room.Delete;
+
 import com.avijit.rms1.data.remote.model.User;
+import com.avijit.rms1.data.remote.model.UserType;
+import com.avijit.rms1.data.remote.responses.NetworkResponse;
 import com.avijit.rms1.data.remote.responses.UserTypeResponse;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -11,18 +17,21 @@ import retrofit2.http.POST;
 import retrofit2.http.Path;
 
 public interface UserTypeApi {
-    @DELETE("deleteuser/{id}")
-    Call<User> delete(@Path("id") String id);
-
-    @GET("getuser/{id}")
-    Call<User> getUser(@Path("id") String id);
 
     @GET("user-type")
-    Call<UserTypeResponse> allTypes();
+    Call<NetworkResponse<List<UserType>>> allTypes();
 
-    @POST("saveuser")
-    Call<User> storeUser(@Body User user);
+    @GET("user-type/{id}")
+    Call<NetworkResponse<UserType>> getTypeById(@Path("id") String id);
 
-    @POST("updateuser/{id}")
-    Call<User> update(@Path("id") String id,@Body User user);
+    @POST("user-type")
+    Call<NetworkResponse<UserType>> saveUserType(@Body UserType userType);
+
+    @POST("user-type/{id}")
+    Call<NetworkResponse<UserType>> updateUserType(@Path("id") String id,@Body UserType userType);
+
+    @DELETE("user-type/{id}")
+    Call<NetworkResponse<UserType>> deleteType(@Path("id") String id);
+
+
 }
