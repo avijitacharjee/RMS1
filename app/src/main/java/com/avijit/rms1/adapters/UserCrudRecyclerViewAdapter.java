@@ -2,18 +2,25 @@ package com.avijit.rms1.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.avijit.rms1.R;
 import com.avijit.rms1.data.remote.model.User;
+import com.avijit.rms1.ui.MainDashboard;
 import com.avijit.rms1.ui.UserCrud;
+import com.avijit.rms1.utils.AppUtils;
 import com.avijit.rms1.viewmodel.UserCrudViewModel;
 
 import java.util.List;
@@ -24,12 +31,14 @@ import java.util.List;
  */
 public class UserCrudRecyclerViewAdapter extends RecyclerView.Adapter<UserCrudRecyclerViewAdapter.ViewHolder>{
     private List<User> userList;
-    Context context;
-    UserCrudViewModel viewModel;
+    private Context context;
+    private UserCrudViewModel viewModel;
+    private AppUtils appUtils;
     public UserCrudRecyclerViewAdapter(Context context,List<User> userList){
         this.userList = userList;
         this.context = context;
         viewModel= ViewModelProviders.of((UserCrud)context).get(UserCrudViewModel.class);
+         appUtils = new AppUtils(context);
     }
     /**
      * Called when RecyclerView needs a new {@link ViewHolder} of the given type to represent
@@ -77,7 +86,36 @@ public class UserCrudRecyclerViewAdapter extends RecyclerView.Adapter<UserCrudRe
      */
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        holder.nameTextView.setText(userList.get(position).getName());
+        holder.deleteButton.setOnClickListener(v -> {
+            new AlertDialog.Builder(context)
+                    .setPositiveButton("Yes",(dialog, which) -> {
+                        appUtils.dialog.show();
+                        viewModel.delete(userList.get(position).getId()).observe((UserCrud) context,response->{
+                            appUtils.dialog.dismiss();
+                            if(response.isNetworkIsSuccessful()){
+                                userList.remove(position);
+                                Toast.makeText(context, "Successfully Deleted", Toast.LENGTH_SHORT).show();
+                                notifyDataSetChanged();
+                            }
+                            else {
+                                Toast.makeText(context, "Failed to connect", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    })
+                    .setNegativeButton("No",(dialog, which) -> {
 
+                    })
+                    .setMessage("Are you sure to delete?")
+                    .create()
+                    .show();
+        });
+        holder.updateButton.setOnClickListener(v -> {
+
+        });
+        holder.viewButton.setOnClickListener(v-> {
+
+        });
     }
 
     /**
@@ -87,13 +125,19 @@ public class UserCrudRecyclerViewAdapter extends RecyclerView.Adapter<UserCrudRe
      */
     @Override
     public int getItemCount() {
-        return 0;
+        return userList.size();
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-
-        public ViewHolder(@NonNull View itemView) {
+        private TextView nameTextView;
+        private ImageView deleteButton,updateButton,viewButton;
+        ViewHolder(@NonNull View itemView) {
             super(itemView);
+            nameTextView = itemView.findViewById(R.id.name_text_view);
+            deleteButton = itemView.findViewById(R.id.delete_button);
+            updateButton = itemView.findViewById(R.id.update_button);
+            viewButton = itemView.findViewById(R.id.view_button);
         }
+
     }
 }
