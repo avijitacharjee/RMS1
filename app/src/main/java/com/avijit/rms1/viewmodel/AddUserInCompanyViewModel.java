@@ -25,7 +25,7 @@ public class AddUserInCompanyViewModel extends ViewModel {
     public MutableLiveData<NetworkResponse<CompanyUser>> addUser(String email,String company_id,String role){
         return companyRepository.addUserToCompany(email,company_id,role);
     }
-    public MutableLiveData<UserStoreResponse> registerNewUser(User user){
+    public MutableLiveData<NetworkResponse<User>> registerNewUser(User user){
         return userRepository.addUser(user);
     }
 }

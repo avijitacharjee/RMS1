@@ -29,7 +29,7 @@ public class SignUpViewModel extends AndroidViewModel {
     public MutableLiveData<NetworkResponse<List<UserType>>> getUserTypes(){
         return userTypeRepository.getUserTypes();
     }
-    public MutableLiveData<UserStoreResponse> saveUser(User user){
+    public MutableLiveData<NetworkResponse<User>> saveUser(User user){
         return userRepository.addUser(user);
     }
     public MutableLiveData<User> getUserByToken(String token){

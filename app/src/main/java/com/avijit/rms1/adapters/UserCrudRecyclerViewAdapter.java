@@ -3,6 +3,7 @@ package com.avijit.rms1.adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +13,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -38,7 +43,7 @@ public class UserCrudRecyclerViewAdapter extends RecyclerView.Adapter<UserCrudRe
         this.userList = userList;
         this.context = context;
         viewModel= ViewModelProviders.of((UserCrud)context).get(UserCrudViewModel.class);
-         appUtils = new AppUtils(context);
+        appUtils = new AppUtils(context);
     }
     /**
      * Called when RecyclerView needs a new {@link ViewHolder} of the given type to represent
@@ -110,9 +115,17 @@ public class UserCrudRecyclerViewAdapter extends RecyclerView.Adapter<UserCrudRe
                     .create()
                     .show();
         });
-        holder.updateButton.setOnClickListener(v -> {
+        /*holder.updateButton.setOnClickListener(v -> {
+            DialogFragment dialogFragment=  new UpdateDialogFragment();
+            FragmentTransaction ft = ((UserCrud) context ).getSupportFragmentManager().beginTransaction();
+            Fragment prev =((UserCrud) context ). getSupportFragmentManager().findFragmentByTag("dialog");
+            if (prev != null) {
+                ft.remove(prev);
+            }
+            ft.addToBackStack(null);
+            dialogFragment.show(ft,"update");
 
-        });
+        });*/
         holder.viewButton.setOnClickListener(v-> {
 
         });
@@ -128,6 +141,11 @@ public class UserCrudRecyclerViewAdapter extends RecyclerView.Adapter<UserCrudRe
         return userList.size();
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+
     static class ViewHolder extends RecyclerView.ViewHolder {
         private TextView nameTextView;
         private ImageView deleteButton,updateButton,viewButton;
@@ -139,5 +157,17 @@ public class UserCrudRecyclerViewAdapter extends RecyclerView.Adapter<UserCrudRe
             viewButton = itemView.findViewById(R.id.view_button);
         }
 
+    }
+    private class UpdateDialogFragment extends DialogFragment {
+        @Nullable
+        @Override
+        public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+            return inflater.inflate(R.layout.fragment_user_update,container,false);
+        }
+
+        @Override
+        public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+            Toast.makeText(context, "Hi", Toast.LENGTH_SHORT).show();
+        }
     }
 }

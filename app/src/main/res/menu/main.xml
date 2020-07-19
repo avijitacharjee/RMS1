@@ -51,6 +51,11 @@
             android:title="Search Given Reliefs"
             />
         <item
+            android:id="@+id/nav_user"
+            android:icon="@drawable/ic_info_outline_black_24dp"
+            android:title="User"
+            />
+        <item
             android:id="@+id/nav_news_home"
             android:icon="@drawable/ic_info_outline_black_24dp"
             android:title="News"
