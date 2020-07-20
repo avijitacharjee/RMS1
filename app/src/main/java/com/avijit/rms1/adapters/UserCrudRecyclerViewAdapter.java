@@ -7,8 +7,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,7 +30,10 @@ import com.avijit.rms1.ui.UserCrud;
 import com.avijit.rms1.utils.AppUtils;
 import com.avijit.rms1.viewmodel.UserCrudViewModel;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Created by Avijit Acharjee on 7/18/2020 at 11:58 PM.
@@ -98,6 +103,7 @@ public class UserCrudRecyclerViewAdapter extends RecyclerView.Adapter<UserCrudRe
                         appUtils.dialog.show();
                         viewModel.delete(userList.get(position).getId()).observe((UserCrud) context,response->{
                             appUtils.dialog.dismiss();
+
                             if(response.isNetworkIsSuccessful()){
                                 userList.remove(position);
                                 Toast.makeText(context, "Successfully Deleted", Toast.LENGTH_SHORT).show();
@@ -115,8 +121,8 @@ public class UserCrudRecyclerViewAdapter extends RecyclerView.Adapter<UserCrudRe
                     .create()
                     .show();
         });
-        /*holder.updateButton.setOnClickListener(v -> {
-            DialogFragment dialogFragment=  new UpdateDialogFragment();
+        holder.updateButton.setOnClickListener(v -> {
+            DialogFragment dialogFragment=  new UpdateDialogFragment(userList.get(position));
             FragmentTransaction ft = ((UserCrud) context ).getSupportFragmentManager().beginTransaction();
             Fragment prev =((UserCrud) context ). getSupportFragmentManager().findFragmentByTag("dialog");
             if (prev != null) {
@@ -124,8 +130,7 @@ public class UserCrudRecyclerViewAdapter extends RecyclerView.Adapter<UserCrudRe
             }
             ft.addToBackStack(null);
             dialogFragment.show(ft,"update");
-
-        });*/
+        });
         holder.viewButton.setOnClickListener(v-> {
 
         });
@@ -158,7 +163,15 @@ public class UserCrudRecyclerViewAdapter extends RecyclerView.Adapter<UserCrudRe
         }
 
     }
-    private class UpdateDialogFragment extends DialogFragment {
+    public static class UpdateDialogFragment extends DialogFragment {
+        EditText fullNameEditText,emailEditText,phoneEditText,nidEditText,passwordEditText;
+        Spinner typeSpinner;
+        TextView goButton;
+        UserCrudViewModel viewModel;
+        User user;
+        public UpdateDialogFragment(User user){
+            this.user = user;
+        }
         @Nullable
         @Override
         public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -167,7 +180,47 @@ public class UserCrudRecyclerViewAdapter extends RecyclerView.Adapter<UserCrudRe
 
         @Override
         public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-            Toast.makeText(context, "Hi", Toast.LENGTH_SHORT).show();
+            viewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity())).get(UserCrudViewModel.class);
+            initViews(view);
+            setInitialValue();
+            AppUtils appUtils = new AppUtils(getContext());
+            goButton.setOnClickListener(v->{
+                User newUser = new User();
+                newUser.setName(fullNameEditText.getText().toString());
+                newUser.setEmail(emailEditText.getText().toString());
+                newUser.setPhone(phoneEditText.getText().toString());
+                newUser.setNid(nidEditText.getText().toString());
+                newUser.setPassword(passwordEditText.getText().toString());
+                newUser.setTbl_user_types_id((typeSpinner.getSelectedItemPosition()-1)+"");
+                appUtils.dialog.show();
+                viewModel.update(user.getId(),newUser).observe(getActivity(),response->{
+                    appUtils.dialog.dismiss();
+                    if(response.isNetworkIsSuccessful()){
+                        Toast.makeText(getContext(), "Successfully updated", Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        Toast.makeText(getContext(), "Failed to connect", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            });
+        }
+        private void initViews(View view){
+            fullNameEditText = view.findViewById(R.id.full_name_edit_text);
+            emailEditText = view.findViewById(R.id.email_edit_text);
+            phoneEditText = view.findViewById(R.id.phone_edit_text);
+            nidEditText = view.findViewById(R.id.nid_edit_text);
+            passwordEditText = view.findViewById(R.id.password_edit_text);
+            typeSpinner = view.findViewById(R.id.type_spinner);
+            goButton = view.findViewById(R.id.go);
+        }
+        private void setInitialValue(){
+            fullNameEditText.setText(user.getName());
+            emailEditText.setText(user.getEmail());
+            phoneEditText.setText(user.getPhone());
+            nidEditText.setText(user.getNid());
+            passwordEditText.setText(user.getPassword());
+            typeSpinner.setSelection(Integer.parseInt(user.getTbl_user_types_id())+1);
+
         }
     }
 }
