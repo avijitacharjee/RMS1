@@ -14,7 +14,7 @@
         android:roundIcon="@mipmap/ic_launcher_fahim_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MaterialComponents.NoActionBar">
-        <activity android:name=".ui.UserCrud"></activity>
+        <activity android:name=".ui.UserCRUD"></activity>
         <activity android:name=".ui.UserType" />
         <activity android:name=".ui.Profile" />
         <activity android:name=".ui.news_fragments.NewsDetails" />

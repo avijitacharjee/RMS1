@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -26,7 +27,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.avijit.rms1.R;
 import com.avijit.rms1.data.remote.model.User;
 import com.avijit.rms1.ui.MainDashboard;
-import com.avijit.rms1.ui.UserCrud;
+import com.avijit.rms1.ui.UserCRUD;
 import com.avijit.rms1.utils.AppUtils;
 import com.avijit.rms1.viewmodel.UserCrudViewModel;
 
@@ -47,7 +48,7 @@ public class UserCrudRecyclerViewAdapter extends RecyclerView.Adapter<UserCrudRe
     public UserCrudRecyclerViewAdapter(Context context,List<User> userList){
         this.userList = userList;
         this.context = context;
-        viewModel= ViewModelProviders.of((UserCrud)context).get(UserCrudViewModel.class);
+        viewModel= ViewModelProviders.of((UserCRUD)context).get(UserCrudViewModel.class);
         appUtils = new AppUtils(context);
     }
     /**
@@ -101,7 +102,7 @@ public class UserCrudRecyclerViewAdapter extends RecyclerView.Adapter<UserCrudRe
             new AlertDialog.Builder(context)
                     .setPositiveButton("Yes",(dialog, which) -> {
                         appUtils.dialog.show();
-                        viewModel.delete(userList.get(position).getId()).observe((UserCrud) context,response->{
+                        viewModel.delete(userList.get(position).getId()).observe((UserCRUD) context,response->{
                             appUtils.dialog.dismiss();
 
                             if(response.isNetworkIsSuccessful()){
@@ -123,8 +124,8 @@ public class UserCrudRecyclerViewAdapter extends RecyclerView.Adapter<UserCrudRe
         });
         holder.updateButton.setOnClickListener(v -> {
             DialogFragment dialogFragment=  new UpdateDialogFragment(userList.get(position));
-            FragmentTransaction ft = ((UserCrud) context ).getSupportFragmentManager().beginTransaction();
-            Fragment prev =((UserCrud) context ). getSupportFragmentManager().findFragmentByTag("dialog");
+            FragmentTransaction ft = ((UserCRUD) context ).getSupportFragmentManager().beginTransaction();
+            Fragment prev =((UserCRUD) context ). getSupportFragmentManager().findFragmentByTag("dialog");
             if (prev != null) {
                 ft.remove(prev);
             }
@@ -132,7 +133,14 @@ public class UserCrudRecyclerViewAdapter extends RecyclerView.Adapter<UserCrudRe
             dialogFragment.show(ft,"update");
         });
         holder.viewButton.setOnClickListener(v-> {
-
+            DialogFragment dialogFragment=  new ViewUserDialogFragment(userList.get(position));
+            FragmentTransaction ft = ((UserCRUD) context ).getSupportFragmentManager().beginTransaction();
+            Fragment prev =((UserCRUD) context ). getSupportFragmentManager().findFragmentByTag("dialog");
+            if (prev != null) {
+                ft.remove(prev);
+            }
+            ft.addToBackStack(null);
+            dialogFragment.show(ft,"update");
         });
     }
 
@@ -221,6 +229,23 @@ public class UserCrudRecyclerViewAdapter extends RecyclerView.Adapter<UserCrudRe
             passwordEditText.setText(user.getPassword());
             typeSpinner.setSelection(Integer.parseInt(user.getTbl_user_types_id())+1);
 
+        }
+
+        @Override
+        public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+            getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+            super.onActivityCreated(savedInstanceState);
+        }
+    }
+    public static class ViewUserDialogFragment extends DialogFragment{
+        User user;
+        public ViewUserDialogFragment(User user){
+            this.user=user;
+        }
+        @Nullable
+        @Override
+        public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+            return inflater.inflate(R.layout.fragment_user_details,container,false);
         }
     }
 }

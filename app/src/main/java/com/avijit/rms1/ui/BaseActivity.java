@@ -59,7 +59,7 @@ public class BaseActivity extends AppCompatActivity {
         if(user.getTbl_user_types_id()==null){
             return;
         }
-        if(user.getTbl_user_types_id().equals("1") || user.getTbl_user_types_id().equals("2") || user.getTbl_user_types_id().equals("3")){
+        /*if(user.getTbl_user_types_id().equals("1") || user.getTbl_user_types_id().equals("2") || user.getTbl_user_types_id().equals("3")){
             navigationView.getMenu().findItem(R.id.nav_add_company).setVisible(false);
             navigationView.getMenu().findItem(R.id.nav_add_user_in_company).setVisible(false);
         }
@@ -68,7 +68,7 @@ public class BaseActivity extends AppCompatActivity {
             navigationView.getMenu().findItem(R.id.nav_add_request_for_relief).setVisible(false);
             navigationView.getMenu().findItem(R.id.nav_add_donate_schedule).setVisible(false);
         }
-
+*/
     }
 
 }

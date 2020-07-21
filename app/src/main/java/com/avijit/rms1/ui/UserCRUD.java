@@ -17,7 +17,7 @@ import com.avijit.rms1.viewmodel.UserCrudViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserCrud extends BaseActivity {
+public class UserCRUD extends BaseActivity {
     UserCrudViewModel viewModel;
     RecyclerView recyclerView;
     UserCrudRecyclerViewAdapter adapter;

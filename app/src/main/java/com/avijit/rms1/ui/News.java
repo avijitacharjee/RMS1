@@ -100,11 +100,11 @@ public class News extends BaseActivity {
             user= new User();
             user.setTbl_user_types_id("4");
         }
-        if(user.getTbl_user_types_id().equals("3") || user.getTbl_user_types_id().equals("2") || user.getTbl_user_types_id().equals("4")){
+        /*if(user.getTbl_user_types_id().equals("3") || user.getTbl_user_types_id().equals("2") || user.getTbl_user_types_id().equals("4")){
             navigationView.getMenu().findItem(R.id.nav_add_news_type).setVisible(false);
             navigationView.getMenu().findItem(R.id.nav_add_news_sub_type).setVisible(false);
             navigationView.getMenu().findItem(R.id.nav_add_news).setVisible(false);
-        }
+        }*/
         EndDrawerToggle toggle = new EndDrawerToggle(
                 this,
                 drawer,

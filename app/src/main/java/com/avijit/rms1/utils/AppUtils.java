@@ -38,7 +38,7 @@ import com.avijit.rms1.ui.PendingSchedules;
 import com.avijit.rms1.ui.Profile;
 import com.avijit.rms1.ui.ReliefRequest;
 import com.avijit.rms1.ui.SearchByNid;
-import com.avijit.rms1.ui.UserCrud;
+import com.avijit.rms1.ui.UserCRUD;
 import com.avijit.rms1.ui.UserType;
 import com.google.android.material.navigation.NavigationView;
 
@@ -221,7 +221,7 @@ public class AppUtils {
                     break;
                 }
                 case R.id.nav_user :{
-                    context.startActivity(new Intent(context, UserCrud.class));
+                    context.startActivity(new Intent(context, UserCRUD.class));
                     break;
                 }
 
