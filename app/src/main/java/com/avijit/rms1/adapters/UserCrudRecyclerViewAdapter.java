@@ -233,11 +233,12 @@ public class UserCrudRecyclerViewAdapter extends RecyclerView.Adapter<UserCrudRe
 
         @Override
         public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-            getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+            Objects.requireNonNull(Objects.requireNonNull(getDialog()).getWindow()).setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
             super.onActivityCreated(savedInstanceState);
         }
     }
     public static class ViewUserDialogFragment extends DialogFragment{
+        TextView nameTextView,emailTextView,phoneTextView,nidTextView,userTypeTextView,addressTextView;
         User user;
         public ViewUserDialogFragment(User user){
             this.user=user;
@@ -246,6 +247,26 @@ public class UserCrudRecyclerViewAdapter extends RecyclerView.Adapter<UserCrudRe
         @Override
         public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
             return inflater.inflate(R.layout.fragment_user_details,container,false);
+        }
+
+        @Override
+        public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+            super.onViewCreated(view, savedInstanceState);
+            initViews(view);
+            nameTextView.setText(user.getName()==null?"Not provided":user.getName());
+            emailTextView.setText(user.getEmail()==null?"Not provided":user.getEmail());
+            phoneTextView.setText(user.getPhone()==null?"Not provided":user.getPhone());
+            nidTextView.setText(user.getNid()==null?"Not provided":user.getNid());
+            addressTextView.setText(user.getAddress()==null?"Not provided":user.getAddress());
+            userTypeTextView.setText(user.getRole()==null?"Not provided":user.getRole());
+        }
+        private void initViews(View view){
+            nameTextView=view.findViewById(R.id.name_text_view);
+            emailTextView=view.findViewById(R.id.email_text_view);
+            phoneTextView = view.findViewById(R.id.phone_text_view);
+            nidTextView = view.findViewById(R.id.nid_text_view);
+            userTypeTextView=view.findViewById(R.id.user_type_text_view);
+            addressTextView=view.findViewById(R.id.address_text_view);
         }
     }
 }
