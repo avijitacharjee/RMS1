@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -28,6 +29,7 @@ import com.avijit.rms1.utils.AppUtils;
 import com.avijit.rms1.viewmodel.GoodsViewModel;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Created by Avijit Acharjee on 7/23/2020 at 12:01 AM.
@@ -113,9 +115,14 @@ public class GoodsRecyclerViewAdapter extends RecyclerView.Adapter<GoodsRecycler
         }
     }
     public static class UpdateDialogFragment extends DialogFragment {
+        EditText nameEditText,unitEditText;
+        TextView goButton;
         Good good;
+        AppUtils appUtils ;
+        GoodsViewModel viewModel;
         public UpdateDialogFragment(Good good){
             this.good=good;
+
         }
         @Nullable
         @Override
@@ -126,7 +133,30 @@ public class GoodsRecyclerViewAdapter extends RecyclerView.Adapter<GoodsRecycler
         @Override
         public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
             super.onViewCreated(view, savedInstanceState);
-
+            initViews(view);
+            appUtils = new AppUtils(getContext());
+            viewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity())).get(GoodsViewModel.class);
+            goButton.setOnClickListener(v -> {
+                Good good1 = new Good();
+                good1.setId(good.getId());
+                good1.setName(nameEditText.getText().toString());
+                good1.setUnit(unitEditText.getText().toString());
+                appUtils.dialog.show();
+                viewModel.update(good.getId(),good1).observe(this,response->{
+                    appUtils.dialog.dismiss();
+                    if(response.isNetworkIsSuccessful()){
+                        Toast.makeText(getContext(), "Successfully Updated", Toast.LENGTH_SHORT).show();
+                    }
+                    else{
+                        Toast.makeText(getContext(), "Failed to connect", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            });
+        }
+        private void initViews(View view){
+            nameEditText = view.findViewById(R.id.name_edit_text);
+            unitEditText = view.findViewById(R.id.unit_edit_text);
+            goButton = view.findViewById(R.id.go_button);
         }
     }
 }

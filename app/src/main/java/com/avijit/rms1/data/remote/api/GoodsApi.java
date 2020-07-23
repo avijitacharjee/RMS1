@@ -25,9 +25,9 @@ public interface GoodsApi {
     Call<NetworkResponse<Good>> delete(@Path("id") String id);
 
     @POST("goods")
-    Call<GoodResponse> storeGood(@Body Good good);
+    Call<NetworkResponse<Good>> storeGood(@Body Good good);
 
     @POST("goods/{id}")
-    Call<NetworkResponse<Good>> updateGood(@Path("id") String id,@Body UpdateGood good);
+    Call<NetworkResponse<Good>> updateGood(@Path("id") String id,@Body Good good);
 
 }

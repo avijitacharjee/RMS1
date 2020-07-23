@@ -71,6 +71,50 @@ public class GoodRepository {
         });
         return result;
     }
+    public MutableLiveData<NetworkResponse<Good>> update(String id,Good good){
+        MutableLiveData<NetworkResponse<Good>> result = new MutableLiveData<>();
+        NetworkResponse<Good> ff= new NetworkResponse<>();
+        ff.setNetworkIsSuccessful(false);
+        goodsApi.updateGood(id,good).enqueue(new Callback<NetworkResponse<Good>>() {
+            @Override
+            public void onResponse(Call<NetworkResponse<Good>> call, Response<NetworkResponse<Good>> response) {
+                if(response.isSuccessful()){
+                    result.setValue(response.body());
+                }
+                else {
+                    result.setValue(ff);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<NetworkResponse<Good>> call, Throwable t) {
+                result.setValue(ff);
+            }
+        });
+        return result;
+    }
+    public MutableLiveData<NetworkResponse<Good>> create(Good good){
+        MutableLiveData<NetworkResponse<Good>> result = new MutableLiveData<>();
+        NetworkResponse<Good> ff= new NetworkResponse<>();
+        ff.setNetworkIsSuccessful(false);
+        goodsApi.storeGood(good).enqueue(new Callback<NetworkResponse<Good>>() {
+            @Override
+            public void onResponse(Call<NetworkResponse<Good>> call, Response<NetworkResponse<Good>> response) {
+                if(response.isSuccessful()){
+                    result.setValue(response.body());
+                }
+                else {
+                    result.setValue(ff);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<NetworkResponse<Good>> call, Throwable t) {
+                result.setValue(ff);
+            }
+        });
+        return result;
+    }
 
 
 }

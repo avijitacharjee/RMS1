@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel;
 import com.avijit.rms1.data.remote.model.Good;
 import com.avijit.rms1.data.remote.responses.NetworkResponse;
 import com.avijit.rms1.repository.GoodRepository;
-import com.avijit.rms1.ui.Goods;
 
 import java.util.List;
 
@@ -29,5 +28,11 @@ public class GoodsViewModel extends ViewModel {
     }
     public MutableLiveData<NetworkResponse<Good>> delete(String id){
         return goodRepository.delete(id);
+    }
+    public MutableLiveData<NetworkResponse<Good>> update(String id,Good good){
+        return goodRepository.update(id,good);
+    }
+    public MutableLiveData<NetworkResponse<Good>> create(Good good){
+        return goodRepository.create(good);
     }
 }

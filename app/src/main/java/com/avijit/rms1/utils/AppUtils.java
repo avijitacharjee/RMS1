@@ -30,6 +30,7 @@ import com.avijit.rms1.ui.AddSchedule;
 import com.avijit.rms1.ui.AddUserInCompany;
 import com.avijit.rms1.ui.CompletedSchedules;
 import com.avijit.rms1.ui.FamilyAddress;
+import com.avijit.rms1.ui.Goods;
 import com.avijit.rms1.ui.Login;
 import com.avijit.rms1.ui.MainDashboard;
 import com.avijit.rms1.ui.Nav;
@@ -223,6 +224,9 @@ public class AppUtils {
                 case R.id.nav_user :{
                     context.startActivity(new Intent(context, UserCRUD.class));
                     break;
+                }
+                case R.id.nav_goods : {
+                    context.startActivity(new Intent(context, Goods.class));
                 }
 
                 /*case R.id.logout: {
