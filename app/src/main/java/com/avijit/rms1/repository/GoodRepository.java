@@ -1,5 +1,6 @@
 package com.avijit.rms1.repository;
 
+import android.util.Log;
 import android.widget.MultiAutoCompleteTextView;
 
 import androidx.lifecycle.MutableLiveData;
@@ -8,6 +9,7 @@ import com.avijit.rms1.data.remote.RetrofitService;
 import com.avijit.rms1.data.remote.api.GoodsApi;
 import com.avijit.rms1.data.remote.model.Good;
 import com.avijit.rms1.data.remote.responses.NetworkResponse;
+import com.google.gson.Gson;
 
 import java.util.List;
 
@@ -56,7 +58,6 @@ public class GoodRepository {
         MutableLiveData<NetworkResponse<Good>> result = new MutableLiveData<>();
         NetworkResponse<Good> failed = new NetworkResponse<>();
         failed.setNetworkIsSuccessful(false);
-
         goodsApi.delete(id).enqueue(new Callback<NetworkResponse<Good>>() {
             @Override
             public void onResponse(Call<NetworkResponse<Good>> call, Response<NetworkResponse<Good>> response) {
@@ -100,6 +101,7 @@ public class GoodRepository {
         goodsApi.storeGood(good).enqueue(new Callback<NetworkResponse<Good>>() {
             @Override
             public void onResponse(Call<NetworkResponse<Good>> call, Response<NetworkResponse<Good>> response) {
+                Log.d(TAG, new Gson().toJson(good)+"onResponse: "+new Gson().toJson(response));
                 if(response.isSuccessful()){
                     result.setValue(response.body());
                 }
@@ -110,9 +112,11 @@ public class GoodRepository {
 
             @Override
             public void onFailure(Call<NetworkResponse<Good>> call, Throwable t) {
+                Log.d(TAG, "onFailure: "+t.toString());
                 result.setValue(ff);
             }
         });
+
         return result;
     }
 

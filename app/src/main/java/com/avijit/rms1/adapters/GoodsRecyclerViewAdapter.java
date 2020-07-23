@@ -63,7 +63,6 @@ public class GoodsRecyclerViewAdapter extends RecyclerView.Adapter<GoodsRecycler
                         appUtils.dialog.show();
                         viewModel.delete(goodList.get(position).getId()).observe((Goods) activity, response->{
                             appUtils.dialog.dismiss();
-
                             if(response.isNetworkIsSuccessful()){
                                 goodList.remove(position);
                                 Toast.makeText(activity, "Successfully Deleted", Toast.LENGTH_SHORT).show();

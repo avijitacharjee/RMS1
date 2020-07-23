@@ -13,9 +13,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.avijit.rms1.R;
 import com.avijit.rms1.adapters.GoodsRecyclerViewAdapter;
 import com.avijit.rms1.data.remote.model.Good;
+import com.avijit.rms1.data.remote.model.User;
 import com.avijit.rms1.utils.AppUtils;
 import com.avijit.rms1.viewmodel.GoodsViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.gson.Gson;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -86,10 +88,19 @@ public class Goods extends BaseActivity {
         public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
             super.onViewCreated(view, savedInstanceState);
             initViews(view);
+            User user;
+            try {
+                user = new Gson().fromJson(activity.getSharedPreferences("RMS",MODE_PRIVATE).getString("user",""),User.class);
+            }catch (Exception e){
+                user = new User();
+                user.setId("1");
+            }
+            User finalUser = user;
             goButton.setOnClickListener(v -> {
                 Good good = new Good();
                 good.setName(nameEditText.getText().toString());
                 good.setUnit(unitEditText.getText().toString());
+                good.setCreated_by(finalUser.getId());
                 appUtils.dialog.show();
                 viewModel.create(good).observe(this,response->{
                     appUtils.dialog.dismiss();
