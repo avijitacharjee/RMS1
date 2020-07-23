@@ -27,4 +27,7 @@ public class GoodsViewModel extends ViewModel {
         }
         return goodList;
     }
+    public MutableLiveData<NetworkResponse<Good>> delete(String id){
+        return goodRepository.delete(id);
+    }
 }

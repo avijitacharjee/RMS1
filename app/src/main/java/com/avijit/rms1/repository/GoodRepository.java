@@ -52,6 +52,25 @@ public class GoodRepository {
         });
         return result;
     }
+    public MutableLiveData<NetworkResponse<Good>> delete(String id){
+        MutableLiveData<NetworkResponse<Good>> result = new MutableLiveData<>();
+        NetworkResponse<Good> failed = new NetworkResponse<>();
+        failed.setNetworkIsSuccessful(false);
+
+        goodsApi.delete(id).enqueue(new Callback<NetworkResponse<Good>>() {
+            @Override
+            public void onResponse(Call<NetworkResponse<Good>> call, Response<NetworkResponse<Good>> response) {
+                if(response.isSuccessful()) result.setValue(response.body());
+                else result.setValue(failed);
+            }
+
+            @Override
+            public void onFailure(Call<NetworkResponse<Good>> call, Throwable t) {
+                result.setValue(failed);
+            }
+        });
+        return result;
+    }
 
 
 }
