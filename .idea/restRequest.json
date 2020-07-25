@@ -1,6 +1,6 @@
 {
-  "uri": "https://aniksen.me/covidbd/api/goods?name\u003dRice\u0026unit\u003d1\u0026created_by\u003d1",
-  "method": "POST",
+  "uri": "https://aniksen.me/covidbd/api/package?tbl_goods_id\u003d1\u0026quantity\u003d5\u0026created_by\u003d1",
+  "method": "GET",
   "body": "",
   "headers": {
     "Accept": "*/*",

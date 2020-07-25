@@ -1,11 +1,8 @@
 package com.avijit.rms1.data.remote.api;
 
-import com.avijit.rms1.data.remote.model.PackageGoods;
+import com.avijit.rms1.data.remote.model.PackageGood;
 import com.avijit.rms1.data.remote.model.PackageGoodsUpdate;
-import com.avijit.rms1.data.remote.model.PackageUpdate;
 import com.avijit.rms1.data.remote.responses.PackageGoodsResponse;
-import com.avijit.rms1.data.remote.responses.PackageResponse;
-import com.avijit.rms1.data.remote.responses.PackageStoreResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -22,7 +19,7 @@ public interface PackageGoodsApi {
     Call<PackageGoodsResponse> getPackageGoodsById(@Path("id") String id);
 
     @POST("package-goods")
-    Call<PackageGoodsResponse> storePackageGoods(@Body PackageGoods pkggoods);
+    Call<PackageGoodsResponse> storePackageGoods(@Body PackageGood pkggoods);
 
     @DELETE("package-goods/{id}")
     Call<PackageGoodsResponse> delete(@Path("id") String id);

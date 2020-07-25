@@ -1,13 +1,14 @@
 package com.avijit.rms1.data.remote.api;
 
-import com.avijit.rms1.data.remote.model.CompanyUser;
+import com.avijit.rms1.data.remote.model.Package;
+import com.avijit.rms1.data.remote.model.PackageGood;
 import com.avijit.rms1.data.remote.model.PackageUpdate;
-import com.avijit.rms1.data.remote.responses.CompanyUserStoreResponse;
-import com.avijit.rms1.data.remote.responses.PackageResponse;
+import com.avijit.rms1.data.remote.responses.NetworkResponse;
 import com.avijit.rms1.data.remote.responses.PackageStoreResponse;
 
+import java.util.List;
+
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
@@ -16,17 +17,17 @@ import retrofit2.http.Path;
 
 public interface PackageApi {
     @GET("package")
-    Call<PackageResponse> getAllPackages();
+    Call<NetworkResponse<List<Package>>> getAllPackages();
 
     @GET("package/{id}")
-    Call<Package> getPackageById(@Path("id") String id);
+    Call<NetworkResponse<Package>> getPackageById(@Path("id") String id);
 
     @POST("package")
-    Call<PackageResponse> storePackage(@Body Package pkg);
+    Call<NetworkResponse<Package>> storePackage(@Body Package pkg);
 
     @DELETE("package/{id}")
-    Call<PackageStoreResponse> delete(@Path("id") String id);
+    Call<NetworkResponse<Package>> delete(@Path("id") String id);
 
     @POST("package/{id}")
-    Call<PackageStoreResponse> update(@Path("id") String id, @Body PackageUpdate body);
+    Call<NetworkResponse<Package>> update(@Path("id") String id, @Body Package body);
 }

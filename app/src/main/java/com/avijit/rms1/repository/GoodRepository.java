@@ -109,7 +109,6 @@ public class GoodRepository {
                     result.setValue(ff);
                 }
             }
-
             @Override
             public void onFailure(Call<NetworkResponse<Good>> call, Throwable t) {
                 Log.d(TAG, "onFailure: "+t.toString());
