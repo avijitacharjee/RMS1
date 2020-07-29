@@ -2,6 +2,7 @@ package com.avijit.rms1.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -143,6 +144,10 @@ public class GoodsRecyclerViewAdapter extends RecyclerView.Adapter<GoodsRecycler
                 appUtils.dialog.show();
                 viewModel.update(good.getId(),good1).observe(this,response->{
                     appUtils.dialog.dismiss();
+                    if(response==null){
+                        startActivity(new Intent(getContext(),Goods.class));
+                        return;
+                    }
                     if(response.isNetworkIsSuccessful()){
                         Toast.makeText(getContext(), "Successfully Updated", Toast.LENGTH_SHORT).show();
                     }

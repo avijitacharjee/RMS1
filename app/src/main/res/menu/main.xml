@@ -61,6 +61,10 @@
             android:title="Goods"
             />
         <item
+            android:id="@+id/nav_package"
+            android:icon="@drawable/ic_info_outline_black_24dp"
+            android:title="Package" />
+        <item
             android:id="@+id/nav_news_home"
             android:icon="@drawable/ic_info_outline_black_24dp"
             android:title="News"

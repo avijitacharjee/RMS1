@@ -35,6 +35,7 @@ import com.avijit.rms1.ui.Login;
 import com.avijit.rms1.ui.MainDashboard;
 import com.avijit.rms1.ui.Nav;
 import com.avijit.rms1.ui.News;
+import com.avijit.rms1.ui.PackageUi;
 import com.avijit.rms1.ui.PendingSchedules;
 import com.avijit.rms1.ui.Profile;
 import com.avijit.rms1.ui.ReliefRequest;
@@ -227,6 +228,11 @@ public class AppUtils {
                 }
                 case R.id.nav_goods : {
                     context.startActivity(new Intent(context, Goods.class));
+                    break;
+                }
+                case R.id.nav_package: {
+                    context.startActivity(new Intent(context, PackageUi.class));
+                    break;
                 }
 
                 /*case R.id.logout: {
