@@ -20,6 +20,33 @@ public class ReliefRequest extends BaseModel {
     private String id;
     private String created_at;
     private String updated_at;
+    private String status;
+    private String requested_by;
+    private String requested_person_contact;
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getRequested_by() {
+        return requested_by;
+    }
+
+    public void setRequested_by(String requested_by) {
+        this.requested_by = requested_by;
+    }
+
+    public String getRequested_person_contact() {
+        return requested_person_contact;
+    }
+
+    public void setRequested_person_contact(String requested_person_contact) {
+        this.requested_person_contact = requested_person_contact;
+    }
 
     public String getRequest_time() {
         return request_time;

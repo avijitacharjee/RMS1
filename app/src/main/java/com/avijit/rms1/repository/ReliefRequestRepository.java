@@ -1,6 +1,7 @@
 package com.avijit.rms1.repository;
 
 import android.util.Log;
+import android.util.MutableBoolean;
 
 import androidx.lifecycle.MutableLiveData;
 
@@ -10,6 +11,8 @@ import com.avijit.rms1.data.remote.model.ReliefRequest;
 import com.avijit.rms1.data.remote.responses.NetworkResponse;
 
 import org.json.JSONObject;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -44,6 +47,28 @@ public class ReliefRequestRepository {
                 NetworkResponse<ReliefRequest> r = new NetworkResponse<>();
                 r.setNetworkIsSuccessful(true);
                 result.setValue(r);
+            }
+        });
+        return result;
+    }
+    public MutableLiveData<NetworkResponse<List<ReliefRequest>>> all(){
+        final MutableLiveData<NetworkResponse<List<ReliefRequest>>> result = new MutableLiveData<>();
+        NetworkResponse<List<ReliefRequest>> fail = new NetworkResponse<>();
+        fail.setNetworkIsSuccessful(false);
+        reliefRequestApi.all().enqueue(new Callback<NetworkResponse<List<ReliefRequest>>>() {
+            @Override
+            public void onResponse(Call<NetworkResponse<List<ReliefRequest>>> call, Response<NetworkResponse<List<ReliefRequest>>> response) {
+                if(response.isSuccessful()){
+                    result.setValue(response.body());
+                }
+                else {
+                    result.setValue(fail);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<NetworkResponse<List<ReliefRequest>>> call, Throwable t) {
+                result.setValue(fail);
             }
         });
         return result;
